@@ -6,6 +6,7 @@ import com.todo.app.entities.Task;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class BusinessObject {
@@ -26,8 +27,8 @@ public class BusinessObject {
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-
         task.setEntry(dtf.format(now));
+
         try{
             boolean existFile = taskDAO.exist(fileName);
             taskDAO.save(task, fileName, existFile);
@@ -46,10 +47,15 @@ public class BusinessObject {
         return true;
     }
 
-    /*public void listTasks() {
-        taskDAO.listTasks();
+    public void listTasks(String fileName) {
+        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+
+        System.out.println("===================LIST==================");
+        for(Task current : tasks)
+        {
+            System.out.println(current.toString());
+        }
     }
-    */
 
     public void loadFile(String fileName)
     {

@@ -36,17 +36,26 @@ public class TaskDAO {
         return true;
     }
 
-    public ArrayList<Task> getAllTasks(String fileName) {
+    public ArrayList<Task> loadTasks(String fileName) {
         File file = new File(fileName);
         ArrayList<Task> tasks = new ArrayList<Task>();
 
         try{
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String description = "";
-            String line = reader.readLine();
-            while(line != null)
+            String line;
+
+            while((line = reader.readLine()) != null)
             {
-                Task current = new Task(line);
+                String data[];
+                ArrayList<String> arr = new ArrayList<>();
+
+                data = line.split(",");
+                String aux = "";
+
+                //System.out.println(Arrays.toString(data));
+
+                Task current = new Task(data[0], data[1], UUID.fromString(data[2]), data[3], data[4]);
                 tasks.add(current);
             }
         }

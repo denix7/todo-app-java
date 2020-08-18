@@ -20,6 +20,19 @@ public class Task {
     public Task(String description) {
         this.description = description;
     }
+    public Task(String description, String status, UUID uuid, String entry, String priority) {
+
+        this.description = description;
+        this.status = status;
+        this.uuid = uuid;
+        this.entry = entry;
+        this.start = start;
+        this.end = end;
+        this.due = due;
+        this.priority = priority;
+        this.depends = depends;
+        this.tags = tags;
+    }
 
     public String getDescription() {
         return description;
@@ -103,17 +116,13 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                ", uuid=" + uuid +
-                ", entry='" + entry + '\'' +
-                ", start=" + start +
-                ", end=" + end +
-                ", due=" + due +
-                ", priority='" + priority + '\'' +
-                ", depends=" + depends +
-                ", tags=" + Arrays.toString(tags) +
-                '}';
+        return
+                "" + description +
+                "," + status +
+                "," + uuid +
+                "," + entry +
+                "," + priority;
+                //"," + depends +
+                //"," + Arrays.toString(tags);
     }
 }
