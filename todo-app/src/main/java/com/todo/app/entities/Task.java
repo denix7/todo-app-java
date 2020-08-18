@@ -1,6 +1,7 @@
 package com.todo.app.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -8,7 +9,7 @@ public class Task {
     private String description;
     private String status;
     private UUID uuid;
-    private Date entry;
+    private String entry;
     private Date start;
     private Date end;
     private Date due;
@@ -36,8 +37,20 @@ public class Task {
         this.status = status;
     }
 
-    public Date getEntry() {
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getEntry() {
         return entry;
+    }
+
+    public void setEntry(String entry) {
+        this.entry = entry;
     }
 
     public Date getStart() {
@@ -91,10 +104,16 @@ public class Task {
     @Override
     public String toString() {
         return "Task{" +
-                "IIUD=" + uuid +
-                ", description='" + description + '\'' +
+                "description='" + description + '\'' +
                 ", status='" + status + '\'' +
+                ", uuid=" + uuid +
+                ", entry='" + entry + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", due=" + due +
                 ", priority='" + priority + '\'' +
+                ", depends=" + depends +
+                ", tags=" + Arrays.toString(tags) +
                 '}';
     }
 }

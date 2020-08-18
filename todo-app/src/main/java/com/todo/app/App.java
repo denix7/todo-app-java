@@ -1,5 +1,6 @@
 package com.todo.app;
 
+import com.todo.app.businessLogic.BusinessObject;
 import com.todo.app.command.manager.Command;
 import com.todo.app.command.manager.CommandManager;
 import com.todo.app.util.Fragmenter;
@@ -20,15 +21,24 @@ public class App {
             }
 
             String[] commandArgs = Fragmenter.fragment(line);
-            String commandName = commandArgs[0];
+            String commandName = commandArgs[1];
+
+            if(!commandArgs[0].equals("todo"))
+                commandName = "invalid";
+
             String[] commandArgs2 = null;
 
             if (commandArgs.length > 1) {
-                commandArgs2 = Arrays.copyOfRange(commandArgs, 1, commandArgs.length);
+                commandArgs2 = Arrays.copyOfRange(commandArgs, 2, commandArgs.length);
             }
 
             Command command = commandManager.getCommand(commandName);
-            command.execute(commandArgs2, System.out);
+
+            //BUSINES OBJECT
+            BusinessObject bo = new BusinessObject();
+            String fileName = "c:\\tasks-java\\tasks.txt";
+
+            command.execute(commandArgs2, System.out, bo, fileName);
         }
     }
 }
