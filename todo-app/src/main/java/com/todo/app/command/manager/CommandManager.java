@@ -9,6 +9,10 @@ public class CommandManager {
 
     private CommandManager() {
         register(ExitCommand.COMMAND_NAME, ExitCommand.class);
+        register(AddCommand.COMMAND_NAME, AddCommand.class);
+        register(ModifyCommand.COMMAND_NAME, ModifyCommand.class);
+        register(ListCommand.COMMAND_NAME, ListCommand.class);
+        register(DoneCommand.COMMAND_NAME, DoneCommand.class);
     }
 
     public static CommandManager getInstance() {
