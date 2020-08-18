@@ -26,8 +26,7 @@ public class CommandManager {
     public Command getCommand(String command) {
         if(!commands.containsKey(command))
         {
-            //return new DefaultCommand();
-            return null;
+            return new DefaultCommand();
         }
 
         try{
