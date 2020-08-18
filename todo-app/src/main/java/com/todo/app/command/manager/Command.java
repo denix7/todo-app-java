@@ -1,12 +1,14 @@
 package com.todo.app.command.manager;
 
+import com.todo.app.businessLogic.BusinessObject;
+
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 public interface Command {
     public String getName();
-    public void execute(String[] args, OutputStream out);
+    public void execute(String[] args, OutputStream out, BusinessObject bo, String fileName);
 
     class CommandManager {
         private static CommandManager commandManager;

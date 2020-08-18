@@ -1,5 +1,7 @@
 package com.todo.app.command.manager;
 
+import com.todo.app.businessLogic.BusinessObject;
+
 import java.io.OutputStream;
 
 public class AbstractCommand implements Command {
@@ -10,7 +12,7 @@ public class AbstractCommand implements Command {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo, String fileName) {
 
     }
 

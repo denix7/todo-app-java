@@ -1,5 +1,7 @@
 package com.todo.app.command.manager;
 
+import com.todo.app.businessLogic.BusinessObject;
+
 import java.io.OutputStream;
 import java.util.Arrays;
 
@@ -13,12 +15,12 @@ public class AddCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo, String fileName) {
         if(args != null && args.length == 1)
         {
             System.out.println(Arrays.toString(args));
             write(out, "Adding element with title");
-            //taskDao.save(args[0]);
+            bo.addTask(args[0], fileName);
         }
     }
 
