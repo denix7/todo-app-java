@@ -51,8 +51,52 @@ public class BusinessObject {
         return true;
     }
 
-    public boolean doneTask() {
-        return true;
+    public String doneTask(String[] args, String fileName) {
+        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+        //System.out.println("BO " + Arrays.toString(args));
+        String arg = args[0];
+        return markAsDone(tasks, fileName, arg);
+    }
+
+    public String markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
+        //System.out.println(tasks.toString());
+        boolean numeric = true;
+        numeric = arg.matches("-?\\d+(\\.\\d+)?");
+        if(numeric)
+        {
+            int index = Integer.parseInt(arg);
+            Task current = tasks.get(index-1);
+            current.setStatus("completed");
+        }
+        else
+        {
+            for(Task current : tasks)
+            {
+                if(current.getTag().equals(arg))
+                {
+                    current.setStatus("completed");
+                }
+            }
+        }
+        //System.out.println(tasks.toString());
+        try{
+            boolean existFile = taskDAO.exist(fileName);
+            if(existFile)
+            {
+                taskDAO.deleteFile(fileName);
+                taskDAO.saveList(tasks, fileName, existFile);
+                return "marked as done";
+            }
+            else
+            {
+                System.out.println("No existe ningun archivo");
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void listTasks(String[] args, String fileName) {

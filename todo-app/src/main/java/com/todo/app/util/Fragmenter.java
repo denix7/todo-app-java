@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.*;
 
 public class Fragmenter {
-    public static String[] fragmentList(String args) {
+    public static String[] fragmentSimple(String args) {
         List<String> tokens = new ArrayList<String>();
         char[] charArray = args.toCharArray();
 
@@ -55,13 +55,21 @@ public class Fragmenter {
             if(args.contains("tag"))
             {
                 int point = args.indexOf(':') + 1;
-                return fragmentList("list " + args.substring(point));
+                return fragmentSimple("list " + args.substring(point));
             }
             regex = "";
-            return fragmentList(args.substring(5));
+            return fragmentSimple(args.substring(5));
 
         }
-
+        if(args.contains("todo done"))
+        {
+            if(args.contains("tag"))
+            {
+                int point = args.indexOf(':') + 1;
+                return fragmentSimple("done " + args.substring(point));
+            }
+            return fragmentSimple(args.substring(5));
+        }
 
         return res;
     }
