@@ -3,6 +3,7 @@ package com.todo.app;
 import com.todo.app.businessLogic.BusinessObject;
 import com.todo.app.command.manager.Command;
 import com.todo.app.command.manager.CommandManager;
+import com.todo.app.command.manager.ListCommand;
 import com.todo.app.util.Fragmenter;
 
 import java.util.Arrays;
@@ -20,7 +21,7 @@ public class App {
                 continue;
             }
 
-            String[] commandArgs = Fragmenter.fragment2(line);
+            String[] commandArgs = Fragmenter.fragment(line);
             String commandName = commandArgs[0];
 
             //if(!commandArgs[0].equals("todo"))
@@ -40,5 +41,7 @@ public class App {
 
             command.execute(commandArgs2, System.out, bo, fileName);
         }
+
+
     }
 }

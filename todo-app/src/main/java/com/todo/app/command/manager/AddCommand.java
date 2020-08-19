@@ -28,7 +28,7 @@ public class AddCommand extends AbstractCommand{
         }
         if(args != null && args.length == 2 )
         {
-            //System.out.println(Arrays.toString(args));
+            System.out.println("Task with priority added");
             bo.addTask(args, fileName);
         }
     }

@@ -24,7 +24,7 @@ public class TaskDAO {
             PrintWriter out = new PrintWriter(new FileWriter(file, exist));
             out.println(task.toString());
             out.close();
-            System.out.println("\nguardado con exito en file!");
+            //System.out.println("\nguardado con exito en file!");
         }
         catch(Exception e)
         {
@@ -55,7 +55,7 @@ public class TaskDAO {
 
                 //System.out.println(Arrays.toString(data));
 
-                Task current = new Task(data[0], data[1], UUID.fromString(data[2]), data[3], data[4]);
+                Task current = new Task(data[0], data[1], UUID.fromString(data[2]), data[3], data[4], data[5]);
                 tasks.add(current);
             }
         }

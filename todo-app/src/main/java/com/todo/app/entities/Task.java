@@ -15,12 +15,12 @@ public class Task {
     private Date due;
     private String priority;
     private ArrayList<UUID> depends;
-    private String[] tags;
+    private String tag;
 
     public Task(String description) {
         this.description = description;
     }
-    public Task(String description, String status, UUID uuid, String entry, String priority) {
+    public Task(String description, String status, UUID uuid, String entry, String priority, String tag) {
 
         this.description = description;
         this.status = status;
@@ -31,7 +31,7 @@ public class Task {
         this.due = due;
         this.priority = priority;
         this.depends = depends;
-        this.tags = tags;
+        this.tag = tag;
     }
 
     public String getDescription() {
@@ -106,12 +106,12 @@ public class Task {
         this.depends = depends;
     }
 
-    public String[] getTags() {
-        return tags;
+    public String getTag() {
+        return tag;
     }
 
-    public void setTags(String[] tags) {
-        this.tags = tags;
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 
     @Override
@@ -121,8 +121,21 @@ public class Task {
                 "," + status +
                 "," + uuid +
                 "," + entry +
-                "," + priority;
+                "," + priority +
+                "," + tag;
                 //"," + depends +
                 //"," + Arrays.toString(tags);
+    }
+
+    public String showList() {
+        return
+                "[description : "+ description + " | "+
+                        "status: " + status + " | "+
+                        "id " + uuid + " | "+
+                        "create : " + entry + " | "+
+                        "priority : " + priority + " | "+
+                        "tag : " + tag + "]" + " | ";
+        //"," + depends +
+        //"," + Arrays.toString(tags);
     }
 }
