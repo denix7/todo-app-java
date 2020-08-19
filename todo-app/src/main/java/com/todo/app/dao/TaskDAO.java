@@ -24,7 +24,26 @@ public class TaskDAO {
             PrintWriter out = new PrintWriter(new FileWriter(file, exist));
             out.println(task.toString());
             out.close();
-            System.out.println("\nguardado con exito en file!");
+            //System.out.println("\nguardado con exito en file!");
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void saveList(ArrayList<Task> tasks, String fileName, boolean exist) {
+        //System.out.println("task dao : " + tasks.toString());
+        File file = new File(fileName);
+
+        try{
+            PrintWriter out = new PrintWriter(new FileWriter(file));
+            for (Task task: tasks)
+            {
+                out.println(task.toString());
+                //System.out.println("\nguardado con exito en file!");
+            }
+            out.close();
         }
         catch(Exception e)
         {
@@ -55,7 +74,7 @@ public class TaskDAO {
 
                 //System.out.println(Arrays.toString(data));
 
-                Task current = new Task(data[0], data[1], UUID.fromString(data[2]), data[3], data[4]);
+                Task current = new Task(data[0], data[1], UUID.fromString(data[2]), data[3], data[4], data[5]);
                 tasks.add(current);
             }
         }
@@ -84,6 +103,6 @@ public class TaskDAO {
     {
         File file = new File(fileName);
         file.delete();
-        System.out.println("Se ha eliminado el archivo");
+        //System.out.println("Se ha eliminado el archivo");
     }
 }

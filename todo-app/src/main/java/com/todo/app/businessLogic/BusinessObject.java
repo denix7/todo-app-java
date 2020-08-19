@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class BusinessObject {
@@ -20,9 +21,11 @@ public class BusinessObject {
     public void addTask(String[] args, String fileName) {
         UUID id = UUID.randomUUID();
         Task task = new Task(args[0]);
+        //System.out.println("BO " + Arrays.toString(args));
 
         task.setUuid(id);
         task.setStatus("pending");
+        task.setTag("default");
 
         if(args.length > 1)
             task.setPriority(args[1]);
@@ -32,6 +35,7 @@ public class BusinessObject {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         task.setEntry(dtf.format(now));
+
 
         try{
             boolean existFile = taskDAO.exist(fileName);
@@ -47,36 +51,81 @@ public class BusinessObject {
         return true;
     }
 
-    public boolean doneTask() {
-        return true;
+    public String doneTask(String[] args, String fileName) {
+        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+        //System.out.println("BO " + Arrays.toString(args));
+        String arg = args[0];
+        return markAsDone(tasks, fileName, arg);
+    }
+
+    public String markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
+        //System.out.println(tasks.toString());
+        boolean numeric = true;
+        numeric = arg.matches("-?\\d+(\\.\\d+)?");
+        if(numeric)
+        {
+            int index = Integer.parseInt(arg);
+            Task current = tasks.get(index-1);
+            current.setStatus("completed");
+        }
+        else
+        {
+            for(Task current : tasks)
+            {
+                if(current.getTag().equals(arg))
+                {
+                    current.setStatus("completed");
+                }
+            }
+        }
+        //System.out.println(tasks.toString());
+        try{
+            boolean existFile = taskDAO.exist(fileName);
+            if(existFile)
+            {
+                taskDAO.deleteFile(fileName);
+                taskDAO.saveList(tasks, fileName, existFile);
+                return "marked as done";
+            }
+            else
+            {
+                System.out.println("No existe ningun archivo");
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void listTasks(String[] args, String fileName) {
         ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+        //System.out.println("BO " + Arrays.toString(args));
         if(args != null)
             tasks = filterByTag(tasks, args[0]);
 
         System.out.println("===================LIST==================");
+        //System.out.println(tasks);
         for(Task current : tasks)
         {
-            System.out.println(current.toString());
+            System.out.println(current.showList());
         }
+
     }
 
     public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
         ArrayList<Task> answer = new ArrayList<Task>();
-
         for(Task current : tasks)
         {
-            String[] tags = current.getTags();
-            for (String currentTag : tags)
+            String currentTag = current.getTag();
+            if(currentTag.equals(tag))
             {
-                if(currentTag.equals(tag))
-                {
-                    answer.add(current);
-                }
+                answer.add(current);
             }
         }
+        if(answer.isEmpty())
+            System.out.println("Nothing founded");
         return answer;
     }
 

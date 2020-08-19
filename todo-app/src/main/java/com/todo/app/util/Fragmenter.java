@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.regex.*;
 
 public class Fragmenter {
-    public static String[] fragment(String args) {
+    public static String[] fragmentSimple(String args) {
         List<String> tokens = new ArrayList<String>();
         char[] charArray = args.toCharArray();
 
@@ -37,20 +37,52 @@ public class Fragmenter {
 
         String[] argsArray = new String[tokens.size()];
         argsArray = tokens.toArray(argsArray);
+        //System.out.println(Arrays.toString(argsArray));
         return argsArray;
     }
 
-    public static String[] fragment2(String args) {
-        String[] res = new String[3];
+    public static String[] fragment(String args) {
+        String[] res = new String[1];
         res[0] = "Invalid";
-        //Pattern p = Pattern.compile("todo\\sadd\\s\\\"([a-zA-Z0-9\\s]+)\\\"( priority : (L?M?H?))?");
-        Pattern p = Pattern.compile("todo\\s(add)\\s\"([a-zA-Z0-9\\s]+)\\\"( priority\\s?:\\s?)?(L?M?H?)?");
+        String regex = "";
+        if(args.contains("add"))
+        {
+            regex = "todo\\s(add)\\s\"([a-zA-Z0-9\\s]+)\\\"( priority\\s?:\\s?)?(L?M?H?)?";
+            return commandAddPattern(regex, args);
+        }
+        if(args.contains("todo list"))
+        {
+            if(args.contains("tag"))
+            {
+                int point = args.indexOf(':') + 1;
+                return fragmentSimple("list " + args.substring(point));
+            }
+            regex = "";
+            return fragmentSimple(args.substring(5));
+
+        }
+        if(args.contains("todo done"))
+        {
+            if(args.contains("tag"))
+            {
+                int point = args.indexOf(':') + 1;
+                return fragmentSimple("done " + args.substring(point));
+            }
+            return fragmentSimple(args.substring(5));
+        }
+
+        return res;
+    }
+
+    private static String[] commandAddPattern(String regex, String args)
+    {
+        String[] res = new String[3];
+        Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(args);
 
         List<String> tokens = new ArrayList<String>();
         if(args.contains("priority"))
         {
-
             int i = 1;
             while(m.find()){
                 tokens.add(m.group(1));
@@ -65,6 +97,34 @@ public class Fragmenter {
                 tokens.add(m.group(2));
             }
         }
+
+        if(tokens.size()>0)
+        {
+            String[] argsArray = new String[tokens.size()];
+            argsArray = tokens.toArray(argsArray);
+            //System.out.println(Arrays.toString(argsArray));
+            return argsArray;
+
+        }
+        return res;
+    }
+
+    private static String[] commandListPattern(String regex, String args)
+    {
+        String[] res = new String[3];
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(args);
+
+        List<String> tokens = new ArrayList<String>();
+
+        int i = 1;
+        while (m.find()) {
+            tokens.add(m.group(i));
+            tokens.add(m.group(i));
+            System.out.println(m.group(1));
+            System.out.println(m.group(2));
+        }
+        System.out.println("list " + tokens.toString());
 
         if(tokens.size()>0)
         {
