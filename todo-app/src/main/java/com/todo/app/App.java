@@ -20,16 +20,16 @@ public class App {
                 continue;
             }
 
-            String[] commandArgs = Fragmenter.fragment(line);
-            String commandName = commandArgs[1];
+            String[] commandArgs = Fragmenter.fragment2(line);
+            String commandName = commandArgs[0];
 
-            if(!commandArgs[0].equals("todo"))
-                commandName = "invalid";
+            //if(!commandArgs[0].equals("todo"))
+            //    commandName = "invalid";
 
             String[] commandArgs2 = null;
 
             if (commandArgs.length > 1) {
-                commandArgs2 = Arrays.copyOfRange(commandArgs, 2, commandArgs.length);
+                commandArgs2 = Arrays.copyOfRange(commandArgs, 1, commandArgs.length);
             }
 
             Command command = commandManager.getCommand(commandName);

@@ -16,11 +16,20 @@ public class AddCommand extends AbstractCommand{
 
     @Override
     public void execute(String[] args, OutputStream out, BusinessObject bo, String fileName) {
+        //System.out.println(Arrays.toString(args));
         if(args != null && args.length == 1)
         {
-            System.out.println(Arrays.toString(args));
             write(out, "Adding element with title");
-            bo.addTask(args[0], fileName);
+            bo.addTask(args, fileName);
+        }
+        if(args == null || args.length == 0)
+        {
+            write(out, "Debe agreagar una nota");
+        }
+        if(args != null && args.length == 2 )
+        {
+            //System.out.println(Arrays.toString(args));
+            bo.addTask(args, fileName);
         }
     }
 
