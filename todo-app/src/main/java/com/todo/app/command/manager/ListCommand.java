@@ -15,8 +15,7 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, BusinessObject bo, String fileName) {
-        System.out.println("list works!");
-        bo.listTasks(fileName);
+        bo.listTasks(args, fileName);
     }
 
     @Override

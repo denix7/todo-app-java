@@ -17,13 +17,17 @@ public class BusinessObject {
         this.taskDAO = new TaskDAO();
     }
 
-    public void addTask(String description, String fileName) {
+    public void addTask(String[] args, String fileName) {
         UUID id = UUID.randomUUID();
-        Task task = new Task(description);
+        Task task = new Task(args[0]);
 
         task.setUuid(id);
         task.setStatus("pending");
-        task.setPriority("M");
+
+        if(args.length > 1)
+            task.setPriority(args[1]);
+        else
+            task.setPriority("M");
 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -47,14 +51,33 @@ public class BusinessObject {
         return true;
     }
 
-    public void listTasks(String fileName) {
+    public void listTasks(String[] args, String fileName) {
         ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+        if(args != null)
+            tasks = filterByTag(tasks, args[0]);
 
         System.out.println("===================LIST==================");
         for(Task current : tasks)
         {
             System.out.println(current.toString());
         }
+    }
+
+    public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
+        ArrayList<Task> answer = new ArrayList<Task>();
+
+        for(Task current : tasks)
+        {
+            String[] tags = current.getTags();
+            for (String currentTag : tags)
+            {
+                if(currentTag.equals(tag))
+                {
+                    answer.add(current);
+                }
+            }
+        }
+        return answer;
     }
 
     public void loadFile(String fileName)
