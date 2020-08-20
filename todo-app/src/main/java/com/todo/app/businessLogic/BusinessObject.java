@@ -3,11 +3,13 @@ package com.todo.app.businessLogic;
 import com.todo.app.dao.TaskDAO;
 import com.todo.app.entities.Task;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 
 public class BusinessObject {
@@ -55,12 +57,37 @@ public class BusinessObject {
     }
 
     private void modifyTaskByIndex(ArrayList<Task> tasks, String fileName, String[] args) {
-        int taskIndex = Integer.parseInt(args[0]) - 1;
-        String newDescription = args[1];
+        boolean numeric = true;
+        numeric = args[0].matches("-?\\d+(\\.\\d+)?");
 
-        Task current = tasks.get(taskIndex);
-        current.setDescription(newDescription);
-
+        if(numeric && args.length<2) {
+            int taskIndex = Integer.parseInt(args[0]) - 1;
+            String newDescription = args[1];
+            Task current = tasks.get(taskIndex);
+            current.setDescription(newDescription);
+        }
+        else
+        {
+            int index = Integer.parseInt(args[0]) - 1;
+            String newTag = args[2];
+            Task current = tasks.get(index);
+            current.setTag(newTag);
+        }
+        /*else
+        {
+            //System.out.println("es letra");
+            String tagName = args[1];
+            String dueDate = args[2];
+            for(Task current : tasks)
+            {
+                if(current.equals(tagName))
+                {
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime due = LocalDateTime.now();
+                    current.setDue(due.toString());
+                }
+            }
+        }*/
         try{
             boolean existFile = taskDAO.exist(fileName);
             if(existFile)

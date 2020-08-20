@@ -72,13 +72,19 @@ public class Fragmenter {
         }
         if(args.contains("todo modify"))
         {
-            if(args.contains("tag"))
+            /*if(args.contains("tag"))
             {
+                System.out.println("args " + args);
                 int tagName = args.indexOf(':') + 1;
-                //int newDescription = args.indexOf(' ')+1;
-                //System.out.println(args.substring(newDescription));
                 return fragmentSimple("modify " + args.substring(tagName));
-            }
+            }*/
+            /*if(args.contains("tag"))
+            {
+                //System.out.println("args " + args);
+                int tagName = args.indexOf(':') + 1;
+                int index =
+                return fragmentSimple("modify " + args.substring(tagName));
+            }*/
             regex = "";
             return fragmentSimple(args.substring(5));
         }
