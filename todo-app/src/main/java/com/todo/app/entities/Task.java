@@ -1,7 +1,6 @@
 package com.todo.app.entities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
@@ -20,8 +19,8 @@ public class Task {
     public Task(String description) {
         this.description = description;
     }
-    public Task(String description, String status, UUID uuid, String entry, String priority, String tag) {
 
+    public Task(String description, String status, UUID uuid, String entry, String priority, String tag) {
         this.description = description;
         this.status = status;
         this.uuid = uuid;
@@ -123,19 +122,15 @@ public class Task {
                 "," + entry +
                 "," + priority +
                 "," + tag;
-                //"," + depends +
-                //"," + Arrays.toString(tags);
     }
 
     public String showList() {
         return
                 "[description : "+ description + " | "+
-                        "status: " + status + " | "+
-                        "id " + uuid + " | "+
-                        "create : " + entry + " | "+
-                        "priority : " + priority + " | "+
-                        "tag : " + tag + "]" + " | ";
-        //"," + depends +
-        //"," + Arrays.toString(tags);
+                "status: " + status + " | "+
+                "id " + uuid + " | "+
+                "create : " + entry + " | "+
+                "priority : " + priority + " | "+
+                "tag : " + tag + "]" + " | ";
     }
 }

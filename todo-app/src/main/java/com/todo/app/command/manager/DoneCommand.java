@@ -1,6 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
+import com.todo.app.businessLogic.BusinessObjectImpl;
 
 import java.io.OutputStream;
 
@@ -14,7 +14,7 @@ public class DoneCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo, String fileName) {
+    public void execute(String[] args, OutputStream out, BusinessObjectImpl bo, String fileName) {
         bo.doneTask(args, fileName);
     }
 
