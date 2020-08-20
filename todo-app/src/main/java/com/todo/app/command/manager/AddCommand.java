@@ -1,9 +1,8 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
+import com.todo.app.businessLogic.BusinessObjectImpl;
 
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class AddCommand extends AbstractCommand{
 
@@ -15,8 +14,7 @@ public class AddCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo, String fileName) {
-        //System.out.println(Arrays.toString(args));
+    public void execute(String[] args, OutputStream out, BusinessObjectImpl bo, String fileName) {
         if(args != null && args.length == 1)
         {
             write(out, "Adding element with title");

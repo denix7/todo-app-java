@@ -5,11 +5,9 @@ import com.todo.app.entities.Task;
 import java.io.*;
 import java.util.*;
 
-public class TaskDAO {
+public class TaskDAOImpl implements ITaskDAO{
 
-    //HashMap<UUID, Task> bd = new HashMap<UUID, Task>();
-
-    public TaskDAO() {
+    public TaskDAOImpl() {
     }
 
     public boolean exist(String fileName) {
@@ -20,11 +18,11 @@ public class TaskDAO {
     public void save(Task task, String fileName, boolean exist) {
         File file = new File(fileName);
 
-        try{
+        try
+        {
             PrintWriter out = new PrintWriter(new FileWriter(file, exist));
             out.println(task.toString());
             out.close();
-            //System.out.println("\nguardado con exito en file!");
         }
         catch(Exception e)
         {
@@ -33,15 +31,14 @@ public class TaskDAO {
     }
 
     public void saveList(ArrayList<Task> tasks, String fileName, boolean exist) {
-        //System.out.println("task dao : " + tasks.toString());
         File file = new File(fileName);
 
-        try{
+        try
+        {
             PrintWriter out = new PrintWriter(new FileWriter(file));
             for (Task task: tasks)
             {
                 out.println(task.toString());
-                //System.out.println("\nguardado con exito en file!");
             }
             out.close();
         }
@@ -59,7 +56,8 @@ public class TaskDAO {
         File file = new File(fileName);
         ArrayList<Task> tasks = new ArrayList<Task>();
 
-        try{
+        try
+        {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String description = "";
             String line;
@@ -71,8 +69,6 @@ public class TaskDAO {
 
                 data = line.split(",");
                 String aux = "";
-
-                //System.out.println(Arrays.toString(data));
 
                 Task current = new Task(data[0], data[1], UUID.fromString(data[2]), data[3], data[4], data[5]);
                 tasks.add(current);
@@ -103,6 +99,5 @@ public class TaskDAO {
     {
         File file = new File(fileName);
         file.delete();
-        //System.out.println("Se ha eliminado el archivo");
     }
 }
