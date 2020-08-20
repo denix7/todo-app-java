@@ -12,7 +12,7 @@ public class Task {
     private String entry;
     private Date start;
     private Date end;
-    private Date due;
+    private String due;
     private String priority;
     private ArrayList<UUID> depends;
     private String tag;
@@ -82,11 +82,11 @@ public class Task {
         this.end = end;
     }
 
-    public Date getDue() {
+    public String getDue() {
         return due;
     }
 
-    public void setDue(Date due) {
+    public void setDue(String due) {
         this.due = due;
     }
 
