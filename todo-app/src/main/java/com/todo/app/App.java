@@ -18,6 +18,8 @@ public class App {
         while (true) {
             String line = scanner.nextLine();
             if (line.trim().isEmpty()) {
+                Command help = commandManager.getCommand("default");
+                help.execute(null, System.out,null,null);
                 continue;
             }
 
@@ -41,7 +43,5 @@ public class App {
 
             command.execute(commandArgs2, System.out, bo, fileName);
         }
-
-
     }
 }

@@ -37,7 +37,7 @@ public class Fragmenter {
 
         String[] argsArray = new String[tokens.size()];
         argsArray = tokens.toArray(argsArray);
-        //System.out.println(Arrays.toString(argsArray));
+        //System.out.println("frag" + Arrays.toString(argsArray));
         return argsArray;
     }
 
@@ -68,6 +68,18 @@ public class Fragmenter {
                 int point = args.indexOf(':') + 1;
                 return fragmentSimple("done " + args.substring(point));
             }
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo modify"))
+        {
+            if(args.contains("tag"))
+            {
+                int tagName = args.indexOf(':') + 1;
+                //int newDescription = args.indexOf(' ')+1;
+                //System.out.println(args.substring(newDescription));
+                return fragmentSimple("modify " + args.substring(tagName));
+            }
+            regex = "";
             return fragmentSimple(args.substring(5));
         }
 
@@ -124,7 +136,7 @@ public class Fragmenter {
             System.out.println(m.group(1));
             System.out.println(m.group(2));
         }
-        System.out.println("list " + tokens.toString());
+        //System.out.println("list " + tokens.toString());
 
         if(tokens.size()>0)
         {

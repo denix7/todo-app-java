@@ -47,18 +47,48 @@ public class BusinessObject {
         }
     }
 
-    public boolean modifyTask() {
-        return true;
+    public void modifyTask(String[] args, String fileName) {
+        //System.out.println("BO " + Arrays.toString(args));
+        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+        modifyTaskByIndex(tasks, fileName, args);
+        System.out.println("modified");
     }
 
-    public String doneTask(String[] args, String fileName) {
+    private void modifyTaskByIndex(ArrayList<Task> tasks, String fileName, String[] args) {
+        int taskIndex = Integer.parseInt(args[0]) - 1;
+        String newDescription = args[1];
+
+        Task current = tasks.get(taskIndex);
+        current.setDescription(newDescription);
+
+        try{
+            boolean existFile = taskDAO.exist(fileName);
+            if(existFile)
+            {
+                taskDAO.deleteFile(fileName);
+                taskDAO.saveList(tasks, fileName, existFile);
+                System.out.println("Task " + " was modified");
+            }
+            else
+            {
+                System.out.println("Doesn't exists any file");
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void doneTask(String[] args, String fileName) {
         ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
         //System.out.println("BO " + Arrays.toString(args));
         String arg = args[0];
-        return markAsDone(tasks, fileName, arg);
+        markAsDone(tasks, fileName, args[0]);
+        System.out.println();
     }
 
-    public String markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
+    public void markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
         //System.out.println(tasks.toString());
         boolean numeric = true;
         numeric = arg.matches("-?\\d+(\\.\\d+)?");
@@ -85,18 +115,17 @@ public class BusinessObject {
             {
                 taskDAO.deleteFile(fileName);
                 taskDAO.saveList(tasks, fileName, existFile);
-                return "marked as done";
+                System.out.println("marked as done");
             }
             else
             {
-                System.out.println("No existe ningun archivo");
+                System.out.println("Doesn't exists any file");
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
         }
-        return "";
     }
 
     public void listTasks(String[] args, String fileName) {
@@ -107,10 +136,13 @@ public class BusinessObject {
 
         System.out.println("===================LIST==================");
         //System.out.println(tasks);
+        int indexTask= 1;
         for(Task current : tasks)
         {
-            System.out.println(current.showList());
+            System.out.println(indexTask +")" + " " + current.showList());
+            indexTask++;
         }
+        System.out.println("There are : " + tasks.size() + " elements");
 
     }
 
