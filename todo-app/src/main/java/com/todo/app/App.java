@@ -37,9 +37,11 @@ public class App {
 
             //Business Object
             BusinessObjectImpl bo = new BusinessObjectImpl();
+
+            //create file at path
             String fileName = "c:\\tasks-java\\tasks.txt";
 
-            //Execute command
+            //Command Executor
             command.execute(commandArgs2, System.out, bo, fileName);
         }
     }

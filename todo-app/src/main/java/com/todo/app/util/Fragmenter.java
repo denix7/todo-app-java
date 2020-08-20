@@ -70,6 +70,14 @@ public class Fragmenter {
             }
             return fragmentSimple(args.substring(5));
         }
+        if(args.contains("todo exit"))
+        {
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo help"))
+        {
+            return fragmentSimple(args.substring(5));
+        }
         if(args.contains("todo modify"))
         {
             /*if(args.contains("tag"))
