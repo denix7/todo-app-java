@@ -7,7 +7,10 @@ import com.todo.app.factory.MySQLAdapter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class TaskMySqlDAOImpl implements ITaskDAO {
     private IDBAdapter adapter;
@@ -19,10 +22,16 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
     @Override
     public void save(Task task, String fileName, boolean exist) {
         try {
-            String sql = "insert into tasks(description) values (?)";
+            String sql = "insert into tasks(description, uuid, status, tag, priority, entry) values (?,?,?,?,?,?)";
             Connection connection = adapter.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
+
             statement.setString(1, task.getDescription());
+            statement.setString(2, task.getUuid().toString());
+            statement.setString(3, task.getStatus());
+            statement.setString(4, task.getTag());
+            statement.setString(5, task.getPriority());
+            statement.setString(6, task.getEntry());
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,6 +71,37 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
 
     @Override
     public ArrayList<Task> loadTasks(String fileName) {
-        return null;
+        try{
+            String sql = "select * from tasks";
+            Connection connection = adapter.getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet results = statement.executeQuery();
+
+            ArrayList<Task> tasks = new ArrayList<Task>();
+
+            while(results.next()){
+                int id = results.getInt(1);
+                String description = results.getString(2);
+                String uudi = results.getString(3);
+                String status = results.getString(4);
+                String tag = results.getString(5);
+                String priority = results.getString(6);
+                String entry = results.getString(7);
+
+                Task current = new Task(description);
+                current.setUuid(UUID.fromString(uudi));
+                current.setStatus(status);
+                current.setTag(tag);
+                current.setPriority(priority);
+                current.setEntry(entry);
+
+                tasks.add(current);
+            }
+
+            return tasks;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 }

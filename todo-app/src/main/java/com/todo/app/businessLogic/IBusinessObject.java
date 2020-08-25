@@ -9,8 +9,6 @@ public interface IBusinessObject {
 
     void modifyTask(String[] args, String fileName);
 
-    void modifyTaskByIndex(ArrayList<Task> tasks, String fileName, String[] args);
-
     void doneTask(String[] args, String fileName);
 
     void listTasks(String[] args, String fileName);
