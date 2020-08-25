@@ -1,20 +1,21 @@
 package com.todo.app.businessLogic;
 
-import com.todo.app.dao.TaskDAOImpl;
+import com.todo.app.dao.ITaskDAO;
+import com.todo.app.dao.TaskTxtDAOImpl;
 import com.todo.app.entities.Task;
+import com.todo.app.factory.FactoryDAO;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
-public class BusinessObjectImpl implements BusinessObject {
+public class BusinessObjectTxtImpl implements IBusinessObject {
 
-    public static TaskDAOImpl taskDAO;
+    public static TaskTxtDAOImpl taskDAO;
 
-    public BusinessObjectImpl() {
-        this.taskDAO = new TaskDAOImpl();
+    public BusinessObjectTxtImpl() {
+        this.taskDAO = new TaskTxtDAOImpl();
     }
 
     public void addTask(String[] args, String fileName) {

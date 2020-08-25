@@ -3,7 +3,7 @@ package com.todo.app.businessLogic;
 import com.todo.app.entities.Task;
 import java.util.ArrayList;
 
-public interface BusinessObject {
+public interface IBusinessObject {
 
     void addTask(String[] args, String fileName);
 

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class CommandManager {
     private static CommandManager commandManager;
-    private static Map<String, Class<? extends Command>> commands = new HashMap<String, Class<? extends Command>>();
+    private static Map<String, Class<? extends ICommand>> commands = new HashMap<String, Class<? extends ICommand>>();
 
     private CommandManager() {
         register(ExitCommand.COMMAND_NAME, ExitCommand.class);
@@ -24,18 +24,18 @@ public class CommandManager {
         return commandManager;
     }
 
-    public void register(String commandName, Class<? extends Command> command) {
+    public void register(String commandName, Class<? extends ICommand> command) {
         commands.put(commandName, command);
     }
 
-    public Command getCommand(String command) {
+    public ICommand getCommand(String command) {
         if(!commands.containsKey(command))
         {
             return new DefaultCommand();
         }
 
         try{
-            Command iCommand = commands.get(command).newInstance();
+            ICommand iCommand = commands.get(command).newInstance();
             return iCommand;
         }
         catch (Exception e)

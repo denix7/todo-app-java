@@ -5,9 +5,9 @@ import com.todo.app.entities.Task;
 import java.io.*;
 import java.util.*;
 
-public class TaskDAOImpl implements ITaskDAO{
+public class TaskTxtDAOImpl implements ITaskDAO{
 
-    public TaskDAOImpl() {
+    public TaskTxtDAOImpl() {
     }
 
     public boolean exist(String fileName) {
@@ -48,8 +48,12 @@ public class TaskDAOImpl implements ITaskDAO{
         }
     }
 
-    public boolean update() {
-        return true;
+    public void update(Task task) {
+
+    }
+
+    public void delete(Task task) {
+
     }
 
     public ArrayList<Task> loadTasks(String fileName) {
