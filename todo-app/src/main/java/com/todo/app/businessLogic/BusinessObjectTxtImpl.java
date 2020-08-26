@@ -176,4 +176,9 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void countTasks(String[] args, String fileName) {
+
+    }
 }

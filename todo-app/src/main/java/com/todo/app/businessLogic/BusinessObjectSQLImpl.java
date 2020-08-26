@@ -149,4 +149,16 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         }
         return answer;
     }
+
+    @Override
+    public void countTasks(String[] args, String fileName){
+        System.out.println(Arrays.toString(args));
+        if(args == null){
+            ArrayList<Task> tasks =  taskDAO.loadTasks("");
+            System.out.println("There are : " + tasks.size() + " tasks");
+        }
+        else{
+            System.out.println("Command not found");
+        }
+    }
 }
