@@ -99,9 +99,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
 
     public void doneTask(String[] args, String fileName) {
         ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
-        String arg = args[0];
         markAsDone(tasks, fileName, args[0]);
-        System.out.println();
     }
 
     public void markAsDone(ArrayList<Task> tasks, String fileName, String arg) {

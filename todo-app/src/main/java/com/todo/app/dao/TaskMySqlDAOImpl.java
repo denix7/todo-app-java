@@ -5,6 +5,9 @@ import com.todo.app.factory.FactoryDAO;
 import com.todo.app.factory.IDBAdapter;
 import com.todo.app.factory.MySQLAdapter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,16 +43,29 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
 
     @Override
     public void saveList(ArrayList<Task> tasks, String fileName, boolean exist) {
-
+        try
+        {
+            for (Task task: tasks)
+            {
+                update(task);
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void update(Task task) {
         try{
-            String sql = "UPDATE tasks set description where id = ?";
+            String sql = "update tasks set description = ?, tag = ?, status = ? where id = ?";
             Connection connection = adapter.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, task.getUuid().toString());
+            statement.setString(1, task.getDescription());
+            statement.setString(2, task.getTag());
+            statement.setString(3, task.getStatus());
+            statement.setInt(4, task.getId());
             statement.executeUpdate();
         } catch(Exception e){
             e.printStackTrace();
@@ -89,6 +105,7 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
                 String entry = results.getString(7);
 
                 Task current = new Task(description);
+                current.setId(id);
                 current.setUuid(UUID.fromString(uudi));
                 current.setStatus(status);
                 current.setTag(tag);

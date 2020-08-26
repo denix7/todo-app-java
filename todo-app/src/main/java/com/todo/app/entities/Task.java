@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Task {
+    private int id;
     private String description;
     private String status;
     private UUID uuid;
@@ -31,6 +32,14 @@ public class Task {
         this.priority = priority;
         this.depends = depends;
         this.tag = tag;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescription() {

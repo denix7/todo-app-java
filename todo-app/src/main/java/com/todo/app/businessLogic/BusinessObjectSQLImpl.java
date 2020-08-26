@@ -54,9 +54,9 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         Task current;
         if (numeric && args.length == 2) {
-            int taskIndex = Integer.parseInt(args[0]) - 1;
+            int taskIndex = Integer.parseInt(args[0]);
             String newDescription = args[1];
-            current = tasks.get(taskIndex);
+            current = tasks.get(taskIndex-1);
             current.setDescription(newDescription);
         } else {
             int index = Integer.parseInt(args[0]) - 1;
@@ -64,26 +64,81 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             current = tasks.get(index);
             current.setTag(newTag);
         }
-        taskDAO.update(current);
+
+        try{
+            taskDAO.update(current);
+            System.out.println("task was modified");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void doneTask(String[] args, String fileName) {
+        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+        markAsDone(tasks, fileName, args[0]);
+    }
 
+    public void markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
+        boolean numeric = true;
+        numeric = arg.matches("-?\\d+(\\.\\d+)?");
+        Task task = null;
+
+        if (numeric) {
+            int index = Integer.parseInt(arg);
+            task = tasks.get(index - 1);
+            task.setStatus("completed");
+        } else {
+            for (Task current : tasks) {
+                if (current.getTag().equals(arg)) {
+                    current.setStatus("completed");
+                }
+            }
+        }
+
+        try{
+            taskDAO.saveList(tasks, "", false);
+            System.out.println("marked as done");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void listTasks(String[] args, String fileName) {
         ArrayList<Task> tasks =  taskDAO.loadTasks("");
 
-        for(Task current : tasks){
-            System.out.println(current);
+        if(args != null)
+        {
+            tasks = filterByTag(tasks, args[0]);
         }
+
+        System.out.println("===================LIST==================");
+
+        for(Task current : tasks)
+        {
+            System.out.println(current.getId() +")" + " " + current.showList());
+        }
+        System.out.println("There are : " + tasks.size() + " elements");
     }
 
     @Override
     public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
-        return null;
+        ArrayList<Task> answer = new ArrayList<Task>();
+
+        for(Task current : tasks)
+        {
+            String currentTag = current.getTag();
+            if(currentTag.equals(tag))
+            {
+                answer.add(current);
+            }
+        }
+        if(answer.isEmpty())
+        {
+            System.out.println("Nothing founded");
+        }
+        return answer;
     }
 
     @Override
