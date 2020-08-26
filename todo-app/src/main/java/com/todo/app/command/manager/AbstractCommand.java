@@ -18,12 +18,10 @@ public class AbstractCommand implements ICommand {
     }
 
     public void write(OutputStream stream, String message){
-        try
-        {
+        try {
             stream.write(message.getBytes());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -6,6 +6,7 @@ import com.todo.app.entities.Task;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class BusinessObjectSQLImpl implements IBusinessObject {
@@ -24,12 +25,10 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         task.setStatus("pending");
         task.setTag("default");
 
-        if(args.length > 1)
-        {
+        if(args.length > 1) {
             task.setPriority(args[1]);
         }
-        else
-        {
+        else {
             task.setPriority("M");
         }
 
@@ -44,9 +43,15 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         }
     }
 
+    @Override
     public void modifyTask(String[] args, String fileName) {
-        ArrayList tasks = taskDAO.loadTasks("");
-        modifyTaskByIndex(tasks, args);
+        if(args != null) {
+            ArrayList tasks = taskDAO.loadTasks("");
+            modifyTaskByIndex(tasks, args);
+        }
+        else {
+            System.out.println("Command not found");
+        }
     }
 
     public void modifyTaskByIndex(ArrayList<Task> tasks, String[] args) {
@@ -56,19 +61,26 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         if (numeric && args.length == 2) {
             int taskIndex = Integer.parseInt(args[0]);
             String newDescription = args[1];
-            current = tasks.get(taskIndex-1);
+            current = tasks.get(taskIndex - 1);
             current.setDescription(newDescription);
-        } else {
+        }
+        else {
             int index = Integer.parseInt(args[0]) - 1;
-            String newTag = args[2];
+            String arg = args[2];
             current = tasks.get(index);
-            current.setTag(newTag);
+            if(arg.equals("H") || arg.equals("M")  || arg.equals("L") ){
+                current.setPriority(arg);
+            }
+            else{
+                current.setTag(arg);
+            }
         }
 
         try{
             taskDAO.update(current);
             System.out.println("task was modified");
-        }catch (Exception e){
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -88,7 +100,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             int index = Integer.parseInt(arg);
             task = tasks.get(index - 1);
             task.setStatus("completed");
-        } else {
+        }
+        else {
             for (Task current : tasks) {
                 if (current.getTag().equals(arg)) {
                     current.setStatus("completed");
@@ -99,7 +112,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         try{
             taskDAO.saveList(tasks, "", false);
             System.out.println("marked as done");
-        }catch (Exception e){
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -108,15 +122,13 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     public void listTasks(String[] args, String fileName) {
         ArrayList<Task> tasks =  taskDAO.loadTasks("");
 
-        if(args != null)
-        {
+        if(args != null) {
             tasks = filterByTag(tasks, args[0]);
         }
 
         System.out.println("===================LIST==================");
 
-        for(Task current : tasks)
-        {
+        for(Task current : tasks) {
             System.out.println(current.getId() +")" + " " + current.showList());
         }
         System.out.println("There are : " + tasks.size() + " elements");
@@ -126,23 +138,15 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
         ArrayList<Task> answer = new ArrayList<Task>();
 
-        for(Task current : tasks)
-        {
+        for(Task current : tasks) {
             String currentTag = current.getTag();
-            if(currentTag.equals(tag))
-            {
+            if(currentTag.equals(tag)) {
                 answer.add(current);
             }
         }
-        if(answer.isEmpty())
-        {
+        if(answer.isEmpty()) {
             System.out.println("Nothing founded");
         }
         return answer;
-    }
-
-    @Override
-    public void loadFile(String fileName) {
-
     }
 }

@@ -20,7 +20,8 @@ public class MySQLAdapter implements IDBAdapter {
             String password = "";
             Connection connection = DriverManager.getConnection(connectionString, user, password);
             return connection;
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }

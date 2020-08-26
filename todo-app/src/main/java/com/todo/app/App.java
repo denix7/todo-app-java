@@ -24,8 +24,8 @@ public class App {
             String line = scanner.nextLine();
             if (line.trim().isEmpty())
             {
-                ICommand help = commandManager.getCommand("default");
-                help.execute(null, System.out,null,null);
+                ICommand defaultCommand = commandManager.getCommand("default");
+                defaultCommand.execute(null, System.out,null,null);
                 continue;
             }
 

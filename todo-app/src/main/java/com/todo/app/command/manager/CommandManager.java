@@ -17,8 +17,7 @@ public class CommandManager {
     }
 
     public static CommandManager getInstance() {
-        if(commandManager == null)
-        {
+        if(commandManager == null) {
             commandManager = new CommandManager();
         }
         return commandManager;
@@ -29,8 +28,7 @@ public class CommandManager {
     }
 
     public ICommand getCommand(String command) {
-        if(!commands.containsKey(command))
-        {
+        if(!commands.containsKey(command)) {
             return new DefaultCommand();
         }
 
@@ -38,8 +36,7 @@ public class CommandManager {
             ICommand iCommand = commands.get(command).newInstance();
             return iCommand;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }

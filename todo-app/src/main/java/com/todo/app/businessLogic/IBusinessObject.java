@@ -15,5 +15,4 @@ public interface IBusinessObject {
 
     ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag);
 
-    void loadFile(String fileName);
 }

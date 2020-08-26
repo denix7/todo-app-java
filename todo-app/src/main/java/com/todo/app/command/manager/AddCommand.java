@@ -16,17 +16,14 @@ public class AddCommand extends AbstractCommand{
 
     @Override
     public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        if(args != null && args.length == 1)
-        {
+        if(args != null && args.length == 1) {
             write(out, "Adding element with title");
             bo.addTask(args, fileName);
         }
-        if(args == null || args.length == 0)
-        {
+        if(args == null || args.length == 0) {
             write(out, "Debe agreagar una nota");
         }
-        if(args != null && args.length == 2 )
-        {
+        if(args != null && args.length == 2 ) {
             System.out.println("Task with priority added");
             bo.addTask(args, fileName);
         }

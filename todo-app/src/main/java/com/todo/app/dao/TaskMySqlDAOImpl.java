@@ -1,25 +1,19 @@
 package com.todo.app.dao;
 
 import com.todo.app.entities.Task;
-import com.todo.app.factory.FactoryDAO;
+import com.todo.app.factory.FactoryDBAdapter;
 import com.todo.app.factory.IDBAdapter;
-import com.todo.app.factory.MySQLAdapter;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 public class TaskMySqlDAOImpl implements ITaskDAO {
     private IDBAdapter adapter;
 
     public TaskMySqlDAOImpl(){
-        adapter = FactoryDAO.getAdapter();
+        adapter = FactoryDBAdapter.getAdapter();
     }
 
     @Override
@@ -36,22 +30,20 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
             statement.setString(5, task.getPriority());
             statement.setString(6, task.getEntry());
             statement.executeUpdate();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
     public void saveList(ArrayList<Task> tasks, String fileName, boolean exist) {
-        try
-        {
-            for (Task task: tasks)
-            {
+        try {
+            for (Task task: tasks) {
                 update(task);
             }
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -59,15 +51,17 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
     @Override
     public void update(Task task) {
         try{
-            String sql = "update tasks set description = ?, tag = ?, status = ? where id = ?";
+            String sql = "update tasks set description = ?, tag = ?, status = ?, priority = ? where id = ?";
             Connection connection = adapter.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, task.getDescription());
             statement.setString(2, task.getTag());
             statement.setString(3, task.getStatus());
-            statement.setInt(4, task.getId());
+            statement.setString(4, task.getPriority());
+            statement.setInt(5, task.getId());
             statement.executeUpdate();
-        } catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -80,7 +74,8 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, task.getUuid().toString());
             statement.executeUpdate();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -114,9 +109,9 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
 
                 tasks.add(current);
             }
-
             return tasks;
-        }catch(Exception e){
+        }
+        catch(Exception e){
             e.printStackTrace();
             return null;
         }
