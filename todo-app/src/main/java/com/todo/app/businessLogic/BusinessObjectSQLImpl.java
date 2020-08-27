@@ -2,7 +2,12 @@ package com.todo.app.businessLogic;
 
 import com.todo.app.dao.TaskMySqlDAOImpl;
 import com.todo.app.entities.Task;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -245,7 +250,6 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     public void getInfo(String[] args, String fileName) {
         ArrayList<Task> tasks = taskDAO.loadTasks("");
 
-
         if(args == null){
             System.out.println("Command not found");
         }
@@ -269,6 +273,52 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
                 else{
                     System.out.println("the task doesn't exist");
                 }
+            }
+        }
+    }
+
+    @Override
+    public void export(String[] args, String fileName) {
+        ArrayList<Task> tasks = taskDAO.loadTasks("");
+
+        if(args == null){
+            System.out.println("Command not found");
+        }
+        else if(args.length == 1 || args.length > 2){
+            System.out.println("Command not valid");
+        }
+        else{
+            String filter = args[0];
+            String arg = args[1];
+            ArrayList<Task> filters = new ArrayList<>();
+            for(Task current : tasks){
+                if(filter.equals("tag:") && current.getTag().equals(arg)){
+                    filters.add(current);
+                }
+                if(filter.equals("status:") && current.getStatus().equals(arg)){
+                    filters.add(current);
+                }
+                if(filter.equals("priority:") && current.getPriority().equals(arg)){
+                    filters.add(current);
+                }
+            }
+
+            try{
+                exportAsCsv(filters);
+                System.out.println("Tasks exported");
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void exportAsCsv(ArrayList<Task> tasks) throws IOException {
+        FileWriter out = new FileWriter("export.csv");
+        String[] HEADERS = { "Title", "Status", "UUID", "Entry", "Priority", "Tag"};
+
+        try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(HEADERS))){
+            for(Task task : tasks){
+                printer.printRecord(task);
             }
         }
     }

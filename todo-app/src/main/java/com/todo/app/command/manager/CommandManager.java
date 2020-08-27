@@ -18,6 +18,7 @@ public class CommandManager {
         register(TagsCommand.COMMAND_NAME, TagsCommand.class);
         register(DeleteCommand.COMMAND_NAME, DeleteCommand.class);
         register(InfoCommand.COMMAND_NAME, InfoCommand.class);
+        register(ExportCommand.COMMAND_NAME, ExportCommand.class);
     }
 
     public static CommandManager getInstance() {

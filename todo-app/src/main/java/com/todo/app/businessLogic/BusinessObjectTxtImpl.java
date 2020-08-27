@@ -196,4 +196,9 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     public void getInfo(String[] args, String fileName) {
 
     }
+
+    @Override
+    public void export(String[] args, String fileName) {
+
+    }
 }

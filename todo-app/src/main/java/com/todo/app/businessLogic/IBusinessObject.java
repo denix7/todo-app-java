@@ -22,4 +22,6 @@ public interface IBusinessObject {
     void deleteTask(String[] args, String fileName);
 
     void getInfo(String[] args, String fileName);
+
+    void export(String[] args, String fileName);
 }
