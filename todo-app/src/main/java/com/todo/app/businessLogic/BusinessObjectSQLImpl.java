@@ -240,4 +240,36 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             System.out.println("Task deleted");
         }
     }
+
+    @Override
+    public void getInfo(String[] args, String fileName) {
+        ArrayList<Task> tasks = taskDAO.loadTasks("");
+
+
+        if(args == null){
+            System.out.println("Command not found");
+        }
+        else {
+            String arg = args[0];
+            boolean isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
+
+            if (isNumeric) {
+                int index = Integer.parseInt(arg) - 1;
+                if(index < tasks.size()) {
+                    Task current = tasks.get(index);
+
+                    System.out.println("Name:     " + current.getDescription() + "\n" +
+                            "ID:       " + current.getUuid() + "\n" +
+                            "Status:   " + current.getStatus() + "\n" +
+                            "Tag:      " + current.getTag() + "\n" +
+                            "priority: " + current.getPriority() + "\n" +
+                            "entry :   " + current.getEntry() + "\n"
+                    );
+                }
+                else{
+                    System.out.println("the task doesn't exist");
+                }
+            }
+        }
+    }
 }

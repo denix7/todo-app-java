@@ -83,6 +83,9 @@ public class Fragmenter {
         if(args.contains("todo delete")){
             return fragmentSimple(args.substring(5));
         }
+        if(args.contains("todo info")){
+            return fragmentSimple(args.substring(5));
+        }
 
         return res;
     }

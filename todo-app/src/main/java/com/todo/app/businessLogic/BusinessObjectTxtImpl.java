@@ -191,4 +191,9 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     public void deleteTask(String[] args, String fileName) {
 
     }
+
+    @Override
+    public void getInfo(String[] args, String fileName) {
+
+    }
 }
