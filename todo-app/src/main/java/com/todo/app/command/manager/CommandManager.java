@@ -15,6 +15,7 @@ public class CommandManager {
         register(DoneCommand.COMMAND_NAME, DoneCommand.class);
         register(HelpCommand.COMMAND_NAME, HelpCommand.class);
         register(CountCommand.COMMAND_NAME, CountCommand.class);
+        register(TagsCommand.COMMAND_NAME, TagsCommand.class);
     }
 
     public static CommandManager getInstance() {

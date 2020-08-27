@@ -3,11 +3,10 @@ package com.todo.app.businessLogic;
 import com.todo.app.dao.TaskMySqlDAOImpl;
 import com.todo.app.entities.Task;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.UUID;
+import java.util.*;
 
 public class BusinessObjectSQLImpl implements IBusinessObject {
     public static TaskMySqlDAOImpl taskDAO;
@@ -152,13 +151,60 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
 
     @Override
     public void countTasks(String[] args, String fileName){
-        System.out.println(Arrays.toString(args));
+        ArrayList<Task> tasks =  taskDAO.loadTasks("");
+
         if(args == null){
-            ArrayList<Task> tasks =  taskDAO.loadTasks("");
-            System.out.println("There are : " + tasks.size() + " tasks");
+            System.out.println("There are : " + tasks.size() + " tasks founded");
+        }
+        else if(args.length == 2) {
+            ArrayList<Task> result = new ArrayList<Task>();
+            String arg = args[1];
+            for (Task current : tasks){
+                if(arg.equals(current.getPriority()) || arg.equals(current.getStatus()) || arg.equals(current.getTag())){
+                    result.add(current);
+                }
+            }
+            System.out.println("There are : " + result.size() + " tasks founded");
         }
         else{
             System.out.println("Command not found");
         }
+    }
+
+    @Override
+    public void getTags(String[] args, String fileName){
+        ArrayList<Task> tasks =  taskDAO.loadTasks("");
+        HashMap<String, Integer> tags = new HashMap<>();
+        if(args == null){
+            tags = countTags(tasks);
+            for(String key : tags.keySet()){
+                System.out.println(key);
+            }
+        }
+        else if(args.length == 1 && args[0].equals("+")){
+            tags = countTags(tasks);
+            tags.forEach((k, v) -> {
+                System.out.println(k + " : " + v);
+            });
+        }
+        else{
+            System.out.println("Command not found");
+        }
+    }
+
+    private HashMap<String, Integer> countTags(ArrayList<Task> tasks){
+        HashMap<String, Integer> tags = new HashMap<>();
+        int i=1;
+        for (Task current : tasks){
+            if(!tags.containsKey(current.getTag())){
+                tags.put(current.getTag(), i);
+            }
+            else{
+                int cantity = tags.get(current.getTag());
+                cantity++;
+                tags.put(current.getTag(), cantity);
+            }
+        }
+        return tags;
     }
 }

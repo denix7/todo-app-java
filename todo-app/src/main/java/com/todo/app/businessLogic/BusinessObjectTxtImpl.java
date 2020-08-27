@@ -181,4 +181,9 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     public void countTasks(String[] args, String fileName) {
 
     }
+
+    @Override
+    public void getTags(String[] args, String fileName) {
+
+    }
 }

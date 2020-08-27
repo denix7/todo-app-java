@@ -77,6 +77,9 @@ public class Fragmenter {
         if(args.contains("todo count")) {
             return fragmentSimple(args.substring(5));
         }
+        if(args.contains("todo tags")) {
+            return fragmentSimple(args.substring(5));
+        }
 
         return res;
     }

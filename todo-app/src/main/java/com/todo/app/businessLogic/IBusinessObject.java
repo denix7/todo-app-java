@@ -16,4 +16,6 @@ public interface IBusinessObject {
     ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag);
 
     void countTasks(String[] args, String fileName);
+
+    void getTags(String[] args, String fileName);
 }
