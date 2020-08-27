@@ -72,7 +72,7 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
             String sql = "delete from tasks where id = ?";
             Connection connection = adapter.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, task.getUuid().toString());
+            statement.setInt(1, task.getId());
             statement.executeUpdate();
         }
         catch (Exception e) {

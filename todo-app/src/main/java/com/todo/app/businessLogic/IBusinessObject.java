@@ -18,4 +18,6 @@ public interface IBusinessObject {
     void countTasks(String[] args, String fileName);
 
     void getTags(String[] args, String fileName);
+
+    void deleteTask(String[] args, String fileName);
 }

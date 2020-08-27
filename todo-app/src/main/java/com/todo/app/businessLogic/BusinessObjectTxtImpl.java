@@ -98,10 +98,10 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     }
 
     public void markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
-        boolean numeric = true;
-        numeric = arg.matches("-?\\d+(\\.\\d+)?");
+        boolean isNumeric = true;
+        isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
 
-        if(numeric) {
+        if(isNumeric) {
             int index = Integer.parseInt(arg);
             Task current = tasks.get(index-1);
             current.setStatus("completed");
@@ -184,6 +184,11 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
 
     @Override
     public void getTags(String[] args, String fileName) {
+
+    }
+
+    @Override
+    public void deleteTask(String[] args, String fileName) {
 
     }
 }

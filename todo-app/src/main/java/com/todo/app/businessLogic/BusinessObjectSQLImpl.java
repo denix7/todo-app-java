@@ -127,8 +127,10 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
 
         System.out.println("===================LIST==================");
 
+        int indexTask = 1;
         for(Task current : tasks) {
-            System.out.println(current.getId() +")" + " " + current.showList());
+            System.out.println(indexTask +")" + " " + current.showList());
+            indexTask++;
         }
         System.out.println("There are : " + tasks.size() + " elements");
     }
@@ -206,5 +208,36 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             }
         }
         return tags;
+    }
+
+    @Override
+    public void deleteTask(String[] args, String fileName){
+        ArrayList<Task> tasks = taskDAO.loadTasks("");
+        String arg = args[0];
+        boolean isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
+
+        if(args == null){
+            System.out.println("Command not found");
+        }
+        if(isNumeric){
+            int index = Integer.parseInt(args[0]) - 1;
+            if(index <= tasks.size()){
+                Task taskToDelete = tasks.get(index);
+                taskDAO.delete(taskToDelete);
+                System.out.println("Task deleted");
+            }
+            else{
+                System.out.println("This element doesn't exist");
+            }
+        }
+        else{
+            arg = args[1];
+            for(Task current : tasks){
+                if(current.getTag().equals(arg) || current.getStatus().equals(arg) || current.getPriority().equals(arg)){
+                    taskDAO.delete(current);
+                }
+            }
+            System.out.println("Task deleted");
+        }
     }
 }
