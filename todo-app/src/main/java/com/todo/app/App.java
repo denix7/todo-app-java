@@ -1,12 +1,17 @@
 package com.todo.app;
 
-import com.todo.app.businessLogic.BusinessObjectImpl;
-import com.todo.app.command.manager.Command;
+import com.todo.app.businessLogic.BusinessObjectSQLImpl;
+import com.todo.app.businessLogic.BusinessObjectTxtImpl;
+import com.todo.app.businessLogic.IBusinessObject;
 import com.todo.app.command.manager.CommandManager;
+import com.todo.app.command.manager.ICommand;
+import com.todo.app.dao.TaskMySqlDAOImpl;
+import com.todo.app.entities.Task;
 import com.todo.app.util.Fragmenter;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class App {
     public static void main(String[] args) {
@@ -19,8 +24,8 @@ public class App {
             String line = scanner.nextLine();
             if (line.trim().isEmpty())
             {
-                Command help = commandManager.getCommand("default");
-                help.execute(null, System.out,null,null);
+                ICommand defaultCommand = commandManager.getCommand("default");
+                defaultCommand.execute(null, System.out,null,null);
                 continue;
             }
 
@@ -33,10 +38,11 @@ public class App {
                 commandArgs2 = Arrays.copyOfRange(commandArgs, 1, commandArgs.length);
             }
 
-            Command command = commandManager.getCommand(commandName);
+            ICommand command = commandManager.getCommand(commandName);
 
             //Business Object
-            BusinessObjectImpl bo = new BusinessObjectImpl();
+            //IBusinessObject bo = new BusinessObjectTxtImpl();
+            IBusinessObject bo = new BusinessObjectSQLImpl();
 
             //create file at path
             String fileName = "c:\\tasks-java\\tasks.txt";

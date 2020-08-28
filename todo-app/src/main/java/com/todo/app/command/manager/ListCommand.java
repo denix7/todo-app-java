@@ -1,6 +1,7 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectImpl;
+import com.todo.app.businessLogic.BusinessObjectTxtImpl;
+import com.todo.app.businessLogic.IBusinessObject;
 
 import java.io.OutputStream;
 
@@ -14,7 +15,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObjectImpl bo, String fileName) {
+    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
         bo.listTasks(args, fileName);
     }
 

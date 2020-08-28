@@ -45,15 +45,12 @@ public class Fragmenter {
         String[] res = new String[1];
         res[0] = "Invalid";
         String regex = "";
-        if(args.contains("add"))
-        {
+        if(args.contains("add")) {
             regex = "todo\\s(add)\\s\"([a-zA-Z0-9\\s]+)\\\"( priority\\s?:\\s?)?(L?M?H?)?";
             return commandAddPattern(regex, args);
         }
-        if(args.contains("todo list"))
-        {
-            if(args.contains("tag"))
-            {
+        if(args.contains("todo list")) {
+            if(args.contains("tag")) {
                 int point = args.indexOf(':') + 1;
                 return fragmentSimple("list " + args.substring(point));
             }
@@ -61,54 +58,51 @@ public class Fragmenter {
             return fragmentSimple(args.substring(5));
 
         }
-        if(args.contains("todo done"))
-        {
-            if(args.contains("tag"))
-            {
+        if(args.contains("todo done")) {
+            if(args.contains("tag")) {
                 int point = args.indexOf(':') + 1;
                 return fragmentSimple("done " + args.substring(point));
             }
             return fragmentSimple(args.substring(5));
         }
-        if(args.contains("todo exit"))
-        {
+        if(args.contains("todo exit")) {
             return fragmentSimple(args.substring(5));
         }
-        if(args.contains("todo help"))
-        {
+        if(args.contains("todo help")) {
             return fragmentSimple(args.substring(5));
         }
-        if(args.contains("todo modify"))
-        {
-            /*if(args.contains("tag"))
-            {
-                System.out.println("args " + args);
-                int tagName = args.indexOf(':') + 1;
-                return fragmentSimple("modify " + args.substring(tagName));
-            }*/
-            /*if(args.contains("tag"))
-            {
-                //System.out.println("args " + args);
-                int tagName = args.indexOf(':') + 1;
-                int index =
-                return fragmentSimple("modify " + args.substring(tagName));
-            }*/
-            regex = "";
+        if(args.contains("todo modify")) {
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo count")) {
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo tags")) {
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo delete")){
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo info")){
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo export")){
+            return fragmentSimple(args.substring(5));
+        }
+        if(args.contains("todo config")){
             return fragmentSimple(args.substring(5));
         }
 
         return res;
     }
 
-    private static String[] commandAddPattern(String regex, String args)
-    {
+    private static String[] commandAddPattern(String regex, String args) {
         String[] res = new String[3];
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(args);
 
         List<String> tokens = new ArrayList<String>();
-        if(args.contains("priority"))
-        {
+        if(args.contains("priority")) {
             int i = 1;
             while(m.find()){
                 tokens.add(m.group(1));
@@ -124,8 +118,7 @@ public class Fragmenter {
             }
         }
 
-        if(tokens.size()>0)
-        {
+        if(tokens.size()>0) {
             String[] argsArray = new String[tokens.size()];
             argsArray = tokens.toArray(argsArray);
             //System.out.println(Arrays.toString(argsArray));
@@ -135,8 +128,7 @@ public class Fragmenter {
         return res;
     }
 
-    private static String[] commandListPattern(String regex, String args)
-    {
+    private static String[] commandListPattern(String regex, String args) {
         String[] res = new String[3];
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(args);
@@ -152,8 +144,7 @@ public class Fragmenter {
         }
         //System.out.println("list " + tokens.toString());
 
-        if(tokens.size()>0)
-        {
+        if(tokens.size()>0) {
             String[] argsArray = new String[tokens.size()];
             argsArray = tokens.toArray(argsArray);
             System.out.println(Arrays.toString(argsArray));
