@@ -6,7 +6,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -47,7 +46,10 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
 
     @Override
     public void modifyTask(String[] args, String fileName) {
-        if(args != null) {
+        if(args == null || args.length == 1 || args.length > 3) {
+            System.out.println("Command not valid");
+        }
+        else if(args.length == 3 || args.length == 2) {
             ArrayList tasks = taskDAO.loadTasks("");
             modifyTaskByIndex(tasks, args);
         }
@@ -66,21 +68,38 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             current = tasks.get(taskIndex - 1);
             current.setDescription(newDescription);
         }
+        else if(!numeric && args.length == 2){
+            current = null;
+            System.out.println("Command not valid");
+        }
         else {
+            System.out.println(Arrays.toString(args));
             int index = Integer.parseInt(args[0]) - 1;
             String arg = args[2];
+            String filter = args[1];
+
             current = tasks.get(index);
-            if(arg.equals("H") || arg.equals("M")  || arg.equals("L") ){
-                current.setPriority(arg);
+            if (filter.equals("priority:")) {
+                if (arg.equals("H") || arg.equals("M") || arg.equals("L")) {
+                    current.setPriority(arg);
+                }
+                else{
+                    System.out.println("Not valid priority");
+                }
+            }
+            else if(filter.equals("tag:")){
+                current.setTag(arg);
             }
             else{
-                current.setTag(arg);
+                System.out.println("Command not valid");
             }
         }
 
         try{
-            taskDAO.update(current);
-            System.out.println("task was modified");
+            if(current != null){
+                taskDAO.update(current);
+                System.out.println("task was modified");
+            }
         }
         catch (Exception e){
             e.printStackTrace();
@@ -138,7 +157,6 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         System.out.println("There are : " + tasks.size() + " elements");
     }
 
-    @Override
     public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
         ArrayList<Task> answer = new ArrayList<Task>();
 
@@ -215,32 +233,48 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
 
     @Override
     public void deleteTask(String[] args, String fileName){
+        System.out.println(Arrays.toString(args));
         ArrayList<Task> tasks = taskDAO.loadTasks("");
-        String arg = args[0];
-        boolean isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
+
 
         if(args == null){
             System.out.println("Command not found");
         }
-        if(isNumeric){
-            int index = Integer.parseInt(args[0]) - 1;
-            if(index <= tasks.size()){
-                Task taskToDelete = tasks.get(index);
-                taskDAO.delete(taskToDelete);
-                System.out.println("Task deleted");
-            }
-            else{
-                System.out.println("This element doesn't exist");
-            }
-        }
         else{
-            arg = args[1];
-            for(Task current : tasks){
-                if(current.getTag().equals(arg) || current.getStatus().equals(arg) || current.getPriority().equals(arg)){
-                    taskDAO.delete(current);
+            String arg = args[0];
+            boolean isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
+            if(isNumeric){
+                int index = Integer.parseInt(args[0]) - 1;
+                if(index <= tasks.size()){
+                    Task taskToDelete = tasks.get(index);
+                    taskDAO.delete(taskToDelete);
+                    System.out.println("Task deleted");
+                }
+                else{
+                    System.out.println("This element doesn't exist");
                 }
             }
-            System.out.println("Task deleted");
+            else if(args.length == 2){
+                arg = args[1];
+                String filter = args[0];
+                for(Task current : tasks){
+                    if(filter.equals("tag:") && current.getTag().equals(arg)){
+                        taskDAO.delete(current);
+                        System.out.println("Task deleted");
+                    }
+                    else if(filter.equals("priority:") && current.getPriority().equals((arg))){
+                        taskDAO.delete(current);
+                        System.out.println("Task deleted");
+                    }
+                    else if(filter.equals("status:") && current.getStatus().equals((arg))){
+                        taskDAO.delete(current);
+                        System.out.println("Task deleted");
+                    }
+                }
+            }
+            else{
+                System.out.println("Command not valid");
+            }
         }
     }
 
