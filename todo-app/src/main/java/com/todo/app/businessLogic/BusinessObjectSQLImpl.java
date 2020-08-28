@@ -73,7 +73,6 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             System.out.println("Command not valid");
         }
         else {
-            System.out.println(Arrays.toString(args));
             int index = Integer.parseInt(args[0]) - 1;
             String arg = args[2];
             String filter = args[1];
@@ -314,7 +313,12 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         ArrayList<Task> tasks = taskDAO.loadTasks("");
 
         if(args == null){
-            System.out.println("Command not found");
+            try{
+                exportAsCsv(tasks);
+                System.out.println("Tasks exported in " + getPath());
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
         else if(args.length == 1 || args.length > 2){
             System.out.println("Command not valid");
