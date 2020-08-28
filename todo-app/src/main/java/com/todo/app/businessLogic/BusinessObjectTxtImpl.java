@@ -201,4 +201,9 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     public void export(String[] args, String fileName) {
 
     }
+
+    @Override
+    public void config(String[] args, String fileName) {
+
+    }
 }

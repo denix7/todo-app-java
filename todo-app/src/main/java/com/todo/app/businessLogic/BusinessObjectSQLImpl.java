@@ -5,9 +5,7 @@ import com.todo.app.entities.Task;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -305,7 +303,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
 
             try{
                 exportAsCsv(filters);
-                System.out.println("Tasks exported");
+                System.out.println("Tasks exported in " + getPath());
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -313,13 +311,55 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     private void exportAsCsv(ArrayList<Task> tasks) throws IOException {
-        FileWriter out = new FileWriter("export.csv");
+        String path = getPath() + "\\tasks.csv";
+
+        FileWriter out = new FileWriter(path);
         String[] HEADERS = { "Title", "Status", "UUID", "Entry", "Priority", "Tag"};
 
         try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(HEADERS))){
             for(Task task : tasks){
                 printer.printRecord(task);
             }
+        }
+    }
+
+    public void config(String[] args, String fileName) {
+        if(args == null){
+            System.out.println("Command not found");
+        }
+        else if(args.length == 2){
+            String path = args[1];
+            setPath(path);
+        }
+        else{
+            System.out.println("Command not valid");
+        }
+    }
+
+    private void setPath(String path){
+        try (OutputStream output = new FileOutputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")){
+            Properties properties = new Properties();
+            properties.setProperty("path.config", path);
+            properties.store(output, null);
+            System.out.println("Path changed");
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private String getPath() {
+        try(InputStream input = new FileInputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")){
+            Properties properties = new Properties();
+            properties.load(input);
+            String customProperty = properties.getProperty("path.config");
+
+            return customProperty;
+
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            return null;
         }
     }
 }

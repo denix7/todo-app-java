@@ -19,6 +19,7 @@ public class CommandManager {
         register(DeleteCommand.COMMAND_NAME, DeleteCommand.class);
         register(InfoCommand.COMMAND_NAME, InfoCommand.class);
         register(ExportCommand.COMMAND_NAME, ExportCommand.class);
+        register(ConfigCommand.COMMAND_NAME, ConfigCommand.class);
     }
 
     public static CommandManager getInstance() {

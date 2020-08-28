@@ -89,6 +89,9 @@ public class Fragmenter {
         if(args.contains("todo export")){
             return fragmentSimple(args.substring(5));
         }
+        if(args.contains("todo config")){
+            return fragmentSimple(args.substring(5));
+        }
 
         return res;
     }
