@@ -13,8 +13,8 @@ public class ConfigCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.config(args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.config(args);
     }
 
     @Override

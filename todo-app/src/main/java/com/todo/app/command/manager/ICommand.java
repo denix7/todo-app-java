@@ -7,5 +7,5 @@ import java.io.OutputStream;
 
 public interface ICommand {
     public String getName();
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo);
 }

@@ -2,23 +2,23 @@ package com.todo.app.businessLogic;
 
 public interface IBusinessObject {
 
-    void addTask(String[] args, String fileName);
+    void addTask(String[] args);
 
-    void modifyTask(String[] args, String fileName);
+    void modifyTask(String[] args);
 
-    void doneTask(String[] args, String fileName);
+    void doneTask(String[] args);
 
-    void listTasks(String[] args, String fileName);
+    void listTasks(String[] args);
 
-    void countTasks(String[] args, String fileName);
+    void countTasks(String[] args);
 
-    void getTags(String[] args, String fileName);
+    void getTags(String[] args);
 
-    void deleteTask(String[] args, String fileName);
+    void deleteTask(String[] args);
 
-    void getInfo(String[] args, String fileName);
+    void getInfo(String[] args);
 
-    void export(String[] args, String fileName);
+    void export(String[] args);
 
-    void config(String[] args, String fileName);
+    void config(String[] args);
 }

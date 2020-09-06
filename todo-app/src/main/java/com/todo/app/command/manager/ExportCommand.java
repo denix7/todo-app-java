@@ -13,8 +13,8 @@ public class ExportCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.export(args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.export(args);
     }
 
     @Override

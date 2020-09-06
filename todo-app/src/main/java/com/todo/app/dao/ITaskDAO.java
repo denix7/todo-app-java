@@ -8,14 +8,14 @@ import java.util.UUID;
 
 public interface ITaskDAO {
 
-    void save(Task task, String fileName, boolean exist);
+    void save(Task task, boolean exist);
 
-    void saveList(ArrayList<Task> tasks, String fileName, boolean exist);
+    void saveList(ArrayList<Task> tasks, boolean exist);
 
     public void update(Task task);
 
     public void delete(Task task);
 
-    public ArrayList<Task> loadTasks(String fileName);
+    public ArrayList<Task> loadTasks();
 
 }

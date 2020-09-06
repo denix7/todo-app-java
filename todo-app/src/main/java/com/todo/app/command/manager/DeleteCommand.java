@@ -13,8 +13,8 @@ public class DeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.deleteTask(args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.deleteTask(args);
     }
 
     @Override

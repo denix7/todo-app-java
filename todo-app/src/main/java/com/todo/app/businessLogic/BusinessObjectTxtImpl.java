@@ -11,12 +11,15 @@ import java.util.UUID;
 public class BusinessObjectTxtImpl implements IBusinessObject {
 
     public static TaskTxtDAOImpl taskDAO;
+    private String fileName;
 
     public BusinessObjectTxtImpl() {
-        this.taskDAO = new TaskTxtDAOImpl();
+
+        fileName = "c:\\tasks-java\\tasks.txt";
+        this.taskDAO = new TaskTxtDAOImpl(fileName);
     }
 
-    public void addTask(String[] args, String fileName) {
+    public void addTask(String[] args) {
         UUID id = UUID.randomUUID();
         Task task = new Task(args[0]);
 
@@ -39,7 +42,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
 
         try{
             boolean existFile = taskDAO.exist(fileName);
-            taskDAO.save(task, fileName, existFile);
+            taskDAO.save(task, existFile);
         }
         catch(Exception e)
         {
@@ -48,12 +51,12 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     }
 
     @Override
-    public void modifyTask(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
-        modifyTaskByIndex(tasks, fileName, args);
+    public void modifyTask(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
+        modifyTaskByIndex(tasks, args);
     }
 
-    public void modifyTaskByIndex(ArrayList<Task> tasks, String fileName, String[] args) {
+    public void modifyTaskByIndex(ArrayList<Task> tasks, String[] args) {
         try {
             boolean numeric = true;
             numeric = args[0].matches("-?\\d+(\\.\\d+)?");
@@ -80,7 +83,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
             boolean existFile = taskDAO.exist(fileName);
             if(existFile) {
                 taskDAO.deleteFile(fileName);
-                taskDAO.saveList(tasks, fileName, existFile);
+                taskDAO.saveList(tasks, existFile);
                 System.out.println("Task " + " was modified");
             }
             else {
@@ -92,12 +95,12 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         }
     }
 
-    public void doneTask(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
-        markAsDone(tasks, fileName, args[0]);
+    public void doneTask(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
+        markAsDone(tasks, args[0]);
     }
 
-    public void markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
+    public void markAsDone(ArrayList<Task> tasks, String arg) {
         boolean isNumeric = true;
         isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
 
@@ -119,7 +122,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
             boolean existFile = taskDAO.exist(fileName);
             if(existFile) {
                 taskDAO.deleteFile(fileName);
-                taskDAO.saveList(tasks, fileName, existFile);
+                taskDAO.saveList(tasks, existFile);
                 System.out.println("marked as done");
             }
             else {
@@ -131,8 +134,8 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         }
     }
 
-    public void listTasks(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+    public void listTasks(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
 
         if(args != null) {
             tasks = filterByTag(tasks, args[0]);
@@ -162,7 +165,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         return answer;
     }
 
-    public void loadFile(String fileName) {
+    public void loadFile() {
         try {
             if(taskDAO.exist(fileName)) {
                 taskDAO.deleteFile(fileName);
@@ -178,32 +181,32 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     }
 
     @Override
-    public void countTasks(String[] args, String fileName) {
+    public void countTasks(String[] args) {
 
     }
 
     @Override
-    public void getTags(String[] args, String fileName) {
+    public void getTags(String[] args) {
 
     }
 
     @Override
-    public void deleteTask(String[] args, String fileName) {
+    public void deleteTask(String[] args) {
 
     }
 
     @Override
-    public void getInfo(String[] args, String fileName) {
+    public void getInfo(String[] args) {
 
     }
 
     @Override
-    public void export(String[] args, String fileName) {
+    public void export(String[] args) {
 
     }
 
     @Override
-    public void config(String[] args, String fileName) {
+    public void config(String[] args) {
 
     }
 }

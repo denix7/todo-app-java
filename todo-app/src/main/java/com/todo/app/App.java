@@ -25,7 +25,7 @@ public class App {
             if (line.trim().isEmpty())
             {
                 ICommand defaultCommand = commandManager.getCommand("default");
-                defaultCommand.execute(null, System.out,null,null);
+                defaultCommand.execute(null, System.out,null);
                 continue;
             }
 
@@ -41,14 +41,11 @@ public class App {
             ICommand command = commandManager.getCommand(commandName);
 
             //Business Object
-            //IBusinessObject bo = new BusinessObjectTxtImpl();
-            IBusinessObject bo = new BusinessObjectSQLImpl();
-
-            //create file at path
-            String fileName = "c:\\tasks-java\\tasks.txt";
+            IBusinessObject bo = new BusinessObjectTxtImpl();
+            //IBusinessObject bo = new BusinessObjectSQLImpl();
 
             //Command Executor
-            command.execute(commandArgs2, System.out, bo, fileName);
+            command.execute(commandArgs2, System.out, bo);
         }
     }
 }

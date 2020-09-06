@@ -14,7 +14,7 @@ public class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
         String message =
                 "todo exit                         : Close the terminal\n" +
                 "todo add \"task name\"              : Register a new task\n" +

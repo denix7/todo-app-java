@@ -15,8 +15,8 @@ public class ModifyCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.modifyTask(args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.modifyTask(args);
     }
 
     @Override

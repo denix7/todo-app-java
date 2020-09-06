@@ -13,7 +13,7 @@ public class AbstractCommand implements ICommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
 
     }
 

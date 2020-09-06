@@ -15,8 +15,8 @@ public class DoneCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.doneTask(args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.doneTask(args);
     }
 
     @Override

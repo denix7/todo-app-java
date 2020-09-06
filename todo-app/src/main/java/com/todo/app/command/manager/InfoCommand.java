@@ -12,8 +12,8 @@ public class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.getInfo(args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.getInfo(args);
     }
 
     @Override

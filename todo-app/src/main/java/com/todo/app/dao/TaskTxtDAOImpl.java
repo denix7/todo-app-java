@@ -6,8 +6,10 @@ import java.io.*;
 import java.util.*;
 
 public class TaskTxtDAOImpl implements ITaskDAO{
+    String fileName;
 
-    public TaskTxtDAOImpl() {
+    public TaskTxtDAOImpl(String fileName) {
+        this.fileName = fileName;
     }
 
     public boolean exist(String fileName) {
@@ -16,7 +18,7 @@ public class TaskTxtDAOImpl implements ITaskDAO{
     }
 
     @Override
-    public void save(Task task, String fileName, boolean exist) {
+    public void save(Task task, boolean exist) {
         File file = new File(fileName);
 
         try
@@ -32,7 +34,7 @@ public class TaskTxtDAOImpl implements ITaskDAO{
     }
 
     @Override
-    public void saveList(ArrayList<Task> tasks, String fileName, boolean exist) {
+    public void saveList(ArrayList<Task> tasks, boolean exist) {
         File file = new File(fileName);
 
         try
@@ -61,7 +63,7 @@ public class TaskTxtDAOImpl implements ITaskDAO{
     }
 
     @Override
-    public ArrayList<Task> loadTasks(String fileName) {
+    public ArrayList<Task> loadTasks() {
         File file = new File(fileName);
         ArrayList<Task> tasks = new ArrayList<Task>();
 

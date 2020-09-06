@@ -14,8 +14,8 @@ public class CountCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.countTasks(args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.countTasks(args);
     }
 
     @Override

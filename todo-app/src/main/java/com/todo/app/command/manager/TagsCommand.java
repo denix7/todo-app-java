@@ -12,8 +12,8 @@ public class TagsCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.getTags (args, fileName);
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+        bo.getTags (args);
     }
 
     @Override

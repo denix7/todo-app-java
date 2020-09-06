@@ -15,7 +15,7 @@ public class DefaultCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
+    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
         write(out, "Command not found\n");
     }
 

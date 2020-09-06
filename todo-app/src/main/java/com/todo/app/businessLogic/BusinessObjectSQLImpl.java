@@ -18,7 +18,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void addTask(String[] args, String fileName) {
+    public void addTask(String[] args) {
         UUID id = UUID.randomUUID();
         Task task = new Task(args[0]);
 
@@ -38,19 +38,19 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         task.setEntry(dtf.format(now));
 
         try{
-            taskDAO.save(task, "", false);
+            taskDAO.save(task, false);
         }catch (Exception e){
             e.printStackTrace();
         }
     }
 
     @Override
-    public void modifyTask(String[] args, String fileName) {
+    public void modifyTask(String[] args) {
         if(args == null || args.length == 1 || args.length > 3) {
             System.out.println("Command not valid");
         }
         else if(args.length == 3 || args.length == 2) {
-            ArrayList tasks = taskDAO.loadTasks("");
+            ArrayList tasks = taskDAO.loadTasks();
             modifyTaskByIndex(tasks, args);
         }
         else {
@@ -106,12 +106,12 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void doneTask(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
-        markAsDone(tasks, fileName, args[0]);
+    public void doneTask(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
+        markAsDone(tasks, args[0]);
     }
 
-    public void markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
+    public void markAsDone(ArrayList<Task> tasks, String arg) {
         boolean numeric = true;
         numeric = arg.matches("-?\\d+(\\.\\d+)?");
         Task task = null;
@@ -130,7 +130,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         }
 
         try{
-            taskDAO.saveList(tasks, "", false);
+            taskDAO.saveList(tasks, false);
             System.out.println("marked as done");
         }
         catch (Exception e){
@@ -139,8 +139,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void listTasks(String[] args, String fileName) {
-        ArrayList<Task> tasks =  taskDAO.loadTasks("");
+    public void listTasks(String[] args) {
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
 
         if(args != null) {
             tasks = filterByTag(tasks, args[0]);
@@ -172,8 +172,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void countTasks(String[] args, String fileName){
-        ArrayList<Task> tasks =  taskDAO.loadTasks("");
+    public void countTasks(String[] args){
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
 
         if(args == null){
             System.out.println("There are : " + tasks.size() + " tasks founded");
@@ -194,8 +194,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void getTags(String[] args, String fileName){
-        ArrayList<Task> tasks =  taskDAO.loadTasks("");
+    public void getTags(String[] args){
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
         HashMap<String, Integer> tags = new HashMap<>();
         if(args == null){
             tags = countTags(tasks);
@@ -231,9 +231,9 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void deleteTask(String[] args, String fileName){
+    public void deleteTask(String[] args){
         System.out.println(Arrays.toString(args));
-        ArrayList<Task> tasks = taskDAO.loadTasks("");
+        ArrayList<Task> tasks = taskDAO.loadTasks();
 
 
         if(args == null){
@@ -278,8 +278,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void getInfo(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks("");
+    public void getInfo(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
 
         if(args == null){
             System.out.println("Command not found");
@@ -309,8 +309,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void export(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks("");
+    public void export(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
 
         if(args == null){
             try{
@@ -361,7 +361,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         }
     }
 
-    public void config(String[] args, String fileName) {
+    @Override
+    public void config(String[] args) {
         if(args == null){
             System.out.println("Command not found");
         }
