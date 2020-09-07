@@ -7,18 +7,6 @@ public abstract class FactoryDBAdapter {
 
     private static final String DB_TYPE = "dbadaptertype";
 
-
-    public static IDBAdapter getAdapter(DBType type){
-        switch (type){
-            case ORACLE:
-                return null;
-            case MYSQL:
-                return new MySQLAdapter();
-            default:
-                return null;
-        }
-    }
-
     public static IDBAdapter getAdapter(){
         try {
             Properties p = loadProperties();

@@ -37,9 +37,10 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         LocalDateTime now = LocalDateTime.now();
         task.setEntry(dtf.format(now));
 
-        try{
-            taskDAO.save(task, false);
-        }catch (Exception e){
+        try {
+            taskDAO.save(task);
+        }
+        catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -59,7 +60,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     public void modifyTaskByIndex(ArrayList<Task> tasks, String[] args) {
-        boolean numeric = true;
+        boolean numeric;
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         Task current;
         if (numeric && args.length == 2) {
@@ -68,7 +69,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             current = tasks.get(taskIndex - 1);
             current.setDescription(newDescription);
         }
-        else if(!numeric && args.length == 2){
+        else if(!numeric && args.length == 2) {
             current = null;
             System.out.println("Command not valid");
         }
@@ -86,7 +87,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
                     System.out.println("Not valid priority");
                 }
             }
-            else if(filter.equals("tag:")){
+            else if(filter.equals("tag:")) {
                 current.setTag(arg);
             }
             else{
@@ -112,7 +113,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     public void markAsDone(ArrayList<Task> tasks, String arg) {
-        boolean numeric = true;
+        boolean numeric;
         numeric = arg.matches("-?\\d+(\\.\\d+)?");
         Task task = null;
 
@@ -129,11 +130,11 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             }
         }
 
-        try{
-            taskDAO.saveList(tasks, false);
+        try {
+            taskDAO.saveList(tasks);
             System.out.println("marked as done");
         }
-        catch (Exception e){
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -194,34 +195,34 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void getTags(String[] args){
+    public void getTags(String[] args) {
         ArrayList<Task> tasks =  taskDAO.loadTasks();
         HashMap<String, Integer> tags = new HashMap<>();
-        if(args == null){
+        if(args == null) {
             tags = countTags(tasks);
             for(String key : tags.keySet()){
                 System.out.println(key);
             }
         }
-        else if(args.length == 1 && args[0].equals("+")){
+        else if(args.length == 1 && args[0].equals("+")) {
             tags = countTags(tasks);
             tags.forEach((k, v) -> {
                 System.out.println(k + " : " + v);
             });
         }
-        else{
+        else {
             System.out.println("Command not found");
         }
     }
 
-    private HashMap<String, Integer> countTags(ArrayList<Task> tasks){
+    private HashMap<String, Integer> countTags(ArrayList<Task> tasks) {
         HashMap<String, Integer> tags = new HashMap<>();
         int i=1;
-        for (Task current : tasks){
+        for (Task current : tasks) {
             if(!tags.containsKey(current.getTag())){
                 tags.put(current.getTag(), i);
             }
-            else{
+            else {
                 int cantity = tags.get(current.getTag());
                 cantity++;
                 tags.put(current.getTag(), cantity);
@@ -231,47 +232,47 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void deleteTask(String[] args){
+    public void deleteTask(String[] args) {
         System.out.println(Arrays.toString(args));
         ArrayList<Task> tasks = taskDAO.loadTasks();
 
 
-        if(args == null){
+        if(args == null) {
             System.out.println("Command not found");
         }
-        else{
+        else {
             String arg = args[0];
             boolean isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
-            if(isNumeric){
+            if(isNumeric) {
                 int index = Integer.parseInt(args[0]) - 1;
                 if(index <= tasks.size()){
                     Task taskToDelete = tasks.get(index);
                     taskDAO.delete(taskToDelete);
                     System.out.println("Task deleted");
                 }
-                else{
+                else {
                     System.out.println("This element doesn't exist");
                 }
             }
-            else if(args.length == 2){
+            else if(args.length == 2) {
                 arg = args[1];
                 String filter = args[0];
-                for(Task current : tasks){
-                    if(filter.equals("tag:") && current.getTag().equals(arg)){
+                for(Task current : tasks) {
+                    if(filter.equals("tag:") && current.getTag().equals(arg)) {
                         taskDAO.delete(current);
                         System.out.println("Task deleted");
                     }
-                    else if(filter.equals("priority:") && current.getPriority().equals((arg))){
+                    else if(filter.equals("priority:") && current.getPriority().equals((arg))) {
                         taskDAO.delete(current);
                         System.out.println("Task deleted");
                     }
-                    else if(filter.equals("status:") && current.getStatus().equals((arg))){
+                    else if(filter.equals("status:") && current.getStatus().equals((arg))) {
                         taskDAO.delete(current);
                         System.out.println("Task deleted");
                     }
                 }
             }
-            else{
+            else {
                 System.out.println("Command not valid");
             }
         }
@@ -281,7 +282,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     public void getInfo(String[] args) {
         ArrayList<Task> tasks = taskDAO.loadTasks();
 
-        if(args == null){
+        if(args == null) {
             System.out.println("Command not found");
         }
         else {
@@ -320,29 +321,30 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
                 e.printStackTrace();
             }
         }
-        else if(args.length == 1 || args.length > 2){
+        else if(args.length == 1 || args.length > 2) {
             System.out.println("Command not valid");
         }
-        else{
+        else {
             String filter = args[0];
             String arg = args[1];
             ArrayList<Task> filters = new ArrayList<>();
-            for(Task current : tasks){
-                if(filter.equals("tag:") && current.getTag().equals(arg)){
+            for(Task current : tasks) {
+                if(filter.equals("tag:") && current.getTag().equals(arg)) {
                     filters.add(current);
                 }
-                if(filter.equals("status:") && current.getStatus().equals(arg)){
+                if(filter.equals("status:") && current.getStatus().equals(arg)) {
                     filters.add(current);
                 }
-                if(filter.equals("priority:") && current.getPriority().equals(arg)){
+                if(filter.equals("priority:") && current.getPriority().equals(arg)) {
                     filters.add(current);
                 }
             }
 
-            try{
+            try {
                 exportAsCsv(filters);
                 System.out.println("Tasks exported in " + getPath());
-            }catch (Exception e){
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -354,8 +356,8 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         FileWriter out = new FileWriter(path);
         String[] HEADERS = { "Title", "Status", "UUID", "Entry", "Priority", "Tag"};
 
-        try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(HEADERS))){
-            for(Task task : tasks){
+        try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT.withHeader(HEADERS))) {
+            for(Task task : tasks) {
                 printer.printRecord(task);
             }
         }
@@ -363,20 +365,20 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
 
     @Override
     public void config(String[] args) {
-        if(args == null){
+        if(args == null) {
             System.out.println("Command not found");
         }
-        else if(args.length == 2){
+        else if(args.length == 2) {
             String path = args[1];
             setPath(path);
         }
-        else{
+        else {
             System.out.println("Command not valid");
         }
     }
 
-    private void setPath(String path){
-        try (OutputStream output = new FileOutputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")){
+    private void setPath(String path) {
+        try (OutputStream output = new FileOutputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")) {
             Properties properties = new Properties();
             properties.setProperty("path.config", path);
             properties.store(output, null);
@@ -388,7 +390,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     private String getPath() {
-        try(InputStream input = new FileInputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")){
+        try(InputStream input = new FileInputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")) {
             Properties properties = new Properties();
             properties.load(input);
             String customProperty = properties.getProperty("path.config");
@@ -396,7 +398,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             return customProperty;
 
         }
-        catch (IOException e){
+        catch (IOException e) {
             e.printStackTrace();
             return null;
         }

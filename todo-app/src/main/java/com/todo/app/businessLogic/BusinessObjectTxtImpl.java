@@ -16,7 +16,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     public BusinessObjectTxtImpl() {
 
         fileName = "c:\\tasks-java\\tasks.txt";
-        this.taskDAO = new TaskTxtDAOImpl(fileName);
+        taskDAO = new TaskTxtDAOImpl(fileName);
     }
 
     public void addTask(String[] args) {
@@ -40,12 +40,10 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         task.setEntry(dtf.format(now));
 
 
-        try{
-            boolean existFile = taskDAO.exist(fileName);
-            taskDAO.save(task, existFile);
+        try {
+            taskDAO.save(task);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
@@ -58,7 +56,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
 
     public void modifyTaskByIndex(ArrayList<Task> tasks, String[] args) {
         try {
-            boolean numeric = true;
+            boolean numeric;
             numeric = args[0].matches("-?\\d+(\\.\\d+)?");
 
             if (numeric && args.length == 2) {
@@ -78,12 +76,11 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
             System.out.println("Parameters is needed");
         }
 
-        try
-        {
+        try {
             boolean existFile = taskDAO.exist(fileName);
             if(existFile) {
                 taskDAO.deleteFile(fileName);
-                taskDAO.saveList(tasks, existFile);
+                taskDAO.saveList(tasks);
                 System.out.println("Task " + " was modified");
             }
             else {
@@ -101,7 +98,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     }
 
     public void markAsDone(ArrayList<Task> tasks, String arg) {
-        boolean isNumeric = true;
+        boolean isNumeric;
         isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
 
         if(isNumeric) {
@@ -122,7 +119,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
             boolean existFile = taskDAO.exist(fileName);
             if(existFile) {
                 taskDAO.deleteFile(fileName);
-                taskDAO.saveList(tasks, existFile);
+                taskDAO.saveList(tasks);
                 System.out.println("marked as done");
             }
             else {
@@ -151,7 +148,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     }
 
     public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
-        ArrayList<Task> answer = new ArrayList<Task>();
+        ArrayList<Task> answer = new ArrayList<>();
 
         for(Task current : tasks) {
             String currentTag = current.getTag();

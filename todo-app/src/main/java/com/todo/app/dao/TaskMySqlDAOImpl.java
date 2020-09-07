@@ -17,7 +17,7 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
     }
 
     @Override
-    public void save(Task task, boolean exist) {
+    public void save(Task task) {
         try {
             String sql = "insert into tasks(description, uuid, status, tag, priority, entry) values (?,?,?,?,?,?)";
             Connection connection = adapter.getConnection();
@@ -37,7 +37,7 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
     }
 
     @Override
-    public void saveList(ArrayList<Task> tasks, boolean exist) {
+    public void saveList(ArrayList<Task> tasks) {
         try {
             for (Task task: tasks) {
                 update(task);

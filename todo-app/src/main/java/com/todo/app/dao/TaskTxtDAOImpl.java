@@ -6,10 +6,12 @@ import java.io.*;
 import java.util.*;
 
 public class TaskTxtDAOImpl implements ITaskDAO{
-    String fileName;
+    private String fileName;
+    private boolean exist;
 
     public TaskTxtDAOImpl(String fileName) {
         this.fileName = fileName;
+        this.exist = exist(fileName);
     }
 
     public boolean exist(String fileName) {
@@ -18,36 +20,31 @@ public class TaskTxtDAOImpl implements ITaskDAO{
     }
 
     @Override
-    public void save(Task task, boolean exist) {
+    public void save(Task task) {
         File file = new File(fileName);
 
-        try
-        {
+        try {
             PrintWriter out = new PrintWriter(new FileWriter(file, exist));
             out.println(task.toString());
             out.close();
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void saveList(ArrayList<Task> tasks, boolean exist) {
+    public void saveList(ArrayList<Task> tasks) {
         File file = new File(fileName);
 
-        try
-        {
+        try {
             PrintWriter out = new PrintWriter(new FileWriter(file));
-            for (Task task: tasks)
-            {
+            for (Task task: tasks) {
                 out.println(task.toString());
             }
             out.close();
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

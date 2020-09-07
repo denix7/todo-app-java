@@ -21,7 +21,7 @@ public class AddCommand extends AbstractCommand{
             bo.addTask(args);
         }
         if(args == null || args.length == 0) {
-            write(out, "Debe agreagar una nota");
+            write(out, "You should add a note");
         }
         if(args != null && args.length == 2 ) {
             System.out.println("Task with priority added");

@@ -2,15 +2,13 @@ package com.todo.app.dao;
 
 import com.todo.app.entities.Task;
 
-import java.io.*;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public interface ITaskDAO {
 
-    void save(Task task, boolean exist);
+    void save(Task task);
 
-    void saveList(ArrayList<Task> tasks, boolean exist);
+    void saveList(ArrayList<Task> tasks);
 
     public void update(Task task);
 
