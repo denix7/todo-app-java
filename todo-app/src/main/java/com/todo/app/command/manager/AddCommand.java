@@ -18,14 +18,19 @@ public class AddCommand extends AbstractCommand{
     public void execute(String[] args, OutputStream out, IBusinessObject bo) {
         if(args != null && args.length == 1) {
             write(out, "Adding element with title");
-            bo.addTask(args);
+            bo.addTask(args[0], null);
         }
         if(args == null || args.length == 0) {
             write(out, "You should add a note");
         }
         if(args != null && args.length == 2 ) {
-            System.out.println("Task with priority added");
-            bo.addTask(args);
+            if(args[1].equals("M") || args[1].equals("H") || args[1].equals("L")){
+                bo.addTask(args[0], args[1]);
+                write(out, "Task with priority added");
+            }
+            else {
+                write(out,"Task not added, priority only could be: L/M/H");
+            }
         }
     }
 

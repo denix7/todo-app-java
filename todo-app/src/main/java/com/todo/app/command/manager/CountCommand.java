@@ -1,7 +1,6 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.businessLogic.IBusinessObject;
-
 import java.io.OutputStream;
 
 public class CountCommand extends AbstractCommand {
@@ -15,7 +14,36 @@ public class CountCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, IBusinessObject bo) {
-        bo.countTasks(args);
+        int result = 0;
+
+        if(args == null){
+            result = bo.countTasks("");
+            write(out, "There are : " + result + " tasks founded");
+        }
+        else if(args.length == 2) {
+            String filter = args[0];
+            String value = args[1];
+
+            if(filter.equals("priority:")){
+                if(value.equals("H") || value.equals("M") || value.equals("L")) {
+                    result = bo.countTasks(value);
+                }
+            }
+            else if(filter.equals("status:")) {
+                result = bo.countTasks(value);
+            }
+            else if(filter.equals("tag:")) {
+                result = bo.countTasks(value);
+            }
+            else {
+                write(out, "Params not valid\n");
+            }
+
+            write(out, "There are : " + result + " tasks founded");
+        }
+        else {
+            System.out.println("Command not found");
+        }
     }
 
     @Override

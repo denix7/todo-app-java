@@ -1,5 +1,6 @@
 package com.todo.app.businessLogic;
 
+import com.todo.app.dao.ITaskDAO;
 import com.todo.app.dao.TaskTxtDAOImpl;
 import com.todo.app.entities.Task;
 
@@ -8,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class BusinessObjectTxtImpl implements IBusinessObject {
+public class BusinessObjectTxtImpl  {
 
     public static TaskTxtDAOImpl taskDAO;
     private String fileName;
@@ -19,19 +20,18 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         taskDAO = new TaskTxtDAOImpl(fileName);
     }
 
-    public void addTask(String[] args) {
+    public void addTask(String taskName, String priority) {
         UUID id = UUID.randomUUID();
-        Task task = new Task(args[0]);
+        Task task = new Task(taskName);
 
         task.setUuid(id);
         task.setStatus("pending");
         task.setTag("default");
 
-        if(args.length > 1) {
-            task.setPriority(args[1]);
+        if(priority != null) {
+            task.setPriority(priority);
         }
-        else
-        {
+        else {
             task.setPriority("M");
         }
 
@@ -48,7 +48,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         }
     }
 
-    @Override
+
     public void modifyTask(String[] args) {
         ArrayList<Task> tasks = taskDAO.loadTasks();
         modifyTaskByIndex(tasks, args);
@@ -177,32 +177,32 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         }
     }
 
-    @Override
+
     public void countTasks(String[] args) {
 
     }
 
-    @Override
+
     public void getTags(String[] args) {
 
     }
 
-    @Override
+
     public void deleteTask(String[] args) {
 
     }
 
-    @Override
+
     public void getInfo(String[] args) {
 
     }
 
-    @Override
+
     public void export(String[] args) {
 
     }
 
-    @Override
+
     public void config(String[] args) {
 
     }

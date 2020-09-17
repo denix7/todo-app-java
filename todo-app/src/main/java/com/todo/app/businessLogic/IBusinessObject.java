@@ -2,21 +2,21 @@ package com.todo.app.businessLogic;
 
 public interface IBusinessObject {
 
-    void addTask(String[] args);
+    void addTask(String name, String priority);
 
-    void modifyTask(String[] args);
+    void modifyTask(int index, String description, String tag, String priority);
 
     void doneTask(String[] args);
 
     void listTasks(String[] args);
 
-    void countTasks(String[] args);
+    int countTasks(String element);
 
     void getTags(String[] args);
 
-    void deleteTask(String[] args);
+    boolean deleteTask(int index);
 
-    void getInfo(String[] args);
+    String getInfo(int index);
 
     void export(String[] args);
 
