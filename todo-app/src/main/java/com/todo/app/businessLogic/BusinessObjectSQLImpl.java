@@ -39,6 +39,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         else {
             System.out.println("Command not found");
         }*/
+
         ArrayList tasks = taskDAO.loadTasks();
         modifyTaskByIndex(tasks, index, description, tag, priority);
     }

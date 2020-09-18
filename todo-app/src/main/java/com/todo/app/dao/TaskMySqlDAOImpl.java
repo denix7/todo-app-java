@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TaskMySqlDAOImpl implements ITaskDAO {
     private IDBAdapter adapter;
@@ -18,9 +20,9 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
 
     @Override
     public void save(Task task) {
+        Connection connection = adapter.getConnection();
         try {
             String sql = "insert into tasks(description, uuid, status, tag, priority, entry) values (?,?,?,?,?,?)";
-            Connection connection = adapter.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
 
             statement.setString(1, task.getDescription());
@@ -33,6 +35,7 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
         }
         catch (Exception e) {
             e.printStackTrace();
+            Logger.getLogger(TaskTxtDAOImpl.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
