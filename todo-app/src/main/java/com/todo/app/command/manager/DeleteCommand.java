@@ -31,7 +31,7 @@ public class DeleteCommand extends AbstractCommand {
                 write(out, result == true ? "Task deleted succesfull\n" : "The task doesn't exist\n");
             }
             else {
-                System.out.println("This index is not valid");
+                write(out, "This index is not valid");
             }
         }
         else if(args.length == 2) {
