@@ -1,8 +1,10 @@
 package com.todo.app.businessLogic;
 
+import com.todo.app.entities.Task;
+
 public interface IBusinessObject {
 
-    void addTask(String name, String priority);
+    void addTask(Task task);
 
     void modifyTask(int index, String description, String tag, String priority);
 

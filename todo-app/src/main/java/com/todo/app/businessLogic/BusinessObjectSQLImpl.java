@@ -19,25 +19,7 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void addTask(String taskName, String priority) {
-        UUID id = UUID.randomUUID();
-        Task task = new Task(taskName);
-
-        task.setUuid(id);
-        task.setStatus("pending");
-        task.setTag("default");
-
-        if(priority != null) {
-            task.setPriority(priority);
-        }
-        else {
-            task.setPriority("M");
-        }
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        task.setEntry(dtf.format(now));
-
+    public void addTask(Task task) {
         try {
             taskDAO.save(task);
         }

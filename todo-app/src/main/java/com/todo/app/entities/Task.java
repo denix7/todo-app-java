@@ -21,6 +21,11 @@ public class Task {
         this.description = description;
     }
 
+    public Task(String description, String priority) {
+        this.description = description;
+        this.priority = priority;
+    }
+
     public Task(String description, String status, UUID uuid, String entry, String priority, String tag) {
         this.description = description;
         this.status = status;
