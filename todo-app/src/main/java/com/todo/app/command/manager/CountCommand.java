@@ -18,7 +18,7 @@ public class CountCommand extends AbstractCommand {
 
         if(args == null){
             result = bo.countTasks("");
-            write(out, "There are : " + result + " tasks founded");
+            write(out, "There are : " + result + " tasks founded\n");
         }
         else if(args.length == 2) {
             String filter = args[0];
@@ -39,10 +39,10 @@ public class CountCommand extends AbstractCommand {
                 write(out, "Params not valid\n");
             }
 
-            write(out, "There are : " + result + " tasks founded");
+            write(out, "There are : " + result + " tasks founded\n");
         }
         else {
-            System.out.println("Command not found");
+            write(out, "Command not found\n");
         }
     }
 

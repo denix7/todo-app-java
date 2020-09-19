@@ -14,6 +14,8 @@ public interface ITaskDAO {
 
     public void delete(Task task);
 
+    public Task read(int key);
+
     public ArrayList<Task> loadTasks();
 
 }

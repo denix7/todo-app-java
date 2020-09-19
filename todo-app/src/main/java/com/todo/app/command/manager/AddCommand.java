@@ -33,6 +33,7 @@ public class AddCommand extends AbstractCommand{
             LocalDateTime now = LocalDateTime.now();
             task.setEntry(dtf.format(now));
 
+            task.setDue(dtf.format(now));
             bo.addTask(task);
         }
         if(args == null || args.length == 0) {

@@ -5,7 +5,7 @@ import com.todo.app.entities.Task;
 import java.io.*;
 import java.util.*;
 
-public class TaskTxtDAOImpl implements ITaskDAO{
+public class TaskTxtDAOImpl{
     private String fileName;
     private boolean exist;
 
@@ -19,7 +19,6 @@ public class TaskTxtDAOImpl implements ITaskDAO{
         return file.exists();
     }
 
-    @Override
     public void save(Task task) {
         File file = new File(fileName);
 
@@ -33,7 +32,6 @@ public class TaskTxtDAOImpl implements ITaskDAO{
         }
     }
 
-    @Override
     public void saveList(ArrayList<Task> tasks) {
         File file = new File(fileName);
 
@@ -49,17 +47,14 @@ public class TaskTxtDAOImpl implements ITaskDAO{
         }
     }
 
-    @Override
     public void update(Task task) {
 
     }
 
-    @Override
     public void delete(Task task) {
 
     }
 
-    @Override
     public ArrayList<Task> loadTasks() {
         File file = new File(fileName);
         ArrayList<Task> tasks = new ArrayList<Task>();

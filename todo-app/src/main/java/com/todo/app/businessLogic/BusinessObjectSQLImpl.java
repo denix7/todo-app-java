@@ -7,8 +7,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class BusinessObjectSQLImpl implements IBusinessObject {
@@ -29,31 +27,24 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void modifyTask(int index, String description, String tag, String priority) {
-        /*if(args == null || args.length == 1 || args.length > 3) {
-            System.out.println("Command not valid");
-        }
-        else if(args.length == 3 || args.length == 2) {
-            modifyTaskByIndex(tasks, index, description, tag, priority);
-        }
-        else {
-            System.out.println("Command not found");
-        }*/
-
+    public void modifyTask(Task newTask) {
         ArrayList tasks = taskDAO.loadTasks();
-        modifyTaskByIndex(tasks, index, description, tag, priority);
-    }
 
-    public void modifyTaskByIndex(ArrayList<Task> tasks, int index, String description, String tag, String priority) {
         Task current;
-        current = tasks.get(index);
-        current.setDescription(description);
-
-        if (priority != null) {
-            current.setPriority(priority);
+        current = (Task)tasks.get(newTask.getId());
+        System.out.println(newTask);
+        if(newTask.getDescription() != null){
+            current.setDescription(newTask.getDescription());
         }
-        if(tag != null) {
-            current.setTag(tag);
+        if (newTask.getPriority() != null) {
+            current.setPriority(newTask.getPriority());
+        }
+        if(newTask.getTag() != null) {
+            current.setTag(newTask.getTag());
+        }
+        if(newTask.getDue() != null) {
+            current.setDue(newTask.getDue());
+            System.out.println(newTask.getDue());
         }
 
         try{

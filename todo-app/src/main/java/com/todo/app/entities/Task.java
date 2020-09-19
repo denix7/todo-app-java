@@ -17,6 +17,8 @@ public class Task {
     private ArrayList<UUID> depends;
     private String tag;
 
+    public Task(){}
+
     public Task(String description) {
         this.description = description;
     }
@@ -145,6 +147,7 @@ public class Task {
                 "id " + uuid + " | "+
                 "create : " + entry + " | "+
                 "priority : " + priority + " | "+
-                "tag : " + tag + "]" + " | ";
+                "tag : " + tag + "]" + " | " +
+                "due : " + due;
     }
 }

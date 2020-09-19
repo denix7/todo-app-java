@@ -22,35 +22,67 @@ public class ModifyCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, IBusinessObject bo) {
-        System.out.println("modify : "  + Arrays.toString(args));
-        //bo.modifyTask(args);
+        System.out.println(Arrays.toString(args));
         boolean numeric;
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         if(args == null || args.length == 1 || args.length > 5) {
             write(out, "Command not valid");
         }
-        else if(args.length == 3 || args.length == 2) {
-            //ArrayList tasks = taskDAO.loadTasks();
-            if (numeric && args.length == 2) {
-                int taskIndex = Integer.parseInt(args[0]);
-                String newDescription = args[1];
-                bo.modifyTask(taskIndex - 1, newDescription, null, null);
+
+        if (numeric && args.length == 2) {
+            int taskIndex = Integer.parseInt(args[0]);
+            String newDescription = args[1];
+
+            Task task = new Task();
+            task.setId(taskIndex-1);
+            task.setDescription(newDescription);
+
+            bo.modifyTask(task);
+        }
+        else if(numeric && args.length == 3 && args[1].equals("tag:")) {
+            int taskIndex = Integer.parseInt(args[0]);
+            String newTag = args[2];
+
+            Task task = new Task();
+            task.setId(taskIndex-1);
+            task.setTag(newTag);
+
+            bo.modifyTask(task);
+        }
+        else if (numeric && args.length == 3 && args[1].equals("priority:")) {
+            String newPriority = args[2];
+            int taskIndex = Integer.parseInt(args[0]);
+            if (newPriority.equals("H") || newPriority.equals("M") || newPriority.equals("L")){
+                Task task = new Task();
+                task.setId(taskIndex - 1);
+                task.setPriority(newPriority);
+
+                bo.modifyTask(task);
+                write(out, "Priority was modified\n");
+            }
+            else {
+                write(out, "Priority not valid\n");
             }
         }
-        else if (args.length == 5) {
+        else if(numeric && args.length == 4 && args[1].equals("due:")){
             int taskIndex = Integer.parseInt(args[0]);
-            String tag = args[2];
-            String priority = args[4];
-            System.out.println(taskIndex);
-            System.out.println(tag);
-            System.out.println(priority);
-            bo.modifyTask(taskIndex - 1, "", tag, priority);
+            String date = args[2] + " " + args[3];
+            boolean validDate = date.matches("\\d{4}\\/\\d{2}\\/\\d{2}\\s\\d{2}:\\d{2}:\\d{2}");
+            if(validDate){
+                Task task = new Task();
+                task.setId(taskIndex - 1);
+                task.setDue(date);
+                bo.modifyTask(task);
+            }
+            else{
+                write(out, "This date is not valid");
+            }
         }
         else if (!numeric && args.length == 2) {
-            write(out, "Command not valid");
+            write(out, "Command not valid\n");
         }
         else {
-            write(out, "Command not found");
+            write(out, "Command not found\n");
         }
     }
 

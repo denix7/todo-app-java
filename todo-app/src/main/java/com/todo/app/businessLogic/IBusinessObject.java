@@ -6,7 +6,7 @@ public interface IBusinessObject {
 
     void addTask(Task task);
 
-    void modifyTask(int index, String description, String tag, String priority);
+    void modifyTask(Task task);
 
     void doneTask(String[] args);
 
