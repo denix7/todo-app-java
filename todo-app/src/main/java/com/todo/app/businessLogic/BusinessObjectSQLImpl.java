@@ -59,11 +59,38 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void doneTask(String[] args) {
+    public void doneTask(Task task) {
         ArrayList<Task> tasks = taskDAO.loadTasks();
-        markAsDone(tasks, args[0]);
+        Task newTask = tasks.get(task.getId());
+
+        if(task.getTag() == null){
+            newTask.setStatus(task.getStatus());
+            try {
+                taskDAO.update(newTask);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(task.getTag() != null){
+            ArrayList<Task> tasksWithTag = new ArrayList<>();
+            for (Task current : tasks){
+                if(current.getTag().equals(task.getTag())){
+                    current.setStatus(task.getStatus());
+                    tasksWithTag.add(current);
+                }
+            }
+            try {
+                taskDAO.saveList(tasksWithTag);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    /*
     public void markAsDone(ArrayList<Task> tasks, String arg) {
         boolean numeric;
         numeric = arg.matches("-?\\d+(\\.\\d+)?");
@@ -82,14 +109,9 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             }
         }
 
-        try {
-            taskDAO.saveList(tasks);
-            System.out.println("marked as done");
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
+     */
 
     @Override
     public void listTasks(String[] args) {

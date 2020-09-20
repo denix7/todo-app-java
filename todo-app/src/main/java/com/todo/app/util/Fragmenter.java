@@ -59,10 +59,6 @@ public class Fragmenter {
 
         }
         if(args.contains("todo done")) {
-            if(args.contains("tag")) {
-                int point = args.indexOf(':') + 1;
-                return fragmentSimple("done " + args.substring(point));
-            }
             return fragmentSimple(args.substring(5));
         }
         if(args.contains("todo exit")) {

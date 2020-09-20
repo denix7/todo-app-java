@@ -8,7 +8,7 @@ public interface IBusinessObject {
 
     void modifyTask(Task task);
 
-    void doneTask(String[] args);
+    void doneTask(Task task);
 
     void listTasks(String[] args);
 

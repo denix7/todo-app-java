@@ -22,14 +22,12 @@ public class ModifyCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, IBusinessObject bo) {
-        System.out.println(Arrays.toString(args));
         boolean numeric;
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         if(args == null || args.length == 1 || args.length > 5) {
-            write(out, "Command not valid");
+            write(out, "Command not valid\n");
         }
-
-        if (numeric && args.length == 2) {
+        else if (numeric && args.length == 2) {
             int taskIndex = Integer.parseInt(args[0]);
             String newDescription = args[1];
 
