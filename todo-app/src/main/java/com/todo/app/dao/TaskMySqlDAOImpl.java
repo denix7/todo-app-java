@@ -86,13 +86,12 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
     }
 
     @Override
-    public Task read(int key) {
-        System.out.println(key);
+    public Task read(Task task) {
         try{
             String sql = "select * from tasks where id = ?";
             Connection connection = adapter.getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1, key);
+            statement.setInt(1, task.getId());
             ResultSet results = statement.executeQuery();
 
             Task current = new Task();

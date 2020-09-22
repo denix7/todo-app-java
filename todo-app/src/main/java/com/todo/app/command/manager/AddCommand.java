@@ -53,7 +53,7 @@ public class AddCommand extends AbstractCommand{
                 task.setEntry(dtf.format(now));
 
                 bo.addTask(task);
-                write(out, "Task with priority added");
+                write(out, "Task with priority added\n");
             }
             else {
                 write(out,"Task not added, priority only could be: L/M/H");

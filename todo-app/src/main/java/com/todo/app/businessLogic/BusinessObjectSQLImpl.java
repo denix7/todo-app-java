@@ -12,8 +12,8 @@ import java.util.*;
 public class BusinessObjectSQLImpl implements IBusinessObject {
     public static ITaskDAO taskDAO;
 
-    public BusinessObjectSQLImpl() {
-        taskDAO = new TaskMySqlDAOImpl();
+    public BusinessObjectSQLImpl(ITaskDAO taskDAO) {
+        this.taskDAO = taskDAO;
     }
 
     @Override
@@ -90,48 +90,15 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         }
     }
 
-    /*
-    public void markAsDone(ArrayList<Task> tasks, String arg) {
-        boolean numeric;
-        numeric = arg.matches("-?\\d+(\\.\\d+)?");
-        Task task = null;
-
-        if (numeric) {
-            int index = Integer.parseInt(arg);
-            task = tasks.get(index - 1);
-            task.setStatus("completed");
-        }
-        else {
-            for (Task current : tasks) {
-                if (current.getTag().equals(arg)) {
-                    current.setStatus("completed");
-                }
-            }
-        }
-
-
+    @Override
+    public ArrayList<Task> listTasks() {
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
+        return tasks;
     }
-     */
 
     @Override
-    public void listTasks(String[] args) {
+    public ArrayList<Task> filterByTag(String tag) {
         ArrayList<Task> tasks =  taskDAO.loadTasks();
-
-        if(args != null) {
-            tasks = filterByTag(tasks, args[0]);
-        }
-
-        System.out.println("===================LIST==================");
-
-        int indexTask = 1;
-        for(Task current : tasks) {
-            System.out.println(indexTask +")" + " " + current.showList());
-            indexTask++;
-        }
-        System.out.println("There are : " + tasks.size() + " elements");
-    }
-
-    public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
         ArrayList<Task> answer = new ArrayList<Task>();
 
         for(Task current : tasks) {
@@ -140,8 +107,33 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
                 answer.add(current);
             }
         }
-        if(answer.isEmpty()) {
-            System.out.println("Nothing founded");
+        return answer;
+    }
+
+    @Override
+    public ArrayList<Task> filterByStatus(String status) {
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
+        ArrayList<Task> answer = new ArrayList<Task>();
+
+        for(Task current : tasks) {
+            String currentStatus = current.getStatus();
+            if(currentStatus.equals(status)) {
+                answer.add(current);
+            }
+        }
+        return answer;
+    }
+
+    @Override
+    public ArrayList<Task> filterByPriority(String priority) {
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
+        ArrayList<Task> answer = new ArrayList<Task>();
+
+        for(Task current : tasks) {
+            String currentPriority = current.getPriority();
+            if(currentPriority.equals(priority)) {
+                answer.add(current);
+            }
         }
         return answer;
     }

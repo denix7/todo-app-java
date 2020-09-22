@@ -5,6 +5,8 @@ import com.todo.app.businessLogic.BusinessObjectTxtImpl;
 import com.todo.app.businessLogic.IBusinessObject;
 import com.todo.app.command.manager.CommandManager;
 import com.todo.app.command.manager.ICommand;
+import com.todo.app.dao.ITaskDAO;
+import com.todo.app.dao.TaskMySqlDAOImpl;
 import com.todo.app.util.Fragmenter;
 
 import java.util.Arrays;
@@ -34,9 +36,12 @@ public class App {
 
             ICommand command = commandManager.getCommand(commandName);
 
+            //dao
+            ITaskDAO taskDAO = new TaskMySqlDAOImpl();
+
             //Business Object
             //IBusinessObject bo = new BusinessObjectTxtImpl();
-            IBusinessObject bo = new BusinessObjectSQLImpl();
+            IBusinessObject bo = new BusinessObjectSQLImpl(taskDAO);
 
             //Command Executor
             command.execute(commandArgs2, System.out, bo);

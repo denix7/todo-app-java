@@ -2,6 +2,8 @@ package com.todo.app.businessLogic;
 
 import com.todo.app.entities.Task;
 
+import java.util.ArrayList;
+
 public interface IBusinessObject {
 
     void addTask(Task task);
@@ -10,7 +12,13 @@ public interface IBusinessObject {
 
     void doneTask(Task task);
 
-    void listTasks(String[] args);
+    ArrayList<Task> listTasks();
+
+    ArrayList<Task> filterByTag(String tag);
+
+    ArrayList<Task> filterByStatus(String status);
+
+    ArrayList<Task> filterByPriority(String priority);
 
     int countTasks(String element);
 

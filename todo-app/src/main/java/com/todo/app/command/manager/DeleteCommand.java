@@ -20,7 +20,7 @@ public class DeleteCommand extends AbstractCommand {
         //bo.deleteTask(args);
         System.out.println(Arrays.toString(args));
         if(args == null) {
-            System.out.println("Command not found");
+            write(out, "Command not found");
         }
         else if(args.length == 1) {
             String indexExpected = args[0];

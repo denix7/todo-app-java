@@ -50,13 +50,7 @@ public class Fragmenter {
             return commandAddPattern(regex, args);
         }
         if(args.contains("todo list")) {
-            if(args.contains("tag")) {
-                int point = args.indexOf(':') + 1;
-                return fragmentSimple("list " + args.substring(point));
-            }
-            regex = "";
             return fragmentSimple(args.substring(5));
-
         }
         if(args.contains("todo done")) {
             return fragmentSimple(args.substring(5));
