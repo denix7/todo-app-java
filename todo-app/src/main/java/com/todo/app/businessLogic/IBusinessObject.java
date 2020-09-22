@@ -3,6 +3,7 @@ package com.todo.app.businessLogic;
 import com.todo.app.entities.Task;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public interface IBusinessObject {
 
@@ -22,7 +23,9 @@ public interface IBusinessObject {
 
     int countTasks(String element);
 
-    void getTags(String[] args);
+    ArrayList<String> getAllTags();
+
+    Map<String, Integer> getAllTagsWithQuantity();
 
     boolean deleteTask(int index);
 

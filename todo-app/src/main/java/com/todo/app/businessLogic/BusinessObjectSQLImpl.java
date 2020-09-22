@@ -1,7 +1,6 @@
 package com.todo.app.businessLogic;
 
 import com.todo.app.dao.ITaskDAO;
-import com.todo.app.dao.TaskMySqlDAOImpl;
 import com.todo.app.entities.Task;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -32,7 +31,6 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
 
         Task current;
         current = (Task)tasks.get(newTask.getId());
-        System.out.println(newTask);
         if(newTask.getDescription() != null){
             current.setDescription(newTask.getDescription());
         }
@@ -44,7 +42,6 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
         }
         if(newTask.getDue() != null) {
             current.setDue(newTask.getDue());
-            System.out.println(newTask.getDue());
         }
 
         try{
@@ -156,28 +153,25 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void getTags(String[] args) {
+    public ArrayList<String> getAllTags() {
         ArrayList<Task> tasks =  taskDAO.loadTasks();
-        HashMap<String, Integer> tags = new HashMap<>();
-        if(args == null) {
-            tags = countTags(tasks);
-            for(String key : tags.keySet()){
-                System.out.println(key);
-            }
-        }
-        else if(args.length == 1 && args[0].equals("+")) {
-            tags = countTags(tasks);
-            tags.forEach((k, v) -> {
-                System.out.println(k + " : " + v);
-            });
-        }
-        else {
-            System.out.println("Command not found");
-        }
+        Map<String, Integer> tags = new HashMap<>();
+
+        tags = countTags(tasks);
+        return new ArrayList<String>(tags.keySet());
     }
 
-    private HashMap<String, Integer> countTags(ArrayList<Task> tasks) {
-        HashMap<String, Integer> tags = new HashMap<>();
+    @Override
+    public Map<String, Integer> getAllTagsWithQuantity() {
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
+        Map<String, Integer> tags = new HashMap<>();
+
+        tags = countTags(tasks);
+        return tags;
+    }
+
+    private Map<String, Integer> countTags(ArrayList<Task> tasks) {
+        Map<String, Integer> tags = new HashMap<>();
         int i=1;
         for (Task current : tasks) {
             if(!tags.containsKey(current.getTag())){

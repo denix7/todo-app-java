@@ -1,12 +1,10 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
 import com.todo.app.businessLogic.IBusinessObject;
 import com.todo.app.entities.Task;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ListCommand extends AbstractCommand {
 
@@ -24,29 +22,34 @@ public class ListCommand extends AbstractCommand {
         if(args == null){
             tasks = bo.listTasks();
         }
-        else{
-            if(args.length == 2 && args[0].equals("tag:")) {
+        else if(args != null && args.length > 2){
+            write(out, "Command not found\n");
+        }
+        else if (args.length == 2 ){
+            if(args[0].equals("tag:")) {
                 String tag = args[1];
                 tasks = bo.filterByTag(tag);
             }
-            if(args.length == 2 && args[0].equals("status:")){
+            if(args[0].equals("status:")){
                 String status = args[1];
                 tasks = bo.filterByStatus(status);
             }
-            if(args.length == 2 && args[0].equals("priority:")){
+            if(args[0].equals("priority:")){
                 String priority = args[1];
                 tasks = bo.filterByPriority(priority);
             }
-            else{
-                write(out, "Command not valid\n");
-            }
+        }
+        else{
+            write(out, "Command not valid\n");
         }
 
-        for (Task current : tasks){
-            if(tasks == null){
-                write(out, "There are not coincidences\n");
+        if(tasks == null){
+            write(out, "There are not coincidences\n");
+        }
+        else{
+            for (Task current : tasks){
+                write(out, current.showList()+"\n");
             }
-            System.out.println(current.showList());
         }
     }
 

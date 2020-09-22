@@ -1,17 +1,13 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
 import com.todo.app.businessLogic.IBusinessObject;
 import com.todo.app.dao.ITaskDAO;
 import com.todo.app.dao.TaskMySqlDAOImpl;
 import com.todo.app.entities.Task;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ModifyCommand extends AbstractCommand {
-    ITaskDAO taskDAO = new TaskMySqlDAOImpl();
 
     public static final String COMMAND_NAME = "modify";
 
