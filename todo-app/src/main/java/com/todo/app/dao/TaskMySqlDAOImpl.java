@@ -133,7 +133,7 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
             while(results.next()){
                 int id = results.getInt(1);
                 String description = results.getString(2);
-                String uudi = results.getString(3);
+                String uuid = results.getString(3);
                 String status = results.getString(4);
                 String tag = results.getString(5);
                 String priority = results.getString(6);
@@ -142,7 +142,7 @@ public class TaskMySqlDAOImpl implements ITaskDAO {
 
                 Task current = new Task(description);
                 current.setId(id);
-                current.setUuid(UUID.fromString(uudi));
+                current.setUuid(UUID.fromString(uuid));
                 current.setStatus(status);
                 current.setTag(tag);
                 current.setPriority(priority);

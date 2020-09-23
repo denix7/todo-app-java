@@ -1,6 +1,7 @@
 package com.todo.app.businessLogic;
 
 import com.todo.app.entities.Task;
+import com.todo.app.filters.Filter;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -19,6 +20,8 @@ public interface IBusinessObject {
 
     ArrayList<Task> filterByStatus(String status);
 
+    public ArrayList<Task> filter(Filter filter);
+
     ArrayList<Task> filterByPriority(String priority);
 
     int countTasks(String element);
@@ -31,7 +34,7 @@ public interface IBusinessObject {
 
     String getInfo(int index);
 
-    void export(String[] args);
+    boolean exportAll();
 
     void config(String[] args);
 }

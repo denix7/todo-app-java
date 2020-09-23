@@ -2,6 +2,8 @@ package com.todo.app.businessLogic;
 
 import com.todo.app.dao.ITaskDAO;
 import com.todo.app.entities.Task;
+import com.todo.app.filters.Filter;
+import com.todo.app.filters.PriorityFilter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
@@ -136,6 +138,19 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
+    public ArrayList<Task> filter(Filter filter) {
+        ArrayList<Task> tasks =  taskDAO.loadTasks();
+        ArrayList<Task> answer = new ArrayList<Task>();
+
+        for(Task current : tasks) {
+            if(filter.satisfies(current)) {
+                answer.add(current);
+            }
+        }
+        return answer;
+    }
+
+    @Override
     public int countTasks(String param){
         ArrayList<Task> tasks =  taskDAO.loadTasks();
         ArrayList<Task> result = new ArrayList<Task>();
@@ -215,48 +230,21 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
     }
 
     @Override
-    public void export(String[] args) {
+    public boolean exportAll() {
         ArrayList<Task> tasks = taskDAO.loadTasks();
-
-        if(args == null){
-            try{
-                exportAsCsv(tasks);
-                System.out.println("Tasks exported in " + getPath());
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+        boolean result;
+        try{
+            result = exportAsCsv(tasks);
+        }catch (Exception e){
+            result = false;
+            e.printStackTrace();
         }
-        else if(args.length == 1 || args.length > 2) {
-            System.out.println("Command not valid");
-        }
-        else {
-            String filter = args[0];
-            String arg = args[1];
-            ArrayList<Task> filters = new ArrayList<>();
-            for(Task current : tasks) {
-                if(filter.equals("tag:") && current.getTag().equals(arg)) {
-                    filters.add(current);
-                }
-                if(filter.equals("status:") && current.getStatus().equals(arg)) {
-                    filters.add(current);
-                }
-                if(filter.equals("priority:") && current.getPriority().equals(arg)) {
-                    filters.add(current);
-                }
-            }
-
-            try {
-                exportAsCsv(filters);
-                System.out.println("Tasks exported in " + getPath());
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        return result;
     }
 
-    private void exportAsCsv(ArrayList<Task> tasks) throws IOException {
+    private boolean exportAsCsv(ArrayList<Task> tasks) throws IOException {
         String path = getPath() + "\\tasks.csv";
+        boolean result;
 
         FileWriter out = new FileWriter(path);
         String[] HEADERS = { "Title", "Status", "UUID", "Entry", "Priority", "Tag"};
@@ -265,7 +253,13 @@ public class BusinessObjectSQLImpl implements IBusinessObject {
             for(Task task : tasks) {
                 printer.printRecord(task);
             }
+            result = true;
         }
+        catch(Exception e){
+            result = false;
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
