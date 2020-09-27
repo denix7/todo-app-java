@@ -1,6 +1,5 @@
 package com.todo.app.businessLogic;
 
-import com.todo.app.dao.ITaskDAO;
 import com.todo.app.dao.TaskTxtDAOImpl;
 import com.todo.app.entities.Task;
 

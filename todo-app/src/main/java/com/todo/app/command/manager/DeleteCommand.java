@@ -1,10 +1,8 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
-import com.todo.app.entities.Task;
+import com.todo.app.businessLogic.BusinessObject;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class DeleteCommand extends AbstractCommand {
@@ -16,7 +14,7 @@ public class DeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         //bo.deleteTask(args);
         System.out.println(Arrays.toString(args));
         if(args == null) {

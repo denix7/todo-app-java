@@ -2,7 +2,7 @@ package com.todo.app.dao;
 
 import com.todo.app.entities.Task;
 import com.todo.app.factory.FactoryDBAdapter;
-import com.todo.app.factory.IDBAdapter;
+import com.todo.app.factory.DBAdapter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,8 +11,8 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TaskMySqlDAOImpl implements ITaskDAO {
-    private IDBAdapter adapter;
+public class TaskMySqlDAOImpl implements TaskDAO {
+    private DBAdapter adapter;
 
     public TaskMySqlDAOImpl(){
         adapter = FactoryDBAdapter.getAdapter();

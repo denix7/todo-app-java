@@ -6,7 +6,7 @@ import com.todo.app.filters.Filter;
 import java.util.ArrayList;
 import java.util.Map;
 
-public interface IBusinessObject {
+public interface BusinessObject {
 
     void addTask(Task task);
 

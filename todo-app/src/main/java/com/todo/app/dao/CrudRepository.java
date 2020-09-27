@@ -2,7 +2,7 @@ package com.todo.app.dao;
 
 import java.util.Optional;
 
-public interface ICrudRepository <T extends Object, ID extends Object>{
+public interface CrudRepository<T extends Object, ID extends Object>{
     public <S extends T> S save(S s);
 
     public <S extends T> Iterable<S> saveAll(Iterable<S> iterable);

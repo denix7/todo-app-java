@@ -1,10 +1,8 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
-import com.todo.app.entities.Task;
+import com.todo.app.businessLogic.BusinessObject;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
 
 public class ExportCommand extends AbstractCommand {
     public static final String COMMAND_NAME = "export";
@@ -15,7 +13,7 @@ public class ExportCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args == null){
             try{
                 boolean result = bo.exportAll();

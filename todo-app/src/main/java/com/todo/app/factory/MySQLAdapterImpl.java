@@ -1,12 +1,10 @@
 package com.todo.app.factory;
 
-import com.todo.app.dao.ITaskDAO;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class MySQLAdapter implements IDBAdapter {
+public class MySQLAdapterImpl implements DBAdapter {
     static{
         try {
             new com.mysql.jdbc.Driver();

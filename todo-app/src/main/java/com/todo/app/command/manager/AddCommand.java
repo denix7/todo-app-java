@@ -1,6 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.businessLogic.BusinessObject;
 import com.todo.app.entities.Task;
 
 import java.io.OutputStream;
@@ -18,7 +18,7 @@ public class AddCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args != null && args.length == 1) {
             write(out, "Adding element with title\n");
             String description = args[0];

@@ -1,10 +1,8 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
-import com.todo.app.entities.Task;
+import com.todo.app.businessLogic.BusinessObject;
 
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class InfoCommand extends AbstractCommand {
     public static final String COMMAND_NAME = "info";
@@ -14,7 +12,7 @@ public class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         //System.out.println(Arrays.toString(args));
         if(args == null) {
             write(out, "Command not valid\n");

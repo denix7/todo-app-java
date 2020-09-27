@@ -1,6 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.businessLogic.BusinessObject;
 import com.todo.app.entities.Task;
 import com.todo.app.filters.Filter;
 import com.todo.app.filters.PriorityFilter;
@@ -20,7 +20,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         ArrayList<Task> tasks = null;
 
         if(args == null){

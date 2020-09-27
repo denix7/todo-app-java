@@ -1,6 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.businessLogic.BusinessObject;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class TagsCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args == null) {
             ArrayList<String> tags = bo.getAllTags();
             for(String key : tags){

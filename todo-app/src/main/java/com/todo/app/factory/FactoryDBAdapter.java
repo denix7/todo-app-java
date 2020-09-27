@@ -7,11 +7,11 @@ public abstract class FactoryDBAdapter {
 
     private static final String DB_TYPE = "dbadaptertype";
 
-    public static IDBAdapter getAdapter(){
+    public static DBAdapter getAdapter(){
         try {
             Properties p = loadProperties();
             String dbType = p.getProperty(DB_TYPE);
-            return (IDBAdapter)Class.forName(dbType).newInstance();
+            return (DBAdapter)Class.forName(dbType).newInstance();
         }
         catch (Exception e) {
             e.printStackTrace();

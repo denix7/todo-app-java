@@ -1,11 +1,9 @@
 package com.todo.app;
 
 import com.todo.app.businessLogic.BusinessObjectSQLImpl;
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.businessLogic.BusinessObject;
 import com.todo.app.command.manager.CommandManager;
-import com.todo.app.command.manager.ICommand;
-import com.todo.app.dao.ITaskDAO;
+import com.todo.app.command.manager.Command;
 import com.todo.app.dao.TaskMySqlDAOImpl;
 import com.todo.app.util.Fragmenter;
 
@@ -21,7 +19,7 @@ public class App {
         while (true) {
             String line = scanner.nextLine();
             if (line.trim().isEmpty()) {
-                ICommand defaultCommand = commandManager.getCommand("default");
+                Command defaultCommand = commandManager.getCommand("default");
                 defaultCommand.execute(null, System.out,null);
                 continue;
             }
@@ -34,14 +32,11 @@ public class App {
                 commandArgs2 = Arrays.copyOfRange(commandArgs, 1, commandArgs.length);
             }
 
-            ICommand command = commandManager.getCommand(commandName);
-
-            //dao
-            ITaskDAO taskDAO = new TaskMySqlDAOImpl();
+            Command command = commandManager.getCommand(commandName);
 
             //Business Object
             //IBusinessObject bo = new BusinessObjectTxtImpl();
-            IBusinessObject bo = new BusinessObjectSQLImpl(taskDAO);
+            BusinessObject bo = new BusinessObjectSQLImpl(new TaskMySqlDAOImpl());
 
             //Command Executor
             command.execute(commandArgs2, System.out, bo);

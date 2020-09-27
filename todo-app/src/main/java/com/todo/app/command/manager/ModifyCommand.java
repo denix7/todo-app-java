@@ -1,8 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
-import com.todo.app.dao.ITaskDAO;
-import com.todo.app.dao.TaskMySqlDAOImpl;
+import com.todo.app.businessLogic.BusinessObject;
 import com.todo.app.entities.Task;
 
 import java.io.OutputStream;
@@ -17,7 +15,7 @@ public class ModifyCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         boolean numeric;
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         if(args == null || args.length == 1 || args.length > 5) {

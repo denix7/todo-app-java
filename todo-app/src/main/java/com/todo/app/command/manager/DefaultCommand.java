@@ -1,7 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.businessLogic.BusinessObject;
 
 import java.io.OutputStream;
 
@@ -15,7 +14,7 @@ public class DefaultCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         write(out, "Command not found\n");
     }
 

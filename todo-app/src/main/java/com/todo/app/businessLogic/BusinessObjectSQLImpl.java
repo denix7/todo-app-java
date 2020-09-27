@@ -1,19 +1,18 @@
 package com.todo.app.businessLogic;
 
-import com.todo.app.dao.ITaskDAO;
+import com.todo.app.dao.TaskDAO;
 import com.todo.app.entities.Task;
 import com.todo.app.filters.Filter;
-import com.todo.app.filters.PriorityFilter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.*;
 import java.util.*;
 
-public class BusinessObjectSQLImpl implements IBusinessObject {
-    public static ITaskDAO taskDAO;
+public class BusinessObjectSQLImpl implements BusinessObject {
+    public static TaskDAO taskDAO;
 
-    public BusinessObjectSQLImpl(ITaskDAO taskDAO) {
+    public BusinessObjectSQLImpl(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
 

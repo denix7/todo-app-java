@@ -4,7 +4,7 @@ import com.todo.app.entities.Task;
 
 import java.util.ArrayList;
 
-public interface ITaskDAO {
+public interface TaskDAO {
 
     void save(Task task);
 
