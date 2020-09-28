@@ -6,6 +6,7 @@ import com.todo.app.factory.DBAdapter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -36,7 +37,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setString(7, task.getDue());
             statement.executeUpdate();
         }
-        catch (Exception e) {
+        catch (SQLException e) {
             e.printStackTrace();
             Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
         } finally {
@@ -85,7 +86,8 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setInt(6, task.getId());
             statement.executeUpdate();
         }
-        catch(Exception e){
+        catch(SQLException e){
+            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         } finally {
             if(statement != null) {
@@ -117,7 +119,8 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setInt(1, task.getId());
             statement.executeUpdate();
         }
-        catch (Exception e) {
+        catch (SQLException e) {
+            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
         } finally {
             if (statement != null) {
@@ -169,7 +172,8 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             }
             return current;
         }
-        catch(Exception e){
+        catch(SQLException e){
+            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
             e.printStackTrace();
             return null;
         } finally {
@@ -233,8 +237,9 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             }
             return tasks;
         }
-        catch(Exception e){
+        catch(SQLException e){
             e.printStackTrace();
+            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
             return null;
         } finally {
             if(results != null) {

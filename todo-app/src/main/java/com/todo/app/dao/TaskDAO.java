@@ -4,7 +4,7 @@ import com.todo.app.entities.Task;
 
 import java.util.ArrayList;
 
-public interface TaskDAO {
+public interface TaskDAO extends CrudRepository<Task> {
 
     void save(Task task);
 
