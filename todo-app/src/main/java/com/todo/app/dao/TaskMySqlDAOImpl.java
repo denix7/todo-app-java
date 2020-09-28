@@ -21,9 +21,11 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     @Override
     public void save(Task task) {
         Connection connection = adapter.getConnection();
+        PreparedStatement statement = null;
+
         try {
             String sql = "insert into tasks(description, uuid, status, tag, priority, entry, due) values (?,?,?,?,?,?,?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(sql);
 
             statement.setString(1, task.getDescription());
             statement.setString(2, task.getUuid().toString());
@@ -31,12 +33,27 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setString(4, task.getTag());
             statement.setString(5, task.getPriority());
             statement.setString(6, task.getEntry());
-            statement.setString(7, task.getDue().toString());
+            statement.setString(7, task.getDue());
             statement.executeUpdate();
         }
         catch (Exception e) {
             e.printStackTrace();
-            Logger.getLogger(TaskTxtDAOImpl.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -54,10 +71,12 @@ public class TaskMySqlDAOImpl implements TaskDAO {
 
     @Override
     public void update(Task task) {
+        Connection connection = adapter.getConnection();
+        PreparedStatement statement = null;
+
         try{
             String sql = "update tasks set description = ?, tag = ?, status = ?, priority = ?, due = ? where id = ?";
-            Connection connection = adapter.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(sql);
             statement.setString(1, task.getDescription());
             statement.setString(2, task.getTag());
             statement.setString(3, task.getStatus());
@@ -68,31 +87,67 @@ public class TaskMySqlDAOImpl implements TaskDAO {
         }
         catch(Exception e){
             e.printStackTrace();
+        } finally {
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public void delete(Task task) {
+        Connection connection = adapter.getConnection();
+        PreparedStatement statement = null;
+
         try {
             String sql = "delete from tasks where id = ?";
-            Connection connection = adapter.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
+
+            statement = connection.prepareStatement(sql);
             statement.setInt(1, task.getId());
             statement.executeUpdate();
         }
         catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public Task read(Task task) {
+        Connection connection = adapter.getConnection();
+        PreparedStatement statement = null;
+        ResultSet results = null;
+
         try{
             String sql = "select * from tasks where id = ?";
-            Connection connection = adapter.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(sql);
             statement.setInt(1, task.getId());
-            ResultSet results = statement.executeQuery();
+            results = statement.executeQuery();
 
             Task current = new Task();
             while(results.next()) {
@@ -117,18 +172,43 @@ public class TaskMySqlDAOImpl implements TaskDAO {
         catch(Exception e){
             e.printStackTrace();
             return null;
+        } finally {
+            if(results != null) {
+                try {
+                    results.close();
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(statement != null){
+                try {
+                    statement.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
     @Override
     public ArrayList<Task> loadTasks() {
+        Connection connection = adapter.getConnection();
+        PreparedStatement statement = null;
+        ResultSet results = null;
+
         try{
             String sql = "select * from tasks";
-            Connection connection = adapter.getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql);
-            ResultSet results = statement.executeQuery();
+            statement = connection.prepareStatement(sql);
+            results = statement.executeQuery();
 
-            ArrayList<Task> tasks = new ArrayList<Task>();
+            ArrayList<Task> tasks = new ArrayList<>();
 
             while(results.next()){
                 int id = results.getInt(1);
@@ -156,6 +236,28 @@ public class TaskMySqlDAOImpl implements TaskDAO {
         catch(Exception e){
             e.printStackTrace();
             return null;
+        } finally {
+            if(results != null) {
+                try {
+                    results.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(statement != null) {
+                try {
+                    statement.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 public class AbstractCommand implements Command {
 
+
     @Override
     public String getName() {
         return null;

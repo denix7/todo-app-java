@@ -1,7 +1,6 @@
 package com.todo.app;
 
 import com.todo.app.businessLogic.BusinessObjectSQLImpl;
-import com.todo.app.businessLogic.BusinessObject;
 import com.todo.app.command.manager.CommandManager;
 import com.todo.app.command.manager.Command;
 import com.todo.app.dao.TaskMySqlDAOImpl;
@@ -35,11 +34,11 @@ public class App {
             Command command = commandManager.getCommand(commandName);
 
             //Business Object
-            //IBusinessObject bo = new BusinessObjectTxtImpl();
-            BusinessObject bo = new BusinessObjectSQLImpl(new TaskMySqlDAOImpl());
+            //BusinessObject bo = new BusinessObjectTxtImpl(new TaskTxtDAOImpl("c:\\\\tasks-java\\\\tasks.txt"));
+            //BusinessObject bo = new BusinessObjectSQLImpl(new TaskMySqlDAOImpl());
 
             //Command Executor
-            command.execute(commandArgs2, System.out, bo);
+            command.execute(commandArgs2, System.out, new BusinessObjectSQLImpl(new TaskMySqlDAOImpl()));
         }
     }
 }
