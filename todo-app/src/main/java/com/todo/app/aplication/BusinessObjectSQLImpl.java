@@ -34,7 +34,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public void modifyTask(Task newTask) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
@@ -43,7 +43,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         }
 
         Task current;
-        current = (Task) tasks.get(newTask.getId());
+        current = tasks.get(newTask.getId());
         if(newTask.getDescription() != null){
             current.setDescription(newTask.getDescription());
         }
@@ -70,7 +70,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public void doneTask(Task task) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
@@ -111,7 +111,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public ArrayList<Task> listTasks() throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
@@ -123,7 +123,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public ArrayList<Task> filterByTag(String tag) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         ArrayList<Task> answer = new ArrayList<>();
 
         try {
@@ -144,7 +144,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public int countTasks(String param) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         ArrayList<Task> result = new ArrayList<>();
 
         try {
@@ -168,7 +168,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public ArrayList<Task> filterByStatus(String status) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         ArrayList<Task> answer = new ArrayList<>();
 
         try {
@@ -190,7 +190,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public ArrayList<Task> filterByPriority(String priority) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         ArrayList<Task> answer = new ArrayList<>();
 
         try {
@@ -211,7 +211,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public ArrayList<Task> filter(Filter filter) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         ArrayList<Task> answer = new ArrayList<>();
 
         try {
@@ -231,7 +231,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public ArrayList<String> getAllTags() throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         Map<String, Integer> tags;
 
         try {
@@ -247,7 +247,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public Map<String, Integer> getAllTagsWithQuantity() throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         Map<String, Integer> tags;
 
         try {
@@ -279,7 +279,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public boolean deleteTask(int index) throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
@@ -305,8 +305,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public String getInfo(int index) throws BusinessException {
-        ArrayList<Task> tasks = null;
-        Task current = tasks.get(index);
+        ArrayList<Task> tasks;
 
         try {
             tasks = taskDAO.loadTasks();
@@ -314,6 +313,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
+        Task current = tasks.get(index);
 
         return ("Name:     " + current.getDescription() + "\n" +
                 "ID:       " + current.getUuid() + "\n" +
@@ -326,7 +326,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public boolean exportAll() throws BusinessException {
-        ArrayList<Task> tasks = null;
+        ArrayList<Task> tasks;
         boolean result;
 
         try {
