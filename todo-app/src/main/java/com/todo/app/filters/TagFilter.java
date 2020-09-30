@@ -1,6 +1,6 @@
 package com.todo.app.filters;
 
-import com.todo.app.entities.Task;
+import com.todo.app.domain.entities.Task;
 
 public class TagFilter implements Filter {
     private String tag;

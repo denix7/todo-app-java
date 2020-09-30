@@ -1,9 +1,9 @@
 package com.todo.app;
 
-import com.todo.app.businessLogic.BusinessObjectSQLImpl;
+import com.todo.app.aplication.BusinessObjectSQLImpl;
 import com.todo.app.command.manager.CommandManager;
 import com.todo.app.command.manager.Command;
-import com.todo.app.dao.TaskMySqlDAOImpl;
+import com.todo.app.infrastructure.TaskMySqlDAOImpl;
 import com.todo.app.util.Fragmenter;
 
 import java.util.Arrays;

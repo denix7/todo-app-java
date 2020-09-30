@@ -1,6 +1,6 @@
-package com.todo.app.dao;
+package com.todo.app.infrastructure;
 
-import com.todo.app.entities.Task;
+import com.todo.app.domain.entities.Task;
 
 import java.io.*;
 import java.util.*;

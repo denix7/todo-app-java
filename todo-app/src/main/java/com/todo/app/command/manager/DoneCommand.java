@@ -1,7 +1,7 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
-import com.todo.app.entities.Task;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.domain.entities.Task;
 
 import java.io.OutputStream;
 
@@ -25,7 +25,11 @@ public class DoneCommand extends AbstractCommand {
             task.setId(index - 1);
             task.setStatus("completed");
 
-            bo.doneTask(task);
+            try {
+                bo.doneTask(task);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
             write(out, "Marked as done\n");
         }
         else if(!isNumeric && args.length == 2){
@@ -33,7 +37,12 @@ public class DoneCommand extends AbstractCommand {
             if(args[0].equals("tag:")){
                 task.setTag(tag);
                 task.setStatus("completed");
-                bo.doneTask(task);
+
+                try {
+                    bo.doneTask(task);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
                 write(out, "All tasks with tag marked as done\n");
             }
             else{

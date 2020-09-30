@@ -1,6 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
+import com.todo.app.aplication.BusinessObject;
 
 import java.io.OutputStream;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
-import com.todo.app.entities.Task;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.domain.entities.Task;
 import com.todo.app.filters.Filter;
 import com.todo.app.filters.PriorityFilter;
 import com.todo.app.filters.StatusFilter;

@@ -1,4 +1,4 @@
-package com.todo.app.entities;
+package com.todo.app.domain.entities;
 
 import java.util.ArrayList;
 import java.util.Date;

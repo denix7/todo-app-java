@@ -1,6 +1,7 @@
-package com.todo.app.businessLogic;
+package com.todo.app.aplication;
 
-import com.todo.app.entities.Task;
+import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
 import com.todo.app.filters.Filter;
 
 import java.util.ArrayList;
@@ -8,11 +9,11 @@ import java.util.Map;
 
 public interface BusinessObject {
 
-    void addTask(Task task);
+    void addTask(Task task) throws BusinessException;
 
-    void modifyTask(Task task);
+    void modifyTask(Task task) throws BusinessException;
 
-    void doneTask(Task task);
+    void doneTask(Task task) throws BusinessException;
 
     ArrayList<Task> listTasks();
 
@@ -30,7 +31,7 @@ public interface BusinessObject {
 
     Map<String, Integer> getAllTagsWithQuantity();
 
-    boolean deleteTask(int index);
+    boolean deleteTask(int index) throws BusinessException;
 
     String getInfo(int index);
 

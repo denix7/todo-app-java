@@ -1,7 +1,7 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
-import com.todo.app.entities.Task;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.domain.entities.Task;
 
 import java.io.OutputStream;
 import java.time.LocalDateTime;
@@ -33,7 +33,12 @@ public class AddCommand extends AbstractCommand{
             task.setEntry(dtf.format(now));
 
             task.setDue(dtf.format(now));
-            bo.addTask(task);
+
+            try {
+                bo.addTask(task);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
         if(args == null || args.length == 0) {
             write(out, "You should add a note");
@@ -51,7 +56,11 @@ public class AddCommand extends AbstractCommand{
                 LocalDateTime now = LocalDateTime.now();
                 task.setEntry(dtf.format(now));
 
-                bo.addTask(task);
+                try {
+                    bo.addTask(task);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
                 write(out, "Task with priority added\n");
             }
             else {

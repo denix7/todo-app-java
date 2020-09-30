@@ -1,33 +1,40 @@
-package com.todo.app.businessLogic;
+package com.todo.app.aplication;
 
-import com.todo.app.dao.TaskDAO;
-import com.todo.app.entities.Task;
+import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.PersistentException;
+import com.todo.app.infrastructure.TaskDAO;
+import com.todo.app.infrastructure.TaskMySqlDAOImpl;
+import com.todo.app.domain.entities.Task;
 import com.todo.app.filters.Filter;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BusinessObjectSQLImpl implements BusinessObject {
     public static TaskDAO taskDAO;
+    private static final Logger LOGGER = Logger.getLogger(TaskMySqlDAOImpl.class.getName());
 
     public BusinessObjectSQLImpl(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
 
     @Override
-    public void addTask(Task task) {
+    public void addTask(Task task) throws BusinessException {
         try {
             taskDAO.save(task);
         }
-        catch (Exception e){
-            e.printStackTrace();
+        catch (PersistentException exception){
+            LOGGER.log(Level.SEVERE, "Error while storing");
+            throw new BusinessException("Error in Businnes Layer", exception);
         }
     }
 
     @Override
-    public void modifyTask(Task newTask) {
+    public void modifyTask(Task newTask) throws BusinessException {
         ArrayList tasks = taskDAO.loadTasks();
 
         Task current;
@@ -51,13 +58,14 @@ public class BusinessObjectSQLImpl implements BusinessObject {
                 System.out.println("task was modified");
             }
         }
-        catch (Exception e){
-            e.printStackTrace();
+        catch (PersistentException exception){
+            LOGGER.log(Level.SEVERE, "Error while modifiying");
+            throw new BusinessException("Error in Businnes Layer", exception);
         }
     }
 
     @Override
-    public void doneTask(Task task) {
+    public void doneTask(Task task) throws BusinessException {
         ArrayList<Task> tasks = taskDAO.loadTasks();
         Task newTask = tasks.get(task.getId());
 
@@ -66,8 +74,9 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             try {
                 taskDAO.update(newTask);
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            catch (PersistentException exception){
+                LOGGER.log(Level.SEVERE, "Error while done task");
+                throw new BusinessException("Error in Businnes Layer", exception);
             }
         }
 
@@ -82,8 +91,9 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             try {
                 taskDAO.saveList(tasksWithTag);
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            catch (PersistentException exception){
+                LOGGER.log(Level.SEVERE, "Error while done task");
+                throw new BusinessException("Error in Businnes Layer", exception);
             }
         }
     }
@@ -201,12 +211,18 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     }
 
     @Override
-    public boolean deleteTask(int index) {
+    public boolean deleteTask(int index) throws BusinessException {
         ArrayList<Task> tasks = taskDAO.loadTasks();
 
         if(index <= tasks.size()){
             Task taskToDelete = tasks.get(index);
-            taskDAO.delete(taskToDelete);
+            try {
+                taskDAO.delete(taskToDelete);
+            }
+            catch (PersistentException exception){
+                LOGGER.log(Level.SEVERE, "Error while storing");
+                throw new BusinessException("Error in Businnes Layer", exception);
+            }
             return true;
         }
         else {

@@ -1,6 +1,7 @@
-package com.todo.app.dao;
+package com.todo.app.infrastructure;
 
-import com.todo.app.entities.Task;
+import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.PersistentException;
 import com.todo.app.factory.FactoryDBAdapter;
 import com.todo.app.factory.DBAdapter;
 import java.sql.Connection;
@@ -14,13 +15,14 @@ import java.util.logging.Logger;
 
 public class TaskMySqlDAOImpl implements TaskDAO {
     private DBAdapter adapter;
+    private static final Logger LOGGER = Logger.getLogger(TaskMySqlDAOImpl.class.getName());
 
     public TaskMySqlDAOImpl(){
         adapter = FactoryDBAdapter.getAdapter();
     }
 
     @Override
-    public void save(Task task) {
+    public void save(Task task) throws PersistentException {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
 
@@ -36,23 +38,24 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setString(6, task.getEntry());
             statement.setString(7, task.getDue());
             statement.executeUpdate();
+
         }
-        catch (SQLException e) {
-            e.printStackTrace();
-            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
+        catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to save task", exception);
+            throw new PersistentException("Error while saving in DB", exception);
         } finally {
             if (statement != null) {
                 try {
                     statement.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             if (connection != null) {
                 try {
                     connection.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }
@@ -65,13 +68,14 @@ public class TaskMySqlDAOImpl implements TaskDAO {
                 update(task);
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch(Exception exception) {
+            LOGGER.log(Level.SEVERE, "Unable to update task", exception);
+            //throw new PersistentException("Error while saving in DB", exception);
         }
     }
 
     @Override
-    public void update(Task task) {
+    public void update(Task task) throws PersistentException {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
 
@@ -86,29 +90,29 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setInt(6, task.getId());
             statement.executeUpdate();
         }
-        catch(SQLException e){
-            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
-            e.printStackTrace();
+        catch(SQLException exception){
+            LOGGER.log(Level.SEVERE, "Unable to update task", exception);
+            throw new PersistentException("Error while storing in DB", exception);
         } finally {
             if(statement != null) {
                 try {
                     statement.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             if (connection != null) {
                 try {
                     connection.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }
     }
 
     @Override
-    public void delete(Task task) {
+    public void delete(Task task) throws PersistentException {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
 
@@ -119,32 +123,33 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setInt(1, task.getId());
             statement.executeUpdate();
         }
-        catch (SQLException e) {
-            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
-            e.printStackTrace();
+        catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to delete task", exception);
+            throw new PersistentException("Error while deleting in DB", exception);
         } finally {
             if (statement != null) {
                 try {
                     statement.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             if (connection != null) {
                 try {
                     connection.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }
     }
 
     @Override
-    public Task read(Task task) {
+    public Task read(Task task) throws PersistentException{
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
         ResultSet results = null;
+        Task current = null;
 
         try{
             String sql = "select * from tasks where id = ?";
@@ -152,7 +157,6 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             statement.setInt(1, task.getId());
             results = statement.executeQuery();
 
-            Task current = new Task();
             while(results.next()) {
                 int id = results.getInt(1);
                 String description = results.getString(2);
@@ -170,34 +174,33 @@ public class TaskMySqlDAOImpl implements TaskDAO {
                 current.setPriority(priority);
                 current.setEntry(entry);
             }
-            return current;
         }
-        catch(SQLException e){
-            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
-            e.printStackTrace();
-            return null;
+        catch(SQLException exception){
+            LOGGER.log(Level.SEVERE, "Unable to read task " + task.getId(), exception);
+            throw new PersistentException("Error while reading in DB", exception);
         } finally {
             if(results != null) {
                 try {
                     results.close();
-                } catch(Exception e) {
-                    e.printStackTrace();
+                } catch(Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             if(statement != null){
                 try {
                     statement.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             if(connection != null) {
                 try {
                     connection.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
+            return current;
         }
     }
 
@@ -206,13 +209,13 @@ public class TaskMySqlDAOImpl implements TaskDAO {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
         ResultSet results = null;
+        ArrayList<Task> tasks = new ArrayList<>();
 
         try{
             String sql = "select * from tasks";
             statement = connection.prepareStatement(sql);
             results = statement.executeQuery();
 
-            ArrayList<Task> tasks = new ArrayList<>();
 
             while(results.next()){
                 int id = results.getInt(1);
@@ -235,34 +238,33 @@ public class TaskMySqlDAOImpl implements TaskDAO {
 
                 tasks.add(current);
             }
-            return tasks;
         }
-        catch(SQLException e){
-            e.printStackTrace();
-            Logger.getLogger(TaskMySqlDAOImpl.class.getName()).log(Level.SEVERE, null, e);
-            return null;
+        catch(SQLException exception){
+            LOGGER.log(Level.SEVERE, "Unable to load Tasks", exception);
+            throw new PersistentException("Error while reading in DB", exception);
         } finally {
             if(results != null) {
                 try {
                     results.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             if(statement != null) {
                 try {
                     statement.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             if (connection != null) {
                 try {
                     connection.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
+            return tasks;
         }
     }
 }

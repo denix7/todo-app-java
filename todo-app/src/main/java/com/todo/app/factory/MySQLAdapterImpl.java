@@ -22,8 +22,8 @@ public class MySQLAdapterImpl implements DBAdapter {
             connection = DriverManager.getConnection(connectionString, user, password);
             return connection;
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (SQLException exception) {
+            exception.printStackTrace();
             return null;
         }
     }

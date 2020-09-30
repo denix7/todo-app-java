@@ -1,7 +1,7 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
-import com.todo.app.entities.Task;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.domain.entities.Task;
 
 import java.io.OutputStream;
 
@@ -29,7 +29,11 @@ public class ModifyCommand extends AbstractCommand {
             task.setId(taskIndex-1);
             task.setDescription(newDescription);
 
-            bo.modifyTask(task);
+            try {
+                bo.modifyTask(task);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
         else if(numeric && args.length == 3 && args[1].equals("tag:")) {
             int taskIndex = Integer.parseInt(args[0]);
@@ -39,7 +43,11 @@ public class ModifyCommand extends AbstractCommand {
             task.setId(taskIndex-1);
             task.setTag(newTag);
 
-            bo.modifyTask(task);
+            try {
+                bo.modifyTask(task);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
         else if (numeric && args.length == 3 && args[1].equals("priority:")) {
             String newPriority = args[2];
@@ -49,7 +57,11 @@ public class ModifyCommand extends AbstractCommand {
                 task.setId(taskIndex - 1);
                 task.setPriority(newPriority);
 
-                bo.modifyTask(task);
+                try {
+                    bo.modifyTask(task);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
                 write(out, "Priority was modified\n");
             }
             else {
@@ -64,7 +76,12 @@ public class ModifyCommand extends AbstractCommand {
                 Task task = new Task();
                 task.setId(taskIndex - 1);
                 task.setDue(date);
-                bo.modifyTask(task);
+
+                try {
+                    bo.modifyTask(task);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
             else{
                 write(out, "This date is not valid");

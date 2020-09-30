@@ -1,7 +1,7 @@
-package com.todo.app.businessLogic;
+package com.todo.app.aplication;
 
-import com.todo.app.dao.TaskTxtDAOImpl;
-import com.todo.app.entities.Task;
+import com.todo.app.infrastructure.TaskTxtDAOImpl;
+import com.todo.app.domain.entities.Task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

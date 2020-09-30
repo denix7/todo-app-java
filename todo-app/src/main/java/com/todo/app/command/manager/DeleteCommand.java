@@ -1,9 +1,8 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObject;
+import com.todo.app.aplication.BusinessObject;
 
 import java.io.OutputStream;
-import java.util.Arrays;
 
 public class DeleteCommand extends AbstractCommand {
     public static final String COMMAND_NAME = "delete";
@@ -15,8 +14,7 @@ public class DeleteCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, BusinessObject bo) {
-        //bo.deleteTask(args);
-        System.out.println(Arrays.toString(args));
+        boolean result = false;
         if(args == null) {
             write(out, "Command not found");
         }
@@ -25,7 +23,11 @@ public class DeleteCommand extends AbstractCommand {
             boolean isNumeric = indexExpected.matches("-?\\d+(\\.\\d+)?");
             if(isNumeric) {
                 int index = Integer.parseInt(args[0]) - 1;
-                boolean result = bo.deleteTask(index);
+                        try {
+                            result = bo.deleteTask(index);
+                        } catch (Exception exception) {
+                            exception.printStackTrace();
+                        }
                 write(out, result == true ? "Task deleted succesfull\n" : "The task doesn't exist\n");
             }
             else {
