@@ -15,11 +15,11 @@ public class DefaultCommand extends AbstractCommand{
 
     @Override
     public void execute(String[] args, OutputStream out, BusinessObject bo) {
-        write(out, "Command not found\n");
+        print(out, "Command not found\n");
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

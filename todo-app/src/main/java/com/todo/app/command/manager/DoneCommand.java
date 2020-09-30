@@ -2,8 +2,10 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
 
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 public class DoneCommand extends AbstractCommand {
 
@@ -27,10 +29,10 @@ public class DoneCommand extends AbstractCommand {
 
             try {
                 bo.doneTask(task);
-            } catch (Exception exception) {
+            } catch (BusinessException exception) {
                 exception.printStackTrace();
             }
-            write(out, "Marked as done\n");
+            print(out, "Marked as done\n");
         }
         else if(!isNumeric && args.length == 2){
             String tag = args[1];
@@ -41,21 +43,22 @@ public class DoneCommand extends AbstractCommand {
                 try {
                     bo.doneTask(task);
                 } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
                     exception.printStackTrace();
                 }
-                write(out, "All tasks with tag marked as done\n");
+                print(out, "All tasks with tag marked as done\n");
             }
             else{
-                write(out, "Command not valid\n");
+                print(out, "Command not valid\n");
             }
         }
         else{
-            write(out, "Command not valid\n");
+            print(out, "Command not valid\n");
         }
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

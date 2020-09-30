@@ -31,11 +31,11 @@ public class HelpCommand extends AbstractCommand {
                 "todo info index                   : Get info of a task by index\n" +
                 "todo config path c:\\users\\user    : Set the path to export a report\n" +
                 "todo export filter: value         : Export a csv file with filter\n";
-        write(out, message);
+        print(out, message);
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

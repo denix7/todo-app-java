@@ -2,8 +2,10 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
 
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 public class ModifyCommand extends AbstractCommand {
 
@@ -19,7 +21,7 @@ public class ModifyCommand extends AbstractCommand {
         boolean numeric;
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         if(args == null || args.length == 1 || args.length > 5) {
-            write(out, "Command not valid\n");
+            print(out, "Command not valid\n");
         }
         else if (numeric && args.length == 2) {
             int taskIndex = Integer.parseInt(args[0]);
@@ -62,10 +64,10 @@ public class ModifyCommand extends AbstractCommand {
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
-                write(out, "Priority was modified\n");
+                print(out, "Priority was modified\n");
             }
             else {
-                write(out, "Priority not valid\n");
+                print(out, "Priority not valid\n");
             }
         }
         else if(numeric && args.length == 4 && args[1].equals("due:")){
@@ -79,24 +81,25 @@ public class ModifyCommand extends AbstractCommand {
 
                 try {
                     bo.modifyTask(task);
-                } catch (Exception exception) {
+                } catch (BusinessException exception) {
+                    LOGGER.log(Level.SEVERE, "Modify Command: Error while storing", exception);
                     exception.printStackTrace();
                 }
             }
             else{
-                write(out, "This date is not valid");
+                print(out, "This date is not valid");
             }
         }
         else if (!numeric && args.length == 2) {
-            write(out, "Command not valid\n");
+            print(out, "Command not valid\n");
         }
         else {
-            write(out, "Command not found\n");
+            print(out, "Command not found\n");
         }
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

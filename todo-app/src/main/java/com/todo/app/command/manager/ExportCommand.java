@@ -1,8 +1,10 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
+import com.todo.app.exceptions.BusinessException;
 
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 public class ExportCommand extends AbstractCommand {
     public static final String COMMAND_NAME = "export";
@@ -17,13 +19,14 @@ public class ExportCommand extends AbstractCommand {
         if(args == null){
             try{
                 boolean result = bo.exportAll();
-                write(out, "Tasks exported\n");
-            }catch (Exception e){
-                e.printStackTrace();
+                print(out, "Tasks exported\n");
+            }catch (BusinessException exception){
+                LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
+                exception.printStackTrace();
             }
         }
         else if(args.length == 1 || args.length > 2) {
-            write(out, "Command not valid\n");
+            print(out, "Command not valid\n");
         }
         /*else {
             String filter = args[0];
@@ -51,7 +54,7 @@ public class ExportCommand extends AbstractCommand {
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

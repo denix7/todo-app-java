@@ -18,7 +18,7 @@ public class ConfigCommand extends AbstractCommand {
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

@@ -9,6 +9,7 @@ import com.todo.app.filters.TagFilter;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.logging.Level;
 
 public class ListCommand extends AbstractCommand {
 
@@ -24,41 +25,61 @@ public class ListCommand extends AbstractCommand {
         ArrayList<Task> tasks = null;
 
         if(args == null){
-            tasks = bo.listTasks();
+            try {
+                tasks = bo.listTasks();
+            } catch (Exception exception) {
+                LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
+                exception.printStackTrace();
+            }
         }
         else if(args != null && args.length > 2){
-            write(out, "Command not found\n");
+            print(out, "Command not found\n");
         }
         else if (args.length == 2 ){
             if(args[0].equals("tag:")) {
                 String tag = args[1];
                 Filter filter = new TagFilter(tag);
-                tasks = bo.filter(filter);
+                try {
+                    tasks = bo.filter(filter);
+                } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
+                    exception.printStackTrace();
+                }
             }
             else if(args[0].equals("status:")){
                 String status = args[1];
                 Filter filter = new StatusFilter(status);
-                tasks = bo.filter(filter);
+                try {
+                    tasks = bo.filter(filter);
+                } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
+                    exception.printStackTrace();
+                }
             }
             else if(args[0].equals("priority:")){
                 String priority = args[1];
                 Filter filter = new PriorityFilter(priority);
-                tasks = bo.filter(filter);
+                try {
+                    tasks = bo.filter(filter);
+                } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
+                    exception.printStackTrace();
+                }
             }
             else{
-                write(out, "Filter no valid\n");
+                print(out, "Filter no valid\n");
             }
         }
         else{
-            write(out, "Command not valid\n");
+            print(out, "Command not valid\n");
         }
 
         if(tasks.isEmpty()){
-            write(out, "There are not coincidences\n");
+            print(out, "There are not coincidences\n");
         }
         else{
             for (Task current : tasks){
-                write(out, current.showList()+"\n");
+                print(out, current.showList()+"\n");
             }
         }
     }
@@ -103,7 +124,7 @@ public class ListCommand extends AbstractCommand {
     }*/
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

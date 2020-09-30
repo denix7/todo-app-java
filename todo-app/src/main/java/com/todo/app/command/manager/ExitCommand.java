@@ -15,12 +15,12 @@ public class ExitCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, BusinessObject bo) {
-        write(out, "Bye!");
+        print(out, "Bye!");
         System.exit(0);
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

@@ -15,27 +15,27 @@ public interface BusinessObject {
 
     void doneTask(Task task) throws BusinessException;
 
-    ArrayList<Task> listTasks();
+    ArrayList<Task> listTasks() throws BusinessException;
 
-    ArrayList<Task> filterByTag(String tag);
+    ArrayList<Task> filterByTag(String tag) throws BusinessException;
 
-    ArrayList<Task> filterByStatus(String status);
+    ArrayList<Task> filterByStatus(String status) throws BusinessException;
 
-    public ArrayList<Task> filter(Filter filter);
+    public ArrayList<Task> filter(Filter filter) throws BusinessException;
 
-    ArrayList<Task> filterByPriority(String priority);
+    ArrayList<Task> filterByPriority(String priority) throws BusinessException;
 
-    int countTasks(String element);
+    int countTasks(String element) throws BusinessException;
 
-    ArrayList<String> getAllTags();
+    ArrayList<String> getAllTags() throws BusinessException;
 
-    Map<String, Integer> getAllTagsWithQuantity();
+    Map<String, Integer> getAllTagsWithQuantity() throws BusinessException;
 
     boolean deleteTask(int index) throws BusinessException;
 
-    String getInfo(int index);
+    String getInfo(int index) throws BusinessException;
 
-    boolean exportAll();
+    boolean exportAll() throws BusinessException;
 
     void config(String[] args);
 }

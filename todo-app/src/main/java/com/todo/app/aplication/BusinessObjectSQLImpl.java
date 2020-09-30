@@ -3,7 +3,6 @@ package com.todo.app.aplication;
 import com.todo.app.exceptions.BusinessException;
 import com.todo.app.exceptions.PersistentException;
 import com.todo.app.infrastructure.TaskDAO;
-import com.todo.app.infrastructure.TaskMySqlDAOImpl;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.filters.Filter;
 import org.apache.commons.csv.CSVFormat;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
 
 public class BusinessObjectSQLImpl implements BusinessObject {
     public static TaskDAO taskDAO;
-    private static final Logger LOGGER = Logger.getLogger(TaskMySqlDAOImpl.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(BusinessObjectSQLImpl.class.getName());
 
     public BusinessObjectSQLImpl(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
@@ -28,17 +27,23 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             taskDAO.save(task);
         }
         catch (PersistentException exception){
-            LOGGER.log(Level.SEVERE, "Error while storing");
-            throw new BusinessException("Error in Businnes Layer", exception);
+            LOGGER.log(Level.SEVERE, "Error while storing in Business Layer");
+            throw new BusinessException("Error. Unable to add in Business Layer", exception);
         }
     }
 
     @Override
     public void modifyTask(Task newTask) throws BusinessException {
-        ArrayList tasks = taskDAO.loadTasks();
+        ArrayList<Task> tasks = null;
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
 
         Task current;
-        current = (Task)tasks.get(newTask.getId());
+        current = (Task) tasks.get(newTask.getId());
         if(newTask.getDescription() != null){
             current.setDescription(newTask.getDescription());
         }
@@ -55,18 +60,24 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try{
             if(current != null){
                 taskDAO.update(current);
-                System.out.println("task was modified");
             }
         }
         catch (PersistentException exception){
-            LOGGER.log(Level.SEVERE, "Error while modifiying");
-            throw new BusinessException("Error in Businnes Layer", exception);
+            LOGGER.log(Level.SEVERE, "Error while modifiying in Business Layer");
+            throw new BusinessException("Error. Unable to modify in Business Layer", exception);
         }
     }
 
     @Override
     public void doneTask(Task task) throws BusinessException {
-        ArrayList<Task> tasks = taskDAO.loadTasks();
+        ArrayList<Task> tasks = null;
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
+
         Task newTask = tasks.get(task.getId());
 
         if(task.getTag() == null){
@@ -75,8 +86,8 @@ public class BusinessObjectSQLImpl implements BusinessObject {
                 taskDAO.update(newTask);
             }
             catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while done task");
-                throw new BusinessException("Error in Businnes Layer", exception);
+                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer");
+                throw new BusinessException("Error. Unable to mark as done in Business Layer", exception);
             }
         }
 
@@ -92,22 +103,35 @@ public class BusinessObjectSQLImpl implements BusinessObject {
                 taskDAO.saveList(tasksWithTag);
             }
             catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while done task");
-                throw new BusinessException("Error in Businnes Layer", exception);
+                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer");
+                throw new BusinessException("Error. Unable to mark as done in Business Layer", exception);
             }
         }
     }
 
     @Override
-    public ArrayList<Task> listTasks() {
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
+    public ArrayList<Task> listTasks() throws BusinessException {
+        ArrayList<Task> tasks = null;
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
         return tasks;
     }
 
     @Override
-    public ArrayList<Task> filterByTag(String tag) {
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
-        ArrayList<Task> answer = new ArrayList<Task>();
+    public ArrayList<Task> filterByTag(String tag) throws BusinessException {
+        ArrayList<Task> tasks = null;
+        ArrayList<Task> answer = new ArrayList<>();
+
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
 
         for(Task current : tasks) {
             String currentTag = current.getTag();
@@ -119,50 +143,16 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     }
 
     @Override
-    public ArrayList<Task> filterByStatus(String status) {
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
-        ArrayList<Task> answer = new ArrayList<Task>();
+    public int countTasks(String param) throws BusinessException {
+        ArrayList<Task> tasks = null;
+        ArrayList<Task> result = new ArrayList<>();
 
-        for(Task current : tasks) {
-            String currentStatus = current.getStatus();
-            if(currentStatus.equals(status)) {
-                answer.add(current);
-            }
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
-        return answer;
-    }
-
-    @Override
-    public ArrayList<Task> filterByPriority(String priority) {
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
-        ArrayList<Task> answer = new ArrayList<Task>();
-
-        for(Task current : tasks) {
-            String currentPriority = current.getPriority();
-            if(currentPriority.equals(priority)) {
-                answer.add(current);
-            }
-        }
-        return answer;
-    }
-
-    @Override
-    public ArrayList<Task> filter(Filter filter) {
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
-        ArrayList<Task> answer = new ArrayList<Task>();
-
-        for(Task current : tasks) {
-            if(filter.satisfies(current)) {
-                answer.add(current);
-            }
-        }
-        return answer;
-    }
-
-    @Override
-    public int countTasks(String param){
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
-        ArrayList<Task> result = new ArrayList<Task>();
 
         if(param.equals("")) {
             return tasks.size();
@@ -177,18 +167,95 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     }
 
     @Override
-    public ArrayList<String> getAllTags() {
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
-        Map<String, Integer> tags = new HashMap<>();
+    public ArrayList<Task> filterByStatus(String status) throws BusinessException {
+        ArrayList<Task> tasks = null;
+        ArrayList<Task> answer = new ArrayList<>();
 
-        tags = countTags(tasks);
-        return new ArrayList<String>(tags.keySet());
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
+
+
+        for(Task current : tasks) {
+            String currentStatus = current.getStatus();
+            if(currentStatus.equals(status)) {
+                answer.add(current);
+            }
+        }
+        return answer;
     }
 
     @Override
-    public Map<String, Integer> getAllTagsWithQuantity() {
-        ArrayList<Task> tasks =  taskDAO.loadTasks();
-        Map<String, Integer> tags = new HashMap<>();
+    public ArrayList<Task> filterByPriority(String priority) throws BusinessException {
+        ArrayList<Task> tasks = null;
+        ArrayList<Task> answer = new ArrayList<>();
+
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
+
+        for(Task current : tasks) {
+            String currentPriority = current.getPriority();
+            if(currentPriority.equals(priority)) {
+                answer.add(current);
+            }
+        }
+        return answer;
+    }
+
+    @Override
+    public ArrayList<Task> filter(Filter filter) throws BusinessException {
+        ArrayList<Task> tasks = null;
+        ArrayList<Task> answer = new ArrayList<>();
+
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
+
+        for(Task current : tasks) {
+            if(filter.satisfies(current)) {
+                answer.add(current);
+            }
+        }
+        return answer;
+    }
+
+    @Override
+    public ArrayList<String> getAllTags() throws BusinessException {
+        ArrayList<Task> tasks = null;
+        Map<String, Integer> tags;
+
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
+
+        tags = countTags(tasks);
+        return new ArrayList<>(tags.keySet());
+    }
+
+    @Override
+    public Map<String, Integer> getAllTagsWithQuantity() throws BusinessException {
+        ArrayList<Task> tasks = null;
+        Map<String, Integer> tags;
+
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
 
         tags = countTags(tasks);
         return tags;
@@ -212,7 +279,13 @@ public class BusinessObjectSQLImpl implements BusinessObject {
 
     @Override
     public boolean deleteTask(int index) throws BusinessException {
-        ArrayList<Task> tasks = taskDAO.loadTasks();
+        ArrayList<Task> tasks = null;
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
 
         if(index <= tasks.size()){
             Task taskToDelete = tasks.get(index);
@@ -220,7 +293,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
                 taskDAO.delete(taskToDelete);
             }
             catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while storing");
+                LOGGER.log(Level.SEVERE, "Error while storing in Business Layer");
                 throw new BusinessException("Error in Businnes Layer", exception);
             }
             return true;
@@ -231,9 +304,16 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     }
 
     @Override
-    public String getInfo(int index) {
-        ArrayList<Task> tasks = taskDAO.loadTasks();
+    public String getInfo(int index) throws BusinessException {
+        ArrayList<Task> tasks = null;
         Task current = tasks.get(index);
+
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
 
         return ("Name:     " + current.getDescription() + "\n" +
                 "ID:       " + current.getUuid() + "\n" +
@@ -245,14 +325,23 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     }
 
     @Override
-    public boolean exportAll() {
-        ArrayList<Task> tasks = taskDAO.loadTasks();
+    public boolean exportAll() throws BusinessException {
+        ArrayList<Task> tasks = null;
         boolean result;
+
+        try {
+            tasks = taskDAO.loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
         try{
             result = exportAsCsv(tasks);
-        }catch (Exception e){
+        }
+        catch (IOException exception){
+            LOGGER.log(Level.SEVERE, "Error while exporting file in Business Layer");
             result = false;
-            e.printStackTrace();
+            exception.printStackTrace();
         }
         return result;
     }
@@ -298,8 +387,9 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             properties.store(output, null);
             System.out.println("Path changed");
         }
-        catch (IOException e) {
-            e.printStackTrace();
+        catch (IOException exception) {
+            LOGGER.log(Level.SEVERE, "Error while setting file path in Business Layer");
+            exception.printStackTrace();
         }
     }
 
@@ -307,13 +397,13 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try(InputStream input = new FileInputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")) {
             Properties properties = new Properties();
             properties.load(input);
-            String customProperty = properties.getProperty("path.config");
 
-            return customProperty;
+            return properties.getProperty("path.config");
 
         }
-        catch (IOException e) {
-            e.printStackTrace();
+        catch (IOException exception) {
+            LOGGER.log(Level.SEVERE, "Error while getting file path in Business Layer");
+            exception.printStackTrace();
             return null;
         }
     }

@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 public class CountCommand extends AbstractCommand {
 
@@ -17,8 +18,13 @@ public class CountCommand extends AbstractCommand {
         int result = 0;
 
         if(args == null){
-            result = bo.countTasks("");
-            write(out, "There are : " + result + " tasks founded\n");
+            try {
+                result = bo.countTasks("");
+            } catch (Exception exception) {
+                LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                exception.printStackTrace();
+            }
+            print(out, "There are : " + result + " tasks founded\n");
         }
         else if(args.length == 2) {
             String filter = args[0];
@@ -26,28 +32,43 @@ public class CountCommand extends AbstractCommand {
 
             if(filter.equals("priority:")){
                 if(value.equals("H") || value.equals("M") || value.equals("L")) {
-                    result = bo.countTasks(value);
+                    try {
+                        result = bo.countTasks(value);
+                    } catch (Exception exception) {
+                        LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                        exception.printStackTrace();
+                    }
                 }
             }
             else if(filter.equals("status:")) {
-                result = bo.countTasks(value);
+                try {
+                    result = bo.countTasks(value);
+                } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                    exception.printStackTrace();
+                }
             }
             else if(filter.equals("tag:")) {
-                result = bo.countTasks(value);
+                try {
+                    result = bo.countTasks(value);
+                } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                    exception.printStackTrace();
+                }
             }
             else {
-                write(out, "Params not valid\n");
+                print(out, "Params not valid\n");
             }
 
-            write(out, "There are : " + result + " tasks founded\n");
+            print(out, "There are : " + result + " tasks founded\n");
         }
         else {
-            write(out, "Command not found\n");
+            print(out, "Command not found\n");
         }
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

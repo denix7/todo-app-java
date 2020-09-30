@@ -2,10 +2,12 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 
 public class AbstractCommand implements Command {
-
+    public static final Logger LOGGER = Logger.getLogger(AbstractCommand.class.getName());
 
     @Override
     public String getName() {
@@ -17,12 +19,12 @@ public class AbstractCommand implements Command {
 
     }
 
-    public void write(OutputStream stream, String message){
+    public void print(OutputStream stream, String message) {
         try {
             stream.write(message.getBytes());
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (IOException exception) {
+            exception.printStackTrace();
         }
     }
 }

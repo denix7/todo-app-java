@@ -17,6 +17,6 @@ public interface TaskDAO extends CrudRepository<Task> {
 
     public Task read(Task task) throws PersistentException;
 
-    public ArrayList<Task> loadTasks();
+    public ArrayList<Task> loadTasks() throws PersistentException;
 
 }

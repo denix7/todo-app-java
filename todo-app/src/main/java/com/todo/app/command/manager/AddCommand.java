@@ -2,11 +2,13 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
 
 import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class AddCommand extends AbstractCommand{
 
@@ -20,7 +22,7 @@ public class AddCommand extends AbstractCommand{
     @Override
     public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args != null && args.length == 1) {
-            write(out, "Adding element with title\n");
+            print(out, "Adding element with title\n");
             String description = args[0];
             Task task = new Task(description);
             UUID id = UUID.randomUUID();
@@ -36,12 +38,13 @@ public class AddCommand extends AbstractCommand{
 
             try {
                 bo.addTask(task);
-            } catch (Exception exception) {
+            } catch (BusinessException exception) {
+                LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
                 exception.printStackTrace();
             }
         }
         if(args == null || args.length == 0) {
-            write(out, "You should add a note");
+            print(out, "You should add a note");
         }
         if(args != null && args.length == 2 ) {
             if(args[1].equals("M") || args[1].equals("H") || args[1].equals("L")){
@@ -58,19 +61,20 @@ public class AddCommand extends AbstractCommand{
 
                 try {
                     bo.addTask(task);
-                } catch (Exception exception) {
+                } catch (BusinessException exception) {
+                    LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
                     exception.printStackTrace();
                 }
-                write(out, "Task with priority added\n");
+                print(out, "Task with priority added\n");
             }
             else {
-                write(out,"Task not added, priority only could be: L/M/H");
+                print(out,"Task not added, priority only could be: L/M/H");
             }
         }
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }
