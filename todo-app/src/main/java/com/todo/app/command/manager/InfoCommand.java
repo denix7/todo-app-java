@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -14,7 +15,7 @@ public class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         if(args == null) {
             print(out, "Command not valid\n");
         }
@@ -30,7 +31,7 @@ public class InfoCommand extends AbstractCommand {
                     taskInfo = bo.getInfo(index);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Info Command: Error while storing", exception);
-                    exception.printStackTrace();
+                    throw new CommandException("Info Command Error", exception);
                 }
                 print(out, taskInfo);
             }

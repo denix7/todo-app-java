@@ -1,16 +1,22 @@
 package com.todo.app;
 
 import com.todo.app.aplication.BusinessObjectSQLImpl;
+import com.todo.app.command.manager.AbstractCommand;
 import com.todo.app.command.manager.CommandManager;
 import com.todo.app.command.manager.Command;
+import com.todo.app.exceptions.CommandException;
 import com.todo.app.infrastructure.TaskMySqlDAOImpl;
 import com.todo.app.util.Fragmenter;
 
+import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class App {
     public static void main(String[] args) {
+        final Logger LOGGER = Logger.getLogger(Logger.class.getName());
         System.out.println("===========Welcome to todo app============");
         Scanner scanner = new Scanner(System.in);
         CommandManager commandManager = CommandManager.getInstance();
@@ -19,7 +25,12 @@ public class App {
             String line = scanner.nextLine();
             if (line.trim().isEmpty()) {
                 Command defaultCommand = commandManager.getCommand("default");
-                defaultCommand.execute(null, System.out,null);
+                try {
+                    defaultCommand.execute(null, System.out,null);
+                } catch (Exception exception) {
+                    LOGGER.info("Is not possible to execute the command");
+                    LOGGER.log(Level.SEVERE, "Is not possible to execute the command", exception);
+                }
                 continue;
             }
 
@@ -35,10 +46,15 @@ public class App {
 
             //Business Object
             //BusinessObject bo = new BusinessObjectTxtImpl(new TaskTxtDAOImpl("c:\\\\tasks-java\\\\tasks.txt"));
-            //BusinessObject bo = new BusinessObjectSQLImpl(new TaskMySqlDAOImpl());
+
 
             //Command Executor
-            command.execute(commandArgs2, System.out, new BusinessObjectSQLImpl(new TaskMySqlDAOImpl()));
+            try {
+                command.execute(commandArgs2, System.out, new BusinessObjectSQLImpl(new TaskMySqlDAOImpl()));
+            } catch (Exception exception) {
+                LOGGER.info("Is not possible to execute the command");
+                LOGGER.log(Level.SEVERE, "Is not possible to execute the command", exception);
+            }
         }
     }
 }

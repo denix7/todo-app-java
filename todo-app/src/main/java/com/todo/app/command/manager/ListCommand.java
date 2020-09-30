@@ -2,6 +2,8 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 import com.todo.app.filters.Filter;
 import com.todo.app.filters.PriorityFilter;
 import com.todo.app.filters.StatusFilter;
@@ -21,15 +23,15 @@ public class ListCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         ArrayList<Task> tasks = null;
 
         if(args == null){
             try {
                 tasks = bo.listTasks();
-            } catch (Exception exception) {
+            } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
-                exception.printStackTrace();
+                throw new CommandException("List Command Error", exception);
             }
         }
         else if(args != null && args.length > 2){
@@ -42,8 +44,8 @@ public class ListCommand extends AbstractCommand {
                 try {
                     tasks = bo.filter(filter);
                 } catch (Exception exception) {
-                    LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
-                    exception.printStackTrace();
+                    LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("List command error", exception);
                 }
             }
             else if(args[0].equals("status:")){
@@ -51,9 +53,9 @@ public class ListCommand extends AbstractCommand {
                 Filter filter = new StatusFilter(status);
                 try {
                     tasks = bo.filter(filter);
-                } catch (Exception exception) {
-                    LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
-                    exception.printStackTrace();
+                } catch (BusinessException exception) {
+                    LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("List command error", exception);
                 }
             }
             else if(args[0].equals("priority:")){
@@ -62,8 +64,8 @@ public class ListCommand extends AbstractCommand {
                 try {
                     tasks = bo.filter(filter);
                 } catch (Exception exception) {
-                    LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
-                    exception.printStackTrace();
+                    LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("List command error", exception);
                 }
             }
             else{

@@ -3,6 +3,7 @@ package com.todo.app.command.manager;
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -17,7 +18,7 @@ public class ModifyCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         boolean numeric;
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         if(args == null || args.length == 1 || args.length > 5) {
@@ -33,8 +34,9 @@ public class ModifyCommand extends AbstractCommand {
 
             try {
                 bo.modifyTask(task);
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            } catch (BusinessException exception) {
+                LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
+                throw new CommandException("Modify command error", exception);
             }
         }
         else if(numeric && args.length == 3 && args[1].equals("tag:")) {
@@ -47,8 +49,9 @@ public class ModifyCommand extends AbstractCommand {
 
             try {
                 bo.modifyTask(task);
-            } catch (Exception exception) {
-                exception.printStackTrace();
+            } catch (BusinessException exception) {
+                LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
+                throw new CommandException("Modify command error", exception);
             }
         }
         else if (numeric && args.length == 3 && args[1].equals("priority:")) {
@@ -61,8 +64,9 @@ public class ModifyCommand extends AbstractCommand {
 
                 try {
                     bo.modifyTask(task);
-                } catch (Exception exception) {
-                    exception.printStackTrace();
+                } catch (BusinessException exception) {
+                    LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
+                    throw new CommandException("Modify command error", exception);
                 }
                 print(out, "Priority was modified\n");
             }
@@ -82,8 +86,8 @@ public class ModifyCommand extends AbstractCommand {
                 try {
                     bo.modifyTask(task);
                 } catch (BusinessException exception) {
-                    LOGGER.log(Level.SEVERE, "Modify Command: Error while storing", exception);
-                    exception.printStackTrace();
+                    LOGGER.log(Level.SEVERE, "Modify Command: Error while modifying", exception);
+                    throw new CommandException("Modify command error", exception);
                 }
             }
             else{

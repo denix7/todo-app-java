@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -17,14 +18,14 @@ public class TagsCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         if(args == null) {
             ArrayList<String> tags = null;
             try {
                 tags = bo.getAllTags();
             } catch (BusinessException exception) {
-                LOGGER.log(Level.SEVERE, "Tag Command: Error while storing", exception);
-                exception.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Tag Command: Error while reading", exception);
+                throw new CommandException("Tag command error", exception);
             }
             for(String key : tags){
                 print(out, key + "\n");
@@ -34,9 +35,9 @@ public class TagsCommand extends AbstractCommand {
             Map<String, Integer> tags = null;
             try {
                 tags = bo.getAllTagsWithQuantity();
-            } catch (Exception exception) {
-                LOGGER.log(Level.SEVERE, "Tag Command: Error while storing", exception);
-                exception.printStackTrace();
+            } catch (BusinessException exception) {
+                LOGGER.log(Level.SEVERE, "Tag Command: Error while reading", exception);
+                throw new CommandException("Tag command error", exception);
             }
             tags.forEach((k, v) -> {
                 print(out, k + " : " + v + "\n");

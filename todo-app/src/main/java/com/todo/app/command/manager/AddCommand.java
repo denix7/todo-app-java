@@ -3,6 +3,7 @@ package com.todo.app.command.manager;
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.time.LocalDateTime;
@@ -20,7 +21,7 @@ public class AddCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         if(args != null && args.length == 1) {
             print(out, "Adding element with title\n");
             String description = args[0];
@@ -40,7 +41,7 @@ public class AddCommand extends AbstractCommand{
                 bo.addTask(task);
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
-                exception.printStackTrace();
+                throw new CommandException("Add Command Error", exception);
             }
         }
         if(args == null || args.length == 0) {
@@ -63,7 +64,7 @@ public class AddCommand extends AbstractCommand{
                     bo.addTask(task);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
-                    exception.printStackTrace();
+                    throw new CommandException("Add Command Error", exception);
                 }
                 print(out, "Task with priority added\n");
             }

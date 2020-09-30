@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -15,7 +16,7 @@ public class DeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         boolean result = false;
         if(args == null) {
             print(out, "Command not found");
@@ -29,7 +30,7 @@ public class DeleteCommand extends AbstractCommand {
                         result = bo.deleteTask(index);
                     } catch (BusinessException exception) {
                         LOGGER.log(Level.SEVERE, "Delete Command: Error while storing", exception);
-                        exception.printStackTrace();
+                        throw new CommandException("Delete Command Error", exception);
                     }
                 print(out, result == true ? "Task deleted succesfull\n" : "The task doesn't exist\n");
             }

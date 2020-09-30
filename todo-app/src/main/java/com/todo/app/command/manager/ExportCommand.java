@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -15,14 +16,14 @@ public class ExportCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         if(args == null){
             try{
                 boolean result = bo.exportAll();
                 print(out, "Tasks exported\n");
             }catch (BusinessException exception){
-                LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
-                exception.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Export Command: Error while exporting", exception);
+                throw new CommandException("Export Command Error", exception);
             }
         }
         else if(args.length == 1 || args.length > 2) {

@@ -3,6 +3,7 @@ package com.todo.app.command.manager;
 import com.todo.app.aplication.BusinessObject;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -17,7 +18,7 @@ public class DoneCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         String indexExpected = args[0];
         boolean isNumeric = indexExpected.matches("-?\\d+(\\.\\d+)?");
         Task task = new Task();
@@ -30,7 +31,8 @@ public class DoneCommand extends AbstractCommand {
             try {
                 bo.doneTask(task);
             } catch (BusinessException exception) {
-                exception.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
+                throw new CommandException("Done Command Error", exception);
             }
             print(out, "Marked as done\n");
         }
@@ -44,7 +46,7 @@ public class DoneCommand extends AbstractCommand {
                     bo.doneTask(task);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
-                    exception.printStackTrace();
+                    throw new CommandException("Done Command Error", exception);
                 }
                 print(out, "All tasks with tag marked as done\n");
             }

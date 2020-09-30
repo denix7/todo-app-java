@@ -1,6 +1,8 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
+import com.todo.app.exceptions.CommandException;
+
 import java.io.OutputStream;
 import java.util.logging.Level;
 
@@ -14,7 +16,7 @@ public class CountCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
         int result = 0;
 
         if(args == null){
@@ -22,7 +24,7 @@ public class CountCommand extends AbstractCommand {
                 result = bo.countTasks("");
             } catch (Exception exception) {
                 LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
-                exception.printStackTrace();
+                throw new CommandException("Count Command Error", exception);
             }
             print(out, "There are : " + result + " tasks founded\n");
         }
