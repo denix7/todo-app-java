@@ -15,7 +15,7 @@ public class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args == null) {
             print(out, "Command not valid\n");
         }
@@ -31,7 +31,6 @@ public class InfoCommand extends AbstractCommand {
                     taskInfo = bo.getInfo(index);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Info Command: Error while storing", exception);
-                    throw new CommandException("Info Command Error", exception);
                 }
                 print(out, taskInfo);
             }

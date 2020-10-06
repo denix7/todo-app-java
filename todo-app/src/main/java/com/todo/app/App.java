@@ -1,14 +1,11 @@
 package com.todo.app;
 
-import com.todo.app.aplication.BusinessObjectSQLImpl;
-import com.todo.app.command.manager.AbstractCommand;
+import com.todo.app.aplication.BusinessObject;
 import com.todo.app.command.manager.CommandManager;
 import com.todo.app.command.manager.Command;
-import com.todo.app.exceptions.CommandException;
-import com.todo.app.infrastructure.TaskMySqlDAOImpl;
+import com.todo.app.dependencyInjection.Injector;
 import com.todo.app.util.Fragmenter;
 
-import java.net.ConnectException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -48,13 +45,13 @@ public class App {
             //BusinessObject bo = new BusinessObjectTxtImpl(new TaskTxtDAOImpl("c:\\\\tasks-java\\\\tasks.txt"));
 
 
+
+            BusinessObject bo  = Injector.getBusinessObject();
             //Command Executor
-            try {
-                command.execute(commandArgs2, System.out, new BusinessObjectSQLImpl(new TaskMySqlDAOImpl()));
-            } catch (Exception exception) {
-                LOGGER.info("Is not possible to execute the command");
-                LOGGER.log(Level.SEVERE, "Is not possible to execute the command", exception);
+
+            //command.execute(commandArgs2, System.out, new BusinessObjectSQLImpl(new TaskMySqlDAOImpl()));
+            command.execute(commandArgs2, System.out, bo);
+
             }
         }
     }
-}

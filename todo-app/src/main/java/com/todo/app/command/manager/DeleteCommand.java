@@ -16,7 +16,7 @@ public class DeleteCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         boolean result = false;
         if(args == null) {
             print(out, "Command not found");
@@ -28,11 +28,10 @@ public class DeleteCommand extends AbstractCommand {
                 int index = Integer.parseInt(args[0]) - 1;
                     try {
                         result = bo.deleteTask(index);
+                        print(out, result == true ? "Task deleted succesfull\n" : "The task doesn't exist\n");
                     } catch (BusinessException exception) {
                         LOGGER.log(Level.SEVERE, "Delete Command: Error while storing", exception);
-                        throw new CommandException("Delete Command Error", exception);
                     }
-                print(out, result == true ? "Task deleted succesfull\n" : "The task doesn't exist\n");
             }
             else {
                 print(out, "This index is not valid");

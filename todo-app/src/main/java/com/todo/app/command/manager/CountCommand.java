@@ -16,7 +16,7 @@ public class CountCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         int result = 0;
 
         if(args == null){
@@ -24,7 +24,6 @@ public class CountCommand extends AbstractCommand {
                 result = bo.countTasks("");
             } catch (Exception exception) {
                 LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
-                throw new CommandException("Count Command Error", exception);
             }
             print(out, "There are : " + result + " tasks founded\n");
         }
@@ -38,7 +37,6 @@ public class CountCommand extends AbstractCommand {
                         result = bo.countTasks(value);
                     } catch (Exception exception) {
                         LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
-                        exception.printStackTrace();
                     }
                 }
             }
@@ -47,7 +45,6 @@ public class CountCommand extends AbstractCommand {
                     result = bo.countTasks(value);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
-                    exception.printStackTrace();
                 }
             }
             else if(filter.equals("tag:")) {
@@ -55,7 +52,6 @@ public class CountCommand extends AbstractCommand {
                     result = bo.countTasks(value);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
-                    exception.printStackTrace();
                 }
             }
             else {

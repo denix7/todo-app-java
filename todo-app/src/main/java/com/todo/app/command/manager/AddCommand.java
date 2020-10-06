@@ -1,9 +1,9 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.BusinessObject;
+import com.todo.app.dependencyInjection.Injector;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
-import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.time.LocalDateTime;
@@ -21,11 +21,12 @@ public class AddCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args != null && args.length == 1) {
             print(out, "Adding element with title\n");
             String description = args[0];
-            Task task = new Task(description);
+            Task task = Injector.getTask();
+            task.setDescription(description);
             UUID id = UUID.randomUUID();
             task.setUuid(id);
             task.setStatus("pending");
@@ -41,7 +42,6 @@ public class AddCommand extends AbstractCommand{
                 bo.addTask(task);
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
-                throw new CommandException("Add Command Error", exception);
             }
         }
         if(args == null || args.length == 0) {
@@ -51,7 +51,9 @@ public class AddCommand extends AbstractCommand{
             if(args[1].equals("M") || args[1].equals("H") || args[1].equals("L")){
                 String description = args[0];
                 String priority = args[1];
-                Task task = new Task(description, priority);
+                Task task = Injector.getTask();
+                task.setDescription(description);
+                task.setPriority(priority);
                 UUID id = UUID.randomUUID();
                 task.setUuid(id);
                 task.setStatus("pending");
@@ -59,12 +61,12 @@ public class AddCommand extends AbstractCommand{
                 DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                 LocalDateTime now = LocalDateTime.now();
                 task.setEntry(dtf.format(now));
+                task.setDue(dtf.format(now));
 
                 try {
                     bo.addTask(task);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
-                    throw new CommandException("Add Command Error", exception);
                 }
                 print(out, "Task with priority added\n");
             }

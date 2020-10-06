@@ -22,7 +22,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void save(Task task) throws PersistentException {
+    public void save(Task task) {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
 
@@ -70,12 +70,11 @@ public class TaskMySqlDAOImpl implements TaskDAO {
         }
         catch(Exception exception) {
             LOGGER.log(Level.SEVERE, "Unable to update task", exception);
-            //throw new PersistentException("Error while saving in DB", exception);
         }
     }
 
     @Override
-    public void update(Task task) throws PersistentException {
+    public void update(Task task) {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
 
@@ -112,7 +111,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void delete(Task task) throws PersistentException {
+    public void delete(Task task) {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
 
@@ -145,7 +144,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     }
 
     @Override
-    public Task read(Task task) throws PersistentException{
+    public Task read(Task task) {
         Connection connection = adapter.getConnection();
         PreparedStatement statement = null;
         ResultSet results = null;

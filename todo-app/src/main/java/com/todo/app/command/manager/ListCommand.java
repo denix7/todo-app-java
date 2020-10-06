@@ -23,7 +23,7 @@ public class ListCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         ArrayList<Task> tasks = null;
 
         if(args == null){
@@ -31,7 +31,6 @@ public class ListCommand extends AbstractCommand {
                 tasks = bo.listTasks();
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
-                throw new CommandException("List Command Error", exception);
             }
         }
         else if(args != null && args.length > 2){
@@ -45,7 +44,6 @@ public class ListCommand extends AbstractCommand {
                     tasks = bo.filter(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
-                    throw new CommandException("List command error", exception);
                 }
             }
             else if(args[0].equals("status:")){
@@ -55,7 +53,6 @@ public class ListCommand extends AbstractCommand {
                     tasks = bo.filter(filter);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
-                    throw new CommandException("List command error", exception);
                 }
             }
             else if(args[0].equals("priority:")){
@@ -65,7 +62,6 @@ public class ListCommand extends AbstractCommand {
                     tasks = bo.filter(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
-                    throw new CommandException("List command error", exception);
                 }
             }
             else{

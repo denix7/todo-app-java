@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface CrudRepository<T>{
-    public void save(T t) throws PersistentException;
+    public void save(T t);
 
-    public void update(T t) throws PersistentException;
+    public void update(T t);
 
-    public void delete(T t) throws PersistentException;
+    public void delete(T t);
 
-    public Task read(T t) throws PersistentException;
+    public Task read(T t);
 
-    public List<T> loadTasks() throws PersistentException;
+    public List<T> loadTasks();
 }

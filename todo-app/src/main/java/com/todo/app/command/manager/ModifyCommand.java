@@ -18,7 +18,7 @@ public class ModifyCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         boolean numeric;
         numeric = args[0].matches("-?\\d+(\\.\\d+)?");
         if(args == null || args.length == 1 || args.length > 5) {
@@ -36,7 +36,6 @@ public class ModifyCommand extends AbstractCommand {
                 bo.modifyTask(task);
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
-                throw new CommandException("Modify command error", exception);
             }
         }
         else if(numeric && args.length == 3 && args[1].equals("tag:")) {
@@ -51,7 +50,6 @@ public class ModifyCommand extends AbstractCommand {
                 bo.modifyTask(task);
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
-                throw new CommandException("Modify command error", exception);
             }
         }
         else if (numeric && args.length == 3 && args[1].equals("priority:")) {
@@ -66,7 +64,6 @@ public class ModifyCommand extends AbstractCommand {
                     bo.modifyTask(task);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
-                    throw new CommandException("Modify command error", exception);
                 }
                 print(out, "Priority was modified\n");
             }
@@ -87,7 +84,6 @@ public class ModifyCommand extends AbstractCommand {
                     bo.modifyTask(task);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Modify Command: Error while modifying", exception);
-                    throw new CommandException("Modify command error", exception);
                 }
             }
             else{

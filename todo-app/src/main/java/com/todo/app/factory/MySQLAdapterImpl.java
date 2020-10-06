@@ -1,14 +1,22 @@
 package com.todo.app.factory;
 
+import com.todo.app.aplication.BusinessObjectSQLImpl;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MySQLAdapterImpl implements DBAdapter {
+    private static final Logger LOGGER = Logger.getLogger(BusinessObjectSQLImpl.class.getName());
+
     static{
         try {
             new com.mysql.jdbc.Driver();
-        } catch (Exception e) {}
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while instiantate JDBC", exception);
+        }
     }
 
     private Connection connection;
@@ -20,11 +28,13 @@ public class MySQLAdapterImpl implements DBAdapter {
             String user = "root";
             String password = "";
             connection = DriverManager.getConnection(connectionString, user, password);
-            return connection;
+
         }
         catch (SQLException exception) {
-            exception.printStackTrace();
-            return null;
+            LOGGER.log(Level.SEVERE, "Error while getting DB conection", exception);
+
+        } finally {
+            return connection;
         }
     }
 

@@ -9,33 +9,33 @@ import java.util.Map;
 
 public interface BusinessObject {
 
-    void addTask(Task task) throws BusinessException;
+    void addTask(Task task);
 
-    void modifyTask(Task task) throws BusinessException;
+    void modifyTask(Task task);
 
-    void doneTask(Task task) throws BusinessException;
+    void doneTask(Task task);
 
-    ArrayList<Task> listTasks() throws BusinessException;
+    ArrayList<Task> listTasks();
 
-    ArrayList<Task> filterByTag(String tag) throws BusinessException;
+    ArrayList<Task> filterByTag(String tag);
 
-    ArrayList<Task> filterByStatus(String status) throws BusinessException;
+    ArrayList<Task> filterByStatus(String status);
 
-    public ArrayList<Task> filter(Filter filter) throws BusinessException;
+    public ArrayList<Task> filter(Filter filter);
 
-    ArrayList<Task> filterByPriority(String priority) throws BusinessException;
+    ArrayList<Task> filterByPriority(String priority);
 
-    int countTasks(String element) throws BusinessException;
+    int countTasks(String element);
 
-    ArrayList<String> getAllTags() throws BusinessException;
+    ArrayList<String> getAllTags();
 
-    Map<String, Integer> getAllTagsWithQuantity() throws BusinessException;
+    Map<String, Integer> getAllTagsWithQuantity();
 
-    boolean deleteTask(int index) throws BusinessException;
+    boolean deleteTask(int index);
 
-    String getInfo(int index) throws BusinessException;
+    String getInfo(int index);
 
-    boolean exportAll() throws BusinessException;
+    boolean exportAll();
 
     void config(String[] args);
 }

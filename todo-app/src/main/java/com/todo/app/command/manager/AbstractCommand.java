@@ -17,7 +17,7 @@ public class AbstractCommand implements Command {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
 
     }
 

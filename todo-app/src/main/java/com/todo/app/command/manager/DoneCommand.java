@@ -18,7 +18,7 @@ public class DoneCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         String indexExpected = args[0];
         boolean isNumeric = indexExpected.matches("-?\\d+(\\.\\d+)?");
         Task task = new Task();
@@ -32,7 +32,6 @@ public class DoneCommand extends AbstractCommand {
                 bo.doneTask(task);
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
-                throw new CommandException("Done Command Error", exception);
             }
             print(out, "Marked as done\n");
         }
@@ -44,9 +43,8 @@ public class DoneCommand extends AbstractCommand {
 
                 try {
                     bo.doneTask(task);
-                } catch (Exception exception) {
+                } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
-                    throw new CommandException("Done Command Error", exception);
                 }
                 print(out, "All tasks with tag marked as done\n");
             }

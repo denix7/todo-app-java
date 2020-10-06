@@ -18,14 +18,13 @@ public class TagsCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args == null) {
             ArrayList<String> tags = null;
             try {
                 tags = bo.getAllTags();
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Tag Command: Error while reading", exception);
-                throw new CommandException("Tag command error", exception);
             }
             for(String key : tags){
                 print(out, key + "\n");
@@ -37,7 +36,6 @@ public class TagsCommand extends AbstractCommand {
                 tags = bo.getAllTagsWithQuantity();
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Tag Command: Error while reading", exception);
-                throw new CommandException("Tag command error", exception);
             }
             tags.forEach((k, v) -> {
                 print(out, k + " : " + v + "\n");

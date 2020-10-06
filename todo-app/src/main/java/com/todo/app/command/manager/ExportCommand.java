@@ -16,14 +16,13 @@ public class ExportCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) throws CommandException {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args == null){
             try{
                 boolean result = bo.exportAll();
                 print(out, "Tasks exported\n");
             }catch (BusinessException exception){
                 LOGGER.log(Level.SEVERE, "Export Command: Error while exporting", exception);
-                throw new CommandException("Export Command Error", exception);
             }
         }
         else if(args.length == 1 || args.length > 2) {

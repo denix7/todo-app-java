@@ -1,5 +1,6 @@
 package com.todo.app.aplication;
 
+import com.todo.app.dependencyInjection.Injector;
 import com.todo.app.exceptions.BusinessException;
 import com.todo.app.exceptions.PersistentException;
 import com.todo.app.infrastructure.TaskDAO;
@@ -16,6 +17,10 @@ import java.util.logging.Logger;
 public class BusinessObjectSQLImpl implements BusinessObject {
     public static TaskDAO taskDAO;
     private static final Logger LOGGER = Logger.getLogger(BusinessObjectSQLImpl.class.getName());
+
+    public BusinessObjectSQLImpl() {
+        this.taskDAO = Injector.getTaskDao();
+    }
 
     public BusinessObjectSQLImpl(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
@@ -341,7 +346,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         catch (IOException exception){
             LOGGER.log(Level.SEVERE, "Error while exporting file in Business Layer");
             result = false;
-            exception.printStackTrace();
+            throw new BusinessException("Error. Unable to exports tasks in Business Layer", exception);
         }
         return result;
     }
@@ -389,22 +394,19 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         }
         catch (IOException exception) {
             LOGGER.log(Level.SEVERE, "Error while setting file path in Business Layer");
-            exception.printStackTrace();
         }
     }
 
     private String getPath() {
+        Properties properties = null;
         try(InputStream input = new FileInputStream("src\\\\main\\\\resources\\\\META-INF\\\\path.properties")) {
-            Properties properties = new Properties();
+            properties = new Properties();
             properties.load(input);
-
-            return properties.getProperty("path.config");
-
         }
         catch (IOException exception) {
             LOGGER.log(Level.SEVERE, "Error while getting file path in Business Layer");
-            exception.printStackTrace();
-            return null;
+        } finally {
+            return properties.getProperty("path.config");
         }
     }
 }
