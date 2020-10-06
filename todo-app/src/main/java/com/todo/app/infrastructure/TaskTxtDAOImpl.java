@@ -1,13 +1,17 @@
-package com.todo.app.dao;
+package com.todo.app.infrastructure;
 
-import com.todo.app.entities.Task;
+import com.todo.app.domain.entities.Task;
 
 import java.io.*;
 import java.util.*;
 
-public class TaskTxtDAOImpl implements ITaskDAO{
+public class TaskTxtDAOImpl{
+    private String fileName;
+    private boolean exist;
 
-    public TaskTxtDAOImpl() {
+    public TaskTxtDAOImpl(String fileName) {
+        this.fileName = fileName;
+        this.exist = exist(fileName);
     }
 
     public boolean exist(String fileName) {
@@ -15,53 +19,43 @@ public class TaskTxtDAOImpl implements ITaskDAO{
         return file.exists();
     }
 
-    @Override
-    public void save(Task task, String fileName, boolean exist) {
+    public void save(Task task) {
         File file = new File(fileName);
 
-        try
-        {
+        try {
             PrintWriter out = new PrintWriter(new FileWriter(file, exist));
             out.println(task.toString());
             out.close();
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void saveList(ArrayList<Task> tasks, String fileName, boolean exist) {
+    public void saveList(ArrayList<Task> tasks) {
         File file = new File(fileName);
 
-        try
-        {
+        try {
             PrintWriter out = new PrintWriter(new FileWriter(file));
-            for (Task task: tasks)
-            {
+            for (Task task: tasks) {
                 out.println(task.toString());
             }
             out.close();
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
     public void update(Task task) {
 
     }
 
-    @Override
     public void delete(Task task) {
 
     }
 
-    @Override
-    public ArrayList<Task> loadTasks(String fileName) {
+    public ArrayList<Task> loadTasks() {
         File file = new File(fileName);
         ArrayList<Task> tasks = new ArrayList<Task>();
 

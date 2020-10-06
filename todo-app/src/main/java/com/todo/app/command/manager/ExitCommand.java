@@ -1,7 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.aplication.BusinessObject;
 
 import java.io.OutputStream;
 
@@ -15,13 +14,13 @@ public class ExitCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        write(out, "Bye!");
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+        print(out, "Bye!");
         System.exit(0);
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

@@ -1,9 +1,12 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
+import java.util.logging.Level;
 
 public class DoneCommand extends AbstractCommand {
 
@@ -15,12 +18,47 @@ public class DoneCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.doneTask(args, fileName);
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+        String indexExpected = args[0];
+        boolean isNumeric = indexExpected.matches("-?\\d+(\\.\\d+)?");
+        Task task = new Task();
+
+        if (isNumeric && args.length == 1) {
+            int index = Integer.parseInt(indexExpected);
+            task.setId(index - 1);
+            task.setStatus("completed");
+
+            try {
+                bo.doneTask(task);
+            } catch (BusinessException exception) {
+                LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
+            }
+            print(out, "Marked as done\n");
+        }
+        else if(!isNumeric && args.length == 2){
+            String tag = args[1];
+            if(args[0].equals("tag:")){
+                task.setTag(tag);
+                task.setStatus("completed");
+
+                try {
+                    bo.doneTask(task);
+                } catch (BusinessException exception) {
+                    LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
+                }
+                print(out, "All tasks with tag marked as done\n");
+            }
+            else{
+                print(out, "Command not valid\n");
+            }
+        }
+        else{
+            print(out, "Command not valid\n");
+        }
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

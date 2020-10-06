@@ -1,11 +1,15 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.exceptions.CommandException;
 
+import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class AbstractCommand implements ICommand {
+public class AbstractCommand implements Command {
+    public static final Logger LOGGER = Logger.getLogger(AbstractCommand.class.getName());
 
     @Override
     public String getName() {
@@ -13,16 +17,16 @@ public class AbstractCommand implements ICommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
 
     }
 
-    public void write(OutputStream stream, String message){
+    public void print(OutputStream stream, String message) {
         try {
             stream.write(message.getBytes());
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (IOException exception) {
+            LOGGER.log(Level.SEVERE, "Abstract command exception", exception);
         }
     }
 }

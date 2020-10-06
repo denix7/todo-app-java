@@ -1,4 +1,4 @@
-package com.todo.app.entities;
+package com.todo.app.domain.entities;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,8 +17,15 @@ public class Task {
     private ArrayList<UUID> depends;
     private String tag;
 
+    public Task(){}
+
     public Task(String description) {
         this.description = description;
+    }
+
+    public Task(String description, String priority) {
+        this.description = description;
+        this.priority = priority;
     }
 
     public Task(String description, String status, UUID uuid, String entry, String priority, String tag) {
@@ -140,6 +147,7 @@ public class Task {
                 "id " + uuid + " | "+
                 "create : " + entry + " | "+
                 "priority : " + priority + " | "+
-                "tag : " + tag + "]" + " | ";
+                "tag : " + tag + "]" + " | " +
+                "due : " + due;
     }
 }

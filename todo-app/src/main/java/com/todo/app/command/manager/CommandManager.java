@@ -2,10 +2,13 @@ package com.todo.app.command.manager;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CommandManager {
     private static CommandManager commandManager;
-    private static Map<String, Class<? extends ICommand>> commands = new HashMap<String, Class<? extends ICommand>>();
+    private static Map<String, Class<? extends Command>> commands = new HashMap<String, Class<? extends Command>>();
+    public static final Logger LOGGER = Logger.getLogger(CommandManager.class.getName());
 
     private CommandManager() {
         register(ExitCommand.COMMAND_NAME, ExitCommand.class);
@@ -29,22 +32,22 @@ public class CommandManager {
         return commandManager;
     }
 
-    public void register(String commandName, Class<? extends ICommand> command) {
+    public void register(String commandName, Class<? extends Command> command) {
         commands.put(commandName, command);
     }
 
-    public ICommand getCommand(String command) {
-        if(!commands.containsKey(command)) {
+    public Command getCommand(String commandName) {
+        if(!commands.containsKey(commandName)) {
             return new DefaultCommand();
         }
 
         try{
-            ICommand iCommand = commands.get(command).newInstance();
-            return iCommand;
+            Command command = commands.get(commandName).newInstance();
+            return command;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        catch (InstantiationException | IllegalAccessException exception) {
+            LOGGER.log(Level.SEVERE, "Command Manager error", exception);
+            return new DefaultCommand();
         }
     }
 }

@@ -1,9 +1,15 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.dependencyInjection.Injector;
+import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
 
 import java.io.OutputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+import java.util.logging.Level;
 
 public class AddCommand extends AbstractCommand{
 
@@ -15,22 +21,63 @@ public class AddCommand extends AbstractCommand{
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         if(args != null && args.length == 1) {
-            write(out, "Adding element with title");
-            bo.addTask(args, fileName);
+            print(out, "Adding element with title\n");
+            String description = args[0];
+            Task task = Injector.getTask();
+            task.setDescription(description);
+            UUID id = UUID.randomUUID();
+            task.setUuid(id);
+            task.setStatus("pending");
+            task.setTag("default");
+            task.setPriority("M");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            task.setEntry(dtf.format(now));
+
+            task.setDue(dtf.format(now));
+
+            try {
+                bo.addTask(task);
+            } catch (BusinessException exception) {
+                LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
+            }
         }
         if(args == null || args.length == 0) {
-            write(out, "Debe agreagar una nota");
+            print(out, "You should add a note");
         }
         if(args != null && args.length == 2 ) {
-            System.out.println("Task with priority added");
-            bo.addTask(args, fileName);
+            if(args[1].equals("M") || args[1].equals("H") || args[1].equals("L")){
+                String description = args[0];
+                String priority = args[1];
+                Task task = Injector.getTask();
+                task.setDescription(description);
+                task.setPriority(priority);
+                UUID id = UUID.randomUUID();
+                task.setUuid(id);
+                task.setStatus("pending");
+                task.setTag("default");
+                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                LocalDateTime now = LocalDateTime.now();
+                task.setEntry(dtf.format(now));
+                task.setDue(dtf.format(now));
+
+                try {
+                    bo.addTask(task);
+                } catch (BusinessException exception) {
+                    LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
+                }
+                print(out, "Task with priority added\n");
+            }
+            else {
+                print(out,"Task not added, priority only could be: L/M/H");
+            }
         }
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

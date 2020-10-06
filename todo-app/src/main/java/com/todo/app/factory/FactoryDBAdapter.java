@@ -1,46 +1,37 @@
 package com.todo.app.factory;
 
+import com.todo.app.infrastructure.TaskMySqlDAOImpl;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class FactoryDBAdapter {
 
     private static final String DB_TYPE = "dbadaptertype";
+    private static final Logger LOGGER = Logger.getLogger(FactoryDBAdapter.class.getName());
 
-
-    public static IDBAdapter getAdapter(DBType type){
-        switch (type){
-            case ORACLE:
-                return null;
-            case MYSQL:
-                return new MySQLAdapter();
-            default:
-                return null;
-        }
-    }
-
-    public static IDBAdapter getAdapter(){
+    public static DBAdapter getAdapter(){
+        DBAdapter dbAdapter = null;
         try {
             Properties p = loadProperties();
             String dbType = p.getProperty(DB_TYPE);
-            return (IDBAdapter)Class.forName(dbType).newInstance();
+            dbAdapter = (DBAdapter)Class.forName(dbType).newInstance();
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
+        catch (IOException | ClassNotFoundException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to get connection", exception);
+        } finally {
+            return dbAdapter;
         }
     }
 
-    private static Properties loadProperties(){
-        try {
+    private static Properties loadProperties() throws IOException {
             Properties p = new Properties();
             InputStream stream = FactoryDBAdapter.class.getClassLoader().getResourceAsStream("META-INF/dbadapter.properties");
             p.load(stream);
             return p;
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }

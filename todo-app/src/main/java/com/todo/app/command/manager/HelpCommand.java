@@ -1,7 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.BusinessObjectTxtImpl;
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.aplication.BusinessObject;
 
 import java.io.OutputStream;
 
@@ -14,7 +13,7 @@ public class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
         String message =
                 "todo exit                         : Close the terminal\n" +
                 "todo add \"task name\"              : Register a new task\n" +
@@ -32,11 +31,11 @@ public class HelpCommand extends AbstractCommand {
                 "todo info index                   : Get info of a task by index\n" +
                 "todo config path c:\\users\\user    : Set the path to export a report\n" +
                 "todo export filter: value         : Export a csv file with filter\n";
-        write(out, message);
+        print(out, message);
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

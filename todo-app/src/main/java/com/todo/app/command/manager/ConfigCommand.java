@@ -1,6 +1,7 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.businessLogic.IBusinessObject;
+import com.todo.app.aplication.BusinessObject;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 
@@ -13,12 +14,12 @@ public class ConfigCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo, String fileName) {
-        bo.config(args, fileName);
+    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+        bo.config(args);
     }
 
     @Override
-    public void write(OutputStream stream, String message) {
-        super.write(stream, message);
+    public void print(OutputStream stream, String message) {
+        super.print(stream, message);
     }
 }

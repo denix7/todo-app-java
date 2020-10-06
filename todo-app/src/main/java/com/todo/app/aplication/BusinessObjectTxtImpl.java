@@ -1,34 +1,36 @@
-package com.todo.app.businessLogic;
+package com.todo.app.aplication;
 
-import com.todo.app.dao.TaskTxtDAOImpl;
-import com.todo.app.entities.Task;
+import com.todo.app.infrastructure.TaskTxtDAOImpl;
+import com.todo.app.domain.entities.Task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class BusinessObjectTxtImpl implements IBusinessObject {
+public class BusinessObjectTxtImpl  {
 
     public static TaskTxtDAOImpl taskDAO;
+    private String fileName;
 
     public BusinessObjectTxtImpl() {
-        this.taskDAO = new TaskTxtDAOImpl();
+
+        fileName = "c:\\tasks-java\\tasks.txt";
+        taskDAO = new TaskTxtDAOImpl(fileName);
     }
 
-    public void addTask(String[] args, String fileName) {
+    public void addTask(String taskName, String priority) {
         UUID id = UUID.randomUUID();
-        Task task = new Task(args[0]);
+        Task task = new Task(taskName);
 
         task.setUuid(id);
         task.setStatus("pending");
         task.setTag("default");
 
-        if(args.length > 1) {
-            task.setPriority(args[1]);
+        if(priority != null) {
+            task.setPriority(priority);
         }
-        else
-        {
+        else {
             task.setPriority("M");
         }
 
@@ -37,25 +39,23 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         task.setEntry(dtf.format(now));
 
 
-        try{
-            boolean existFile = taskDAO.exist(fileName);
-            taskDAO.save(task, fileName, existFile);
+        try {
+            taskDAO.save(task);
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void modifyTask(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
-        modifyTaskByIndex(tasks, fileName, args);
+
+    public void modifyTask(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
+        modifyTaskByIndex(tasks, args);
     }
 
-    public void modifyTaskByIndex(ArrayList<Task> tasks, String fileName, String[] args) {
+    public void modifyTaskByIndex(ArrayList<Task> tasks, String[] args) {
         try {
-            boolean numeric = true;
+            boolean numeric;
             numeric = args[0].matches("-?\\d+(\\.\\d+)?");
 
             if (numeric && args.length == 2) {
@@ -75,12 +75,11 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
             System.out.println("Parameters is needed");
         }
 
-        try
-        {
+        try {
             boolean existFile = taskDAO.exist(fileName);
             if(existFile) {
                 taskDAO.deleteFile(fileName);
-                taskDAO.saveList(tasks, fileName, existFile);
+                taskDAO.saveList(tasks);
                 System.out.println("Task " + " was modified");
             }
             else {
@@ -92,13 +91,13 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         }
     }
 
-    public void doneTask(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
-        markAsDone(tasks, fileName, args[0]);
+    public void doneTask(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
+        markAsDone(tasks, args[0]);
     }
 
-    public void markAsDone(ArrayList<Task> tasks, String fileName, String arg) {
-        boolean isNumeric = true;
+    public void markAsDone(ArrayList<Task> tasks, String arg) {
+        boolean isNumeric;
         isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
 
         if(isNumeric) {
@@ -119,7 +118,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
             boolean existFile = taskDAO.exist(fileName);
             if(existFile) {
                 taskDAO.deleteFile(fileName);
-                taskDAO.saveList(tasks, fileName, existFile);
+                taskDAO.saveList(tasks);
                 System.out.println("marked as done");
             }
             else {
@@ -131,8 +130,8 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         }
     }
 
-    public void listTasks(String[] args, String fileName) {
-        ArrayList<Task> tasks = taskDAO.loadTasks(fileName);
+    public void listTasks(String[] args) {
+        ArrayList<Task> tasks = taskDAO.loadTasks();
 
         if(args != null) {
             tasks = filterByTag(tasks, args[0]);
@@ -148,7 +147,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
     }
 
     public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
-        ArrayList<Task> answer = new ArrayList<Task>();
+        ArrayList<Task> answer = new ArrayList<>();
 
         for(Task current : tasks) {
             String currentTag = current.getTag();
@@ -162,7 +161,7 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         return answer;
     }
 
-    public void loadFile(String fileName) {
+    public void loadFile() {
         try {
             if(taskDAO.exist(fileName)) {
                 taskDAO.deleteFile(fileName);
@@ -177,33 +176,33 @@ public class BusinessObjectTxtImpl implements IBusinessObject {
         }
     }
 
-    @Override
-    public void countTasks(String[] args, String fileName) {
+
+    public void countTasks(String[] args) {
 
     }
 
-    @Override
-    public void getTags(String[] args, String fileName) {
+
+    public void getTags(String[] args) {
 
     }
 
-    @Override
-    public void deleteTask(String[] args, String fileName) {
+
+    public void deleteTask(String[] args) {
 
     }
 
-    @Override
-    public void getInfo(String[] args, String fileName) {
+
+    public void getInfo(String[] args) {
 
     }
 
-    @Override
-    public void export(String[] args, String fileName) {
+
+    public void export(String[] args) {
 
     }
 
-    @Override
-    public void config(String[] args, String fileName) {
+
+    public void config(String[] args) {
 
     }
 }
