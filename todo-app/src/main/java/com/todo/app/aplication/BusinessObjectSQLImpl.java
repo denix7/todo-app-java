@@ -32,7 +32,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             taskDAO.save(task);
         }
         catch (PersistentException exception){
-            LOGGER.log(Level.SEVERE, "Error while storing in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while storing in Business Layer", exception);
             throw new BusinessException("Error. Unable to add in Business Layer", exception);
         }
     }
@@ -43,7 +43,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -68,7 +68,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             }
         }
         catch (PersistentException exception){
-            LOGGER.log(Level.SEVERE, "Error while modifiying in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while modifiying in Business Layer", exception);
             throw new BusinessException("Error. Unable to modify in Business Layer", exception);
         }
     }
@@ -79,7 +79,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -91,7 +91,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
                 taskDAO.update(newTask);
             }
             catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer");
+                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer", exception);
                 throw new BusinessException("Error. Unable to mark as done in Business Layer", exception);
             }
         }
@@ -108,7 +108,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
                 taskDAO.saveList(tasksWithTag);
             }
             catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer");
+                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer", exception);
                 throw new BusinessException("Error. Unable to mark as done in Business Layer", exception);
             }
         }
@@ -120,7 +120,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
         return tasks;
@@ -134,7 +134,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -155,7 +155,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -179,7 +179,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -201,7 +201,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -222,7 +222,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -242,7 +242,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -258,7 +258,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -288,7 +288,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
@@ -298,7 +298,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
                 taskDAO.delete(taskToDelete);
             }
             catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while storing in Business Layer");
+                LOGGER.log(Level.SEVERE, "Error while storing in Business Layer", exception);
                 throw new BusinessException("Error in Businnes Layer", exception);
             }
             return true;
@@ -315,7 +315,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
         Task current = tasks.get(index);
@@ -337,14 +337,14 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
         try{
             result = exportAsCsv(tasks);
         }
         catch (IOException exception){
-            LOGGER.log(Level.SEVERE, "Error while exporting file in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while exporting file in Business Layer", exception);
             throw new BusinessException("Error. Unable to exports tasks in Business Layer", exception);
         } finally {
             return result;
@@ -384,7 +384,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             System.out.println("Path changed");
         }
         catch (IOException exception) {
-            LOGGER.log(Level.SEVERE, "Error while setting file path in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while setting file path in Business Layer", exception);
         }
     }
 
@@ -395,7 +395,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
             properties.load(input);
         }
         catch (IOException exception) {
-            LOGGER.log(Level.SEVERE, "Error while getting file path in Business Layer");
+            LOGGER.log(Level.SEVERE, "Error while getting file path in Business Layer", exception);
         } finally {
             return properties.getProperty("path.config");
         }

@@ -35,7 +35,7 @@ public class ModifyCommand extends AbstractCommand {
             try {
                 bo.modifyTask(task);
             } catch (BusinessException exception) {
-                LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
+                LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying", exception);
             }
         }
         else if(numeric && args.length == 3 && args[1].equals("tag:")) {
@@ -49,7 +49,7 @@ public class ModifyCommand extends AbstractCommand {
             try {
                 bo.modifyTask(task);
             } catch (BusinessException exception) {
-                LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
+                LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying", exception);
             }
         }
         else if (numeric && args.length == 3 && args[1].equals("priority:")) {
@@ -63,7 +63,7 @@ public class ModifyCommand extends AbstractCommand {
                 try {
                     bo.modifyTask(task);
                 } catch (BusinessException exception) {
-                    LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying");
+                    LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying", exception);
                 }
                 print(out, "Priority was modified\n");
             }
