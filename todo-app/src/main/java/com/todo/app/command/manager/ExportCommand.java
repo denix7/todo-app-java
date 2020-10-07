@@ -20,7 +20,11 @@ public class ExportCommand extends AbstractCommand {
         if(args == null){
             try{
                 boolean result = bo.exportAll();
-                print(out, "Tasks exported\n");
+                if (result) {
+                    print(out, "Tasks exported\n");
+                } else {
+                    print(out, "Tasks could not be exported\n");
+                }
             }catch (BusinessException exception){
                 LOGGER.log(Level.SEVERE, "Export Command: Error while exporting", exception);
             }

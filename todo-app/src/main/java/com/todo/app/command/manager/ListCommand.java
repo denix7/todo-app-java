@@ -82,45 +82,6 @@ public class ListCommand extends AbstractCommand {
         }
     }
 
-    /*
-    @Override
-    public void execute(String[] args, OutputStream out, IBusinessObject bo) {
-        ArrayList<Task> tasks = null;
-
-        if(args == null){
-            tasks = bo.listTasks();
-        }
-        else if(args != null && args.length > 2){
-            write(out, "Command not found\n");
-        }
-        else if (args.length == 2 ){
-            if(args[0].equals("tag:")) {
-                String tag = args[1];
-                tasks = bo.filterByTag(tag);
-            }
-            if(args[0].equals("status:")){
-                String status = args[1];
-                tasks = bo.filterByStatus(status);
-            }
-            if(args[0].equals("priority:")){
-                String priority = args[1];
-                tasks = bo.filter(filter);
-            }
-        }
-        else{
-            write(out, "Command not valid\n");
-        }
-
-        if(tasks == null){
-            write(out, "There are not coincidences\n");
-        }
-        else{
-            for (Task current : tasks){
-                write(out, current.showList()+"\n");
-            }
-        }
-    }*/
-
     @Override
     public void print(OutputStream stream, String message) {
         super.print(stream, message);

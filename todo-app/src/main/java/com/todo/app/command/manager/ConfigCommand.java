@@ -15,7 +15,21 @@ public class ConfigCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, BusinessObject bo) {
-        bo.config(args);
+        if(args == null) {
+            print(out, "Command not found\n");
+        }
+        else if(args.length == 2) {
+            String path = args[1];
+            boolean isValidPath = path.matches("^[a-zA-Z]:\\\\(((?![<>:\"/\\\\|?*]).)+((?<![ .])\\\\)?)*$");
+            if(isValidPath) {
+                bo.config(path);
+            } else {
+                print(out, "El path no es valido\n");
+            }
+        }
+        else {
+            print(out, "Command not valid\n");
+        }
     }
 
     @Override

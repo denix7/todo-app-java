@@ -87,7 +87,7 @@ public class ModifyCommand extends AbstractCommand {
                 }
             }
             else{
-                print(out, "This date is not valid");
+                print(out, "This date is not valid\n");
             }
         }
         else if (!numeric && args.length == 2) {

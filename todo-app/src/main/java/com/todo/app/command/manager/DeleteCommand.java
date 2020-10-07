@@ -19,7 +19,7 @@ public class DeleteCommand extends AbstractCommand {
     public void execute(String[] args, OutputStream out, BusinessObject bo) {
         boolean result = false;
         if(args == null) {
-            print(out, "Command not found");
+            print(out, "Command not found\n");
         }
         else if(args.length == 1) {
             String indexExpected = args[0];
@@ -34,7 +34,7 @@ public class DeleteCommand extends AbstractCommand {
                     }
             }
             else {
-                print(out, "This index is not valid");
+                print(out, "This index is not valid\n");
             }
         }
         else if(args.length == 2) {
@@ -51,11 +51,11 @@ public class DeleteCommand extends AbstractCommand {
             }
             else if(filter.equals("status:")) {
                 //bo.deleteTaskByStatus(current);
-                print(out, "Task deleted");
+                print(out, "Task deleted\n");
             }
         }
         else {
-            print(out, "Command not valid");
+            print(out, "Command not valid\n");
         }
     }
 

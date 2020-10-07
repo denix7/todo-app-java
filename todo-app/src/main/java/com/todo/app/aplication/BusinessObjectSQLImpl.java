@@ -332,7 +332,7 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     @Override
     public boolean exportAll() throws BusinessException {
         ArrayList<Task> tasks;
-        boolean result;
+        boolean result = false;
 
         try {
             tasks = taskDAO.loadTasks();
@@ -345,10 +345,10 @@ public class BusinessObjectSQLImpl implements BusinessObject {
         }
         catch (IOException exception){
             LOGGER.log(Level.SEVERE, "Error while exporting file in Business Layer");
-            result = false;
             throw new BusinessException("Error. Unable to exports tasks in Business Layer", exception);
+        } finally {
+            return result;
         }
-        return result;
     }
 
     private boolean exportAsCsv(ArrayList<Task> tasks) throws IOException {
@@ -372,17 +372,8 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     }
 
     @Override
-    public void config(String[] args) {
-        if(args == null) {
-            System.out.println("Command not found");
-        }
-        else if(args.length == 2) {
-            String path = args[1];
-            setPath(path);
-        }
-        else {
-            System.out.println("Command not valid");
-        }
+    public void config(String newPath) {
+        setPath(newPath);
     }
 
     private void setPath(String path) {

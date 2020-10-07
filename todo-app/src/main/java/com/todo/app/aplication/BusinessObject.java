@@ -37,5 +37,5 @@ public interface BusinessObject {
 
     boolean exportAll();
 
-    void config(String[] args);
+    void config(String newPath);
 }
