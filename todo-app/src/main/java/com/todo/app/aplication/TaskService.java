@@ -6,24 +6,25 @@ import com.todo.app.filters.Filter;
 
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
-public interface BusinessObject {
+public interface TaskService {
 
     void addTask(Task task);
 
-    void modifyTask(Task task);
+    void modifyTask(UUID id, Task task);
 
-    void doneTask(Task task);
+    Task getTaskById(UUID id);
 
-    ArrayList<Task> listTasks();
+    ArrayList<Task> getAllTasks();
 
     ArrayList<Task> filterByTag(String tag);
 
     ArrayList<Task> filterByStatus(String status);
 
-    public ArrayList<Task> filter(Filter filter);
-
     ArrayList<Task> filterByPriority(String priority);
+
+    public ArrayList<Task> filter(Filter filter);
 
     int countTasks(String element);
 

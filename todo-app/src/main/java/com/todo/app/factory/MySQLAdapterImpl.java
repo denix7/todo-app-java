@@ -1,6 +1,6 @@
 package com.todo.app.factory;
 
-import com.todo.app.aplication.BusinessObjectSQLImpl;
+import com.todo.app.aplication.TaskServiceImp;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class MySQLAdapterImpl implements DBAdapter {
-    private static final Logger LOGGER = Logger.getLogger(BusinessObjectSQLImpl.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(TaskServiceImp.class.getName());
 
     static{
         try {

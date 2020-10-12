@@ -1,6 +1,6 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.aplication.BusinessObject;
+import com.todo.app.aplication.TaskService;
 
 import java.io.OutputStream;
 
@@ -14,7 +14,7 @@ public class ExitCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, TaskService bo) {
         print(out, "Bye!");
         System.exit(0);
     }

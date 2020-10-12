@@ -1,6 +1,6 @@
 package com.todo.app;
 
-import com.todo.app.aplication.BusinessObject;
+import com.todo.app.aplication.TaskService;
 import com.todo.app.command.manager.CommandManager;
 import com.todo.app.command.manager.Command;
 import com.todo.app.dependencyInjection.Injector;
@@ -46,7 +46,7 @@ public class App {
 
 
 
-            BusinessObject bo  = Injector.getBusinessObject();
+            TaskService bo  = Injector.getTaskService();
             //Command Executor
 
             //command.execute(commandArgs2, System.out, new BusinessObjectSQLImpl(new TaskMySqlDAOImpl()));

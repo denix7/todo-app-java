@@ -1,8 +1,7 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.aplication.BusinessObject;
+import com.todo.app.aplication.TaskService;
 import com.todo.app.exceptions.BusinessException;
-import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class TagsCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, TaskService bo) {
         if(args == null) {
             ArrayList<String> tags = null;
             try {

@@ -49,7 +49,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     public void saveList(ArrayList<Task> tasks) {
         try {
             for (Task task: tasks) {
-                update(task);
+                update(task.getUuid(), task);
             }
         }
         catch(Exception exception) {
@@ -58,7 +58,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void update(Task task) {
+    public void update(UUID id, Task task) {
         String sql = "update tasks set description = ?, tag = ?, status = ?, priority = ?, due = ? where id = ?";
 
         try (Connection connection = adapter.getConnection();

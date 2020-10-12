@@ -14,15 +14,15 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class BusinessObjectSQLImpl implements BusinessObject {
+public class TaskServiceImp implements TaskService {
     public static TaskDAO taskDAO;
-    private static final Logger LOGGER = Logger.getLogger(BusinessObjectSQLImpl.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(TaskServiceImp.class.getName());
 
-    public BusinessObjectSQLImpl() {
+    public TaskServiceImp() {
         this.taskDAO = Injector.getTaskDao();
     }
 
-    public BusinessObjectSQLImpl(TaskDAO taskDAO) {
+    public TaskServiceImp(TaskDAO taskDAO) {
         this.taskDAO = taskDAO;
     }
 
@@ -38,84 +38,27 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     }
 
     @Override
-    public void modifyTask(Task newTask) throws BusinessException {
-        ArrayList<Task> tasks;
+    public void modifyTask(UUID id, Task newTask) throws BusinessException {
         try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        Task current;
-        current = tasks.get(newTask.getId());
-        if(newTask.getDescription() != null){
-            current.setDescription(newTask.getDescription());
-        }
-        if (newTask.getPriority() != null) {
-            current.setPriority(newTask.getPriority());
-        }
-        if(newTask.getTag() != null) {
-            current.setTag(newTask.getTag());
-        }
-        if(newTask.getDue() != null) {
-            current.setDue(newTask.getDue());
-        }
-
-        try{
-            if(current != null){
-                taskDAO.update(current);
-            }
-        }
-        catch (PersistentException exception){
-            LOGGER.log(Level.SEVERE, "Error while modifiying in Business Layer", exception);
+            taskDAO.update(id, newTask);
+        } catch (PersistentException exception){
+            LOGGER.log(Level.SEVERE, "Error while modifying in Business Layer", exception);
             throw new BusinessException("Error. Unable to modify in Business Layer", exception);
         }
     }
 
     @Override
-    public void doneTask(Task task) throws BusinessException {
-        ArrayList<Task> tasks;
+    public Task getTaskById(UUID id) {
         try {
-            tasks = taskDAO.loadTasks();
+            return taskDAO.read(Integer.parseInt(id.toString()));
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
+            LOGGER.log(Level.SEVERE, "Error while getting task by id tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        Task newTask = tasks.get(task.getId());
-
-        if(task.getTag() == null){
-            newTask.setStatus(task.getStatus());
-            try {
-                taskDAO.update(newTask);
-            }
-            catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer", exception);
-                throw new BusinessException("Error. Unable to mark as done in Business Layer", exception);
-            }
-        }
-
-        if(task.getTag() != null){
-            ArrayList<Task> tasksWithTag = new ArrayList<>();
-            for (Task current : tasks){
-                if(current.getTag().equals(task.getTag())){
-                    current.setStatus(task.getStatus());
-                    tasksWithTag.add(current);
-                }
-            }
-            try {
-                taskDAO.saveList(tasksWithTag);
-            }
-            catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while done task in Business Layer", exception);
-                throw new BusinessException("Error. Unable to mark as done in Business Layer", exception);
-            }
         }
     }
 
     @Override
-    public ArrayList<Task> listTasks() throws BusinessException {
+    public ArrayList<Task> getAllTasks() throws BusinessException {
         ArrayList<Task> tasks;
         try {
             tasks = taskDAO.loadTasks();

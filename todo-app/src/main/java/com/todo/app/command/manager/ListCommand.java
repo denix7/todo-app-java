@@ -1,9 +1,8 @@
 package com.todo.app.command.manager;
 
-import com.todo.app.aplication.BusinessObject;
+import com.todo.app.aplication.TaskService;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
-import com.todo.app.exceptions.CommandException;
 import com.todo.app.filters.Filter;
 import com.todo.app.filters.PriorityFilter;
 import com.todo.app.filters.StatusFilter;
@@ -23,12 +22,12 @@ public class ListCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute(String[] args, OutputStream out, BusinessObject bo) {
+    public void execute(String[] args, OutputStream out, TaskService bo) {
         ArrayList<Task> tasks = null;
 
         if(args == null){
             try {
-                tasks = bo.listTasks();
+                tasks = bo.getAllTasks();
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
             }
@@ -76,8 +75,10 @@ public class ListCommand extends AbstractCommand {
             print(out, "There are not coincidences\n");
         }
         else{
+            int index = 0;
             for (Task current : tasks){
-                print(out, current.showList()+"\n");
+                index++;
+                print(out, index + " " +current.showList()+"\n");
             }
         }
     }

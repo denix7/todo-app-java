@@ -4,6 +4,7 @@ import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.PersistentException;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 public interface TaskDAO extends CrudRepository<Task> {
 
@@ -11,7 +12,7 @@ public interface TaskDAO extends CrudRepository<Task> {
 
     void saveList(ArrayList<Task> tasks);
 
-    public void update(Task task);
+    public void update(UUID id, Task task);
 
     public void delete(Task task);
 
