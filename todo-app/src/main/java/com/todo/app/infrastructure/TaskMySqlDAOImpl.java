@@ -4,12 +4,15 @@ import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.PersistentException;
 import com.todo.app.factory.FactoryDBAdapter;
 import com.todo.app.factory.DBAdapter;
+import com.todo.app.filters.Filter;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +49,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void saveList(ArrayList<Task> tasks) {
+    public void saveList(List<Task> tasks) {
         try {
             for (Task task: tasks) {
                 update(task.getUuid(), task);
@@ -172,6 +175,47 @@ public class TaskMySqlDAOImpl implements TaskDAO {
         catch(SQLException exception){
             LOGGER.log(Level.SEVERE, "Unable to load Tasks", exception);
             throw new PersistentException("Error while reading in DB", exception);
+        } finally {
+            return tasks;
+        }
+    }
+
+    @Override
+    public ArrayList<Task> find(Filter filter) {
+        String sql = "select * from tasks where " + filter.getName() + "=?";
+        ArrayList<Task> tasks = new ArrayList<>();
+
+        try (Connection connection = adapter.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, filter.getValue());
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                int id = results.getInt(1);
+                String description = results.getString(2);
+                String uuid = results.getString(3);
+                String status = results.getString(4);
+                String tag = results.getString(5);
+                String priority = results.getString(6);
+                String entry = results.getString(7);
+                String due = results.getString(8);
+
+                Task current = new Task(description);
+                current.setId(id);
+                current.setUuid(UUID.fromString(uuid));
+                current.setStatus(status);
+                current.setTag(tag);
+                current.setPriority(priority);
+                current.setEntry(entry);
+                current.setDue(due);
+
+                tasks.add(current);
+            }
+
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to find task", exception);
+            throw new PersistentException("Error while finding in DB", exception);
         } finally {
             return tasks;
         }

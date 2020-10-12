@@ -5,6 +5,7 @@ import com.todo.app.exceptions.BusinessException;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -19,7 +20,7 @@ public class TagsCommand extends AbstractCommand {
     @Override
     public void execute(String[] args, OutputStream out, TaskService bo) {
         if(args == null) {
-            ArrayList<String> tags = null;
+            List<String> tags = null;
             try {
                 tags = bo.getAllTags();
             } catch (BusinessException exception) {

@@ -2,15 +2,16 @@ package com.todo.app.infrastructure;
 
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.PersistentException;
+import com.todo.app.filters.Filter;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public interface TaskDAO extends CrudRepository<Task> {
 
     void save(Task task);
 
-    void saveList(ArrayList<Task> tasks);
+    void saveList(List<Task> tasks);
 
     public void update(UUID id, Task task);
 
@@ -18,6 +19,8 @@ public interface TaskDAO extends CrudRepository<Task> {
 
     public Task read(int index);
 
-    public ArrayList<Task> loadTasks();
+    public List<Task> loadTasks();
+
+    public List<Task> find(Filter filter);
 
 }

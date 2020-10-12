@@ -10,6 +10,7 @@ import com.todo.app.filters.TagFilter;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 public class ListCommand extends AbstractCommand {
@@ -23,7 +24,7 @@ public class ListCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, TaskService bo) {
-        ArrayList<Task> tasks = null;
+        List<Task> tasks = null;
 
         if(args == null){
             try {
@@ -40,7 +41,7 @@ public class ListCommand extends AbstractCommand {
                 String tag = args[1];
                 Filter filter = new TagFilter(tag);
                 try {
-                    tasks = bo.filter(filter);
+                    tasks = bo.find(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
                 }
@@ -49,7 +50,7 @@ public class ListCommand extends AbstractCommand {
                 String status = args[1];
                 Filter filter = new StatusFilter(status);
                 try {
-                    tasks = bo.filter(filter);
+                    tasks = bo.find(filter);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
                 }
@@ -58,7 +59,7 @@ public class ListCommand extends AbstractCommand {
                 String priority = args[1];
                 Filter filter = new PriorityFilter(priority);
                 try {
-                    tasks = bo.filter(filter);
+                    tasks = bo.find(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
                 }

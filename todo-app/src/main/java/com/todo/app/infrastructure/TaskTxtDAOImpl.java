@@ -1,13 +1,18 @@
 package com.todo.app.infrastructure;
 
 import com.todo.app.domain.entities.Task;
+import com.todo.app.exceptions.BusinessException;
+import com.todo.app.filters.Filter;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TaskTxtDAOImpl{
     private String fileName;
     private boolean exist;
+    private static final Logger LOGGER = Logger.getLogger(TaskMySqlDAOImpl.class.getName());
 
     public TaskTxtDAOImpl(String fileName) {
         this.fileName = fileName;
@@ -97,4 +102,24 @@ public class TaskTxtDAOImpl{
         File file = new File(fileName);
         file.delete();
     }
+
+    public List<Task> find(Filter filter) throws BusinessException {
+        List<Task> tasks;
+        List<Task> answer = new ArrayList<>();
+
+        try {
+            tasks = loadTasks();
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        }
+
+        for(Task current : tasks) {
+            if(filter.satisfies(current)) {
+                answer.add(current);
+            }
+        }
+        return answer;
+    }
+
 }

@@ -58,8 +58,8 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public ArrayList<Task> getAllTasks() throws BusinessException {
-        ArrayList<Task> tasks;
+    public List<Task> getAllTasks() throws BusinessException {
+        List<Task> tasks;
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
@@ -70,30 +70,23 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public ArrayList<Task> filterByTag(String tag) throws BusinessException {
-        ArrayList<Task> tasks;
-        ArrayList<Task> answer = new ArrayList<>();
+    public List<Task> find(Filter filter) throws BusinessException {
+        List<Task> tasks;
 
         try {
-            tasks = taskDAO.loadTasks();
+            tasks = taskDAO.find(filter);
         } catch (Exception exception) {
             LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
-        for(Task current : tasks) {
-            String currentTag = current.getTag();
-            if(currentTag.equals(tag)) {
-                answer.add(current);
-            }
-        }
-        return answer;
+        return tasks;
     }
-
+    
     @Override
     public int countTasks(String param) throws BusinessException {
-        ArrayList<Task> tasks;
-        ArrayList<Task> result = new ArrayList<>();
+        List<Task> tasks;
+        List<Task> result = new ArrayList<>();
 
         try {
             tasks = taskDAO.loadTasks();
@@ -115,71 +108,8 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public ArrayList<Task> filterByStatus(String status) throws BusinessException {
-        ArrayList<Task> tasks;
-        ArrayList<Task> answer = new ArrayList<>();
-
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-
-        for(Task current : tasks) {
-            String currentStatus = current.getStatus();
-            if(currentStatus.equals(status)) {
-                answer.add(current);
-            }
-        }
-        return answer;
-    }
-
-    @Override
-    public ArrayList<Task> filterByPriority(String priority) throws BusinessException {
-        ArrayList<Task> tasks;
-        ArrayList<Task> answer = new ArrayList<>();
-
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        for(Task current : tasks) {
-            String currentPriority = current.getPriority();
-            if(currentPriority.equals(priority)) {
-                answer.add(current);
-            }
-        }
-        return answer;
-    }
-
-    @Override
-    public ArrayList<Task> filter(Filter filter) throws BusinessException {
-        ArrayList<Task> tasks;
-        ArrayList<Task> answer = new ArrayList<>();
-
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        for(Task current : tasks) {
-            if(filter.satisfies(current)) {
-                answer.add(current);
-            }
-        }
-        return answer;
-    }
-
-    @Override
-    public ArrayList<String> getAllTags() throws BusinessException {
-        ArrayList<Task> tasks;
+    public List<String> getAllTags() throws BusinessException {
+        List<Task> tasks;
         Map<String, Integer> tags;
 
         try {
@@ -195,7 +125,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public Map<String, Integer> getAllTagsWithQuantity() throws BusinessException {
-        ArrayList<Task> tasks;
+        List<Task> tasks;
         Map<String, Integer> tags;
 
         try {
@@ -209,7 +139,7 @@ public class TaskServiceImp implements TaskService {
         return tags;
     }
 
-    private Map<String, Integer> countTags(ArrayList<Task> tasks) {
+    private Map<String, Integer> countTags(List<Task> tasks) {
         Map<String, Integer> tags = new HashMap<>();
         int i=1;
         for (Task current : tasks) {
@@ -227,7 +157,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public boolean deleteTask(int index) throws BusinessException {
-        ArrayList<Task> tasks;
+        List<Task> tasks;
         try {
             tasks = taskDAO.loadTasks();
         } catch (Exception exception) {
@@ -253,7 +183,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public String getInfo(int index) throws BusinessException {
-        ArrayList<Task> tasks;
+        List<Task> tasks;
         Task current = null;
         try {
             current = taskDAO.read(index);
@@ -276,7 +206,7 @@ public class TaskServiceImp implements TaskService {
 
     @Override
     public boolean exportAll() throws BusinessException {
-        ArrayList<Task> tasks;
+        List<Task> tasks;
         boolean result = false;
 
         try {
@@ -296,7 +226,7 @@ public class TaskServiceImp implements TaskService {
         }
     }
 
-    private boolean exportAsCsv(ArrayList<Task> tasks) throws IOException {
+    private boolean exportAsCsv(List<Task> tasks) throws IOException {
         String path = getPath() + "\\tasks.csv";
         boolean result;
 

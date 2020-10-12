@@ -5,6 +5,7 @@ import com.todo.app.exceptions.BusinessException;
 import com.todo.app.filters.Filter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,19 +17,15 @@ public interface TaskService {
 
     Task getTaskById(UUID id);
 
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<Task> filterByTag(String tag);
+    List<Task> find(Filter filter);
 
-    ArrayList<Task> filterByStatus(String status);
-
-    ArrayList<Task> filterByPriority(String priority);
-
-    public ArrayList<Task> filter(Filter filter);
+    //public List<Task> filter(Filter filter); TXTDAO
 
     int countTasks(String element);
 
-    ArrayList<String> getAllTags();
+    List<String> getAllTags();
 
     Map<String, Integer> getAllTagsWithQuantity();
 
