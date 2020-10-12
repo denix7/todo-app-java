@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,15 +95,15 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     }
 
     @Override
-    public Task read(Task task) {
+    public Task read(int index) {
         String sql = "select * from tasks where id = ?";
         Task current = null;
 
         try (Connection connection = adapter.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet results = statement.executeQuery()){
+             PreparedStatement statement = connection.prepareStatement(sql);){
 
-            statement.setInt(1, task.getId());
+            statement.setInt(1, index);
+            ResultSet results = statement.executeQuery();
 
             while(results.next()) {
                 int id = results.getInt(1);
@@ -111,20 +112,26 @@ public class TaskMySqlDAOImpl implements TaskDAO {
                 String status = results.getString(4);
                 String tag = results.getString(5);
                 String priority = results.getString(6);
-                String entry = results.getString(7);
+                String due = results.getString(7);
+                String entry = results.getString(8);
+                Date start = results.getDate(9);
+                Date end = results.getDate(10);
 
+                current = new Task();
                 current.setDescription(description);
                 current.setId(id);
                 current.setUuid(UUID.fromString(uudi));
                 current.setStatus(status);
                 current.setTag(tag);
                 current.setPriority(priority);
+                current.setDue(due);
                 current.setEntry(entry);
-
+                current.setStart(start);
+                current.setEnd(end);
             }
         }
         catch(SQLException exception){
-            LOGGER.log(Level.SEVERE, "Unable to read task " + task.getId(), exception);
+            LOGGER.log(Level.SEVERE, "Unable to read task " + index, exception);
             throw new PersistentException("Error while reading in DB", exception);
         } finally {
             return current;

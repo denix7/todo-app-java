@@ -24,15 +24,19 @@ public class InfoCommand extends AbstractCommand {
             boolean isNumeric = indexExpected.matches("-?\\d+(\\.\\d+)?");
 
             if (isNumeric) {
-                int index = Integer.parseInt(indexExpected) - 1;
+                int index = Integer.parseInt(indexExpected);
                 String taskInfo = "";
 
                 try {
                     taskInfo = bo.getInfo(index);
+                    if(taskInfo != null) {
+                        print(out, taskInfo);
+                    } else {
+                        print(out, "Task not found\n");
+                    }
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Info Command: Error while storing", exception);
                 }
-                print(out, taskInfo);
             }
             else{
                 print(out, "The param is incorrect\n");

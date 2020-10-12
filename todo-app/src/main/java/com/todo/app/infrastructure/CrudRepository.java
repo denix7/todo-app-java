@@ -13,7 +13,7 @@ public interface CrudRepository<T>{
 
     public void delete(T t);
 
-    public Task read(T t);
+    public T read(int index);
 
     public List<T> loadTasks();
 }

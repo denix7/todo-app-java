@@ -311,22 +311,24 @@ public class BusinessObjectSQLImpl implements BusinessObject {
     @Override
     public String getInfo(int index) throws BusinessException {
         ArrayList<Task> tasks;
-
+        Task current = null;
         try {
-            tasks = taskDAO.loadTasks();
+            current = taskDAO.read(index);
         } catch (Exception exception) {
             LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+        } finally {
+            if (current != null) {
+                return ("Name:     " + current.getDescription() + "\n" +
+                        "ID:       " + current.getUuid() + "\n" +
+                        "Status:   " + current.getStatus() + "\n" +
+                        "Tag:      " + current.getTag() + "\n" +
+                        "priority: " + current.getPriority() + "\n" +
+                        "entry :   " + current.getEntry() + "\n"
+                );
+            }
+            return  null;
         }
-        Task current = tasks.get(index);
-
-        return ("Name:     " + current.getDescription() + "\n" +
-                "ID:       " + current.getUuid() + "\n" +
-                "Status:   " + current.getStatus() + "\n" +
-                "Tag:      " + current.getTag() + "\n" +
-                "priority: " + current.getPriority() + "\n" +
-                "entry :   " + current.getEntry() + "\n"
-        );
     }
 
     @Override

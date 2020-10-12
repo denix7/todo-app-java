@@ -15,7 +15,7 @@ public interface TaskDAO extends CrudRepository<Task> {
 
     public void delete(Task task);
 
-    public Task read(Task task);
+    public Task read(int index);
 
     public ArrayList<Task> loadTasks();
 
