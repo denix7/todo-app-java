@@ -10,7 +10,6 @@ import com.todo.app.filters.StatusFilter;
 import com.todo.app.filters.TagFilter;
 
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 

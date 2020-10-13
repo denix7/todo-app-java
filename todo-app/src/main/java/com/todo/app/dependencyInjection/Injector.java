@@ -4,6 +4,7 @@ import com.todo.app.aplication.TaskServiceImp;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.infrastructure.TaskDAO;
 import com.todo.app.infrastructure.TaskMySqlDAOImpl;
+import com.todo.app.infrastructure.TaskTxtDAOImpl;
 
 public class Injector {
     public static TaskServiceImp getTaskService(){
@@ -12,6 +13,10 @@ public class Injector {
 
     public static TaskDAO getTaskMySqlDao() {
         return new TaskMySqlDAOImpl();
+    }
+
+    public static TaskDAO getTaskMyFileDao() {
+        return new TaskTxtDAOImpl();
     }
 
     public static Task getTask() {

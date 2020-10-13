@@ -2,6 +2,7 @@ package com.todo.app.infrastructure;
 
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.PersistentException;
 import com.todo.app.filters.Filter;
 
 import java.io.*;
@@ -16,9 +17,8 @@ public class TaskTxtDAOImpl implements TaskDAO{
     private boolean exist;
     private static final Logger LOGGER = Logger.getLogger(TaskMySqlDAOImpl.class.getName());
 
-    public TaskTxtDAOImpl(String fileName) {
-        //fileName = "c:\\tasks-java\\tasks.txt";
-        this.fileName = fileName;
+    public TaskTxtDAOImpl() {
+        this.fileName = "c:\\tasks-java\\tasks.txt";
         this.exist = exist(fileName);
     }
 
@@ -35,22 +35,42 @@ public class TaskTxtDAOImpl implements TaskDAO{
             out.println(task.toString());
             out.close();
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch(IOException exception) {
+            throw new PersistentException("Error. Unable to save task in Persistence file", exception);
+        }
+    }
+
+    @Override
+    public void update(UUID id, Task task) {
+        ArrayList<Task> tasks = loadTasks();
+        modifyTaskByIndex(tasks, task);
+    }
+
+    public void modifyTaskByIndex(ArrayList<Task> tasks, Task task) {
+        System.out.println(task.getId());
+        int taskIndex = task.getId();
+        String newDescription = task.getDescription();
+        Task current = tasks.get(taskIndex);
+        current.setDescription(newDescription);
+
+        try {
+            boolean existFile = exist(fileName);
+            if(existFile) {
+                deleteFile(fileName);
+                saveList(tasks);
+                System.out.println("Task " + " was modified");
+            }
+            else {
+                System.out.println("Doesn't exists any file");
+            }
+        }
+        catch(Exception exception) {
+            throw new PersistentException("Error. Unable to save task in Persistence file", exception);
         }
     }
 
     @Override
     public void saveList(List<Task> tasks) {
-
-    }
-
-    @Override
-    public void update(UUID id, Task task) {
-
-    }
-
-    public void saveList(ArrayList<Task> tasks) {
         File file = new File(fileName);
 
         try {
@@ -60,17 +80,13 @@ public class TaskTxtDAOImpl implements TaskDAO{
             }
             out.close();
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch(IOException exception) {
+            throw new PersistentException("Error. Unable to save task in Persistence file", exception);
         }
     }
 
-    public void update(Task task) {
-
-    }
-
     public void delete(Task task) {
-
+        throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
@@ -84,7 +100,6 @@ public class TaskTxtDAOImpl implements TaskDAO{
 
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
-            String description = "";
             String line;
 
             while((line = reader.readLine()) != null) {
@@ -98,8 +113,8 @@ public class TaskTxtDAOImpl implements TaskDAO{
                 tasks.add(current);
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (IOException exception) {
+            throw new PersistentException("Error. Unable to lpad tasks in Persistence file", exception);
         }
         return tasks;
     }
@@ -111,8 +126,8 @@ public class TaskTxtDAOImpl implements TaskDAO{
             out.close();
             System.out.println("Se ha creado el archivo");
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception exception) {
+            throw new PersistentException("Error. Unable to create file in Persistence file", exception);
         }
     }
 
@@ -121,15 +136,14 @@ public class TaskTxtDAOImpl implements TaskDAO{
         file.delete();
     }
 
-    public List<Task> find(Filter filter) throws BusinessException {
+    public List<Task> find(Filter filter) {
         List<Task> tasks;
         List<Task> answer = new ArrayList<>();
 
         try {
             tasks = loadTasks();
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
+            throw new PersistentException("Error. Unable to load tasks in Persistence file", exception);
         }
 
         for(Task current : tasks) {
@@ -142,86 +156,27 @@ public class TaskTxtDAOImpl implements TaskDAO{
 
     @Override
     public int count() {
-        return 0;
+        ArrayList<Task> tasks = loadTasks();
+        return tasks.size();
     }
 
     @Override
     public int countByFilter(Filter filter) {
-        return 0;
-    }
-
-    /*Service layer*/
-
-    public void addTask(String taskName, String priority) {
-        UUID id = UUID.randomUUID();
-        Task task = new Task(taskName);
-
-        task.setUuid(id);
-        task.setStatus("pending");
-        task.setTag("default");
-
-        if(priority != null) {
-            task.setPriority(priority);
-        }
-        else {
-            task.setPriority("M");
-        }
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-        task.setEntry(dtf.format(now));
-
+        List<Task> tasks;
+        List<Task> answer = new ArrayList<>();
 
         try {
-            save(task);
+            tasks = loadTasks();
+        } catch (Exception exception) {
+            throw new PersistentException("Error. Unable to load tasks in Persistence file", exception);
         }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-
-    public void modifyTask(String[] args) {
-        ArrayList<Task> tasks = loadTasks();
-        modifyTaskByIndex(tasks, args);
-    }
-
-    public void modifyTaskByIndex(ArrayList<Task> tasks, String[] args) {
-        try {
-            boolean numeric;
-            numeric = args[0].matches("-?\\d+(\\.\\d+)?");
-
-            if (numeric && args.length == 2) {
-                int taskIndex = Integer.parseInt(args[0]) - 1;
-                String newDescription = args[1];
-                Task current = tasks.get(taskIndex);
-                current.setDescription(newDescription);
-            }
-            else {
-                int index = Integer.parseInt(args[0]) - 1;
-                String newTag = args[2];
-                Task current = tasks.get(index);
-                current.setTag(newTag);
+        for(Task current : tasks) {
+            if(filter.satisfies(current)) {
+                answer.add(current);
             }
         }
-        catch (Exception e) {
-            System.out.println("Parameters is needed");
-        }
-
-        try {
-            boolean existFile = exist(fileName);
-            if(existFile) {
-                deleteFile(fileName);
-                saveList(tasks);
-                System.out.println("Task " + " was modified");
-            }
-            else {
-                System.out.println("Doesn't exists any file");
-            }
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
+        return answer.size();
     }
 
     public void doneTask(String[] args) {
@@ -258,8 +213,8 @@ public class TaskTxtDAOImpl implements TaskDAO{
                 System.out.println("Doesn't exists any file");
             }
         }
-        catch(Exception e) {
-            e.printStackTrace();
+        catch(Exception exception) {
+            throw new PersistentException("Error. Unable to mark as done task in Persistence file", exception);
         }
     }
 
@@ -270,7 +225,6 @@ public class TaskTxtDAOImpl implements TaskDAO{
             tasks = filterByTag(tasks, args[0]);
         }
 
-        System.out.println("===================LIST==================");
         int indexTask= 1;
         for(Task current : tasks) {
             System.out.println(indexTask +")" + " " + current.showList());
@@ -304,8 +258,8 @@ public class TaskTxtDAOImpl implements TaskDAO{
                 deleteFile(fileName);
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception exception) {
+            throw new PersistentException("Error. Unable to load file in Persistence file", exception);
         }
     }
 }
