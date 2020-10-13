@@ -220,4 +220,50 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             return tasks;
         }
     }
+
+    @Override
+    public int count() {
+        String sql = "select count(*) as total from tasks";
+        ArrayList<Task> tasks = new ArrayList<>();
+        int counter = 0;
+
+        try (Connection connection = adapter.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet results = statement.executeQuery()){
+
+            while (results.next()) {
+                counter = results.getInt("total");
+            }
+
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to find task", exception);
+            throw new PersistentException("Error while finding in DB", exception);
+        } finally {
+            return counter;
+        }
+    }
+
+    @Override
+    public int countByFilter(Filter filter) {
+        String sql = "select count(*) as total from tasks where " + filter.getName() + "=?";
+        ArrayList<Task> tasks = new ArrayList<>();
+        int counter = 0;
+
+        try (Connection connection = adapter.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, filter.getValue());
+            ResultSet results = statement.executeQuery();
+
+            while (results.next()) {
+                counter = results.getInt("total");
+            }
+
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to find task", exception);
+            throw new PersistentException("Error while finding in DB", exception);
+        } finally {
+            return counter;
+        }
+    }
 }

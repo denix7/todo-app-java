@@ -23,4 +23,7 @@ public interface TaskDAO extends CrudRepository<Task> {
 
     public List<Task> find(Filter filter);
 
+    public int count();
+
+    public int countByFilter(Filter filter);
 }

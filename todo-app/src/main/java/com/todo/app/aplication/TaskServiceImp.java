@@ -82,29 +82,33 @@ public class TaskServiceImp implements TaskService {
 
         return tasks;
     }
-    
+
     @Override
-    public int countTasks(String param) throws BusinessException {
-        List<Task> tasks;
-        List<Task> result = new ArrayList<>();
+    public int countTasks() throws BusinessException {
+        int cantity;
 
         try {
-            tasks = taskDAO.loadTasks();
+            cantity = taskDAO.count();
         } catch (Exception exception) {
             LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
             throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
-        if(param.equals("")) {
-            return tasks.size();
+        return cantity;
+    }
+
+    @Override
+    public int countTasksByFilter(Filter filter) throws BusinessException {
+        int cantity;
+
+        try {
+            cantity = taskDAO.countByFilter(filter);
+        } catch (Exception exception) {
+            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
+            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
         }
 
-        for (Task current : tasks){
-            if(param.equals(current.getPriority()) || param.equals(current.getStatus()) || param.equals(current.getTag())){
-                result.add(current);
-            }
-        }
-        return result.size();
+        return cantity;
     }
 
     @Override

@@ -21,9 +21,9 @@ public interface TaskService {
 
     List<Task> find(Filter filter);
 
-    //public List<Task> filter(Filter filter); TXTDAO
+    int countTasks();
 
-    int countTasks(String element);
+    int countTasksByFilter(Filter filter);
 
     List<String> getAllTags();
 

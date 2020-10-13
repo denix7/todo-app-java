@@ -1,6 +1,10 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
+import com.todo.app.filters.Filter;
+import com.todo.app.filters.PriorityFilter;
+import com.todo.app.filters.StatusFilter;
+import com.todo.app.filters.TagFilter;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -17,38 +21,40 @@ public class CountCommand extends AbstractCommand {
     @Override
     public void execute(String[] args, OutputStream out, TaskService bo) {
         int result = 0;
+        Filter filter;
 
         if(args == null){
             try {
-                result = bo.countTasks("");
+                result = bo.countTasks();
             } catch (Exception exception) {
                 LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
             }
             print(out, "There are : " + result + " tasks founded\n");
         }
         else if(args.length == 2) {
-            String filter = args[0];
             String value = args[1];
-
-            if(filter.equals("priority:")){
+            if(args[0].equals("priority:")){
                 if(value.equals("H") || value.equals("M") || value.equals("L")) {
+                    filter = new PriorityFilter(value);
                     try {
-                        result = bo.countTasks(value);
+                        result = bo.countTasksByFilter(filter);
                     } catch (Exception exception) {
                         LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
                     }
                 }
             }
-            else if(filter.equals("status:")) {
+            else if(args[0].equals("status:")) {
+                filter = new StatusFilter(value);
                 try {
-                    result = bo.countTasks(value);
+                    result = bo.countTasksByFilter(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
                 }
             }
-            else if(filter.equals("tag:")) {
+            else if(args[0].equals("tag:")) {
+                filter = new TagFilter(value);
                 try {
-                    result = bo.countTasks(value);
+                    result = bo.countTasksByFilter(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
                 }
