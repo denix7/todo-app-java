@@ -3,6 +3,7 @@ package com.todo.app.command.manager;
 import com.todo.app.aplication.TaskService;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -37,6 +38,7 @@ public class ModifyCommand extends AbstractCommand {
                 print(out, "Description was modified\n");
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying", exception);
+                throw new CommandException("Error. Unable execute the modify command", exception);
             }
         }
         else if(numeric && args.length == 3 && args[1].equals("tag:")) {
@@ -52,6 +54,7 @@ public class ModifyCommand extends AbstractCommand {
                 print(out, "Tag was modified\n");
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying", exception);
+                throw new CommandException("Error. Unable execute the modify command", exception);
             }
         }
         else if (numeric && args.length == 3 && args[1].equals("priority:")) {
@@ -67,6 +70,7 @@ public class ModifyCommand extends AbstractCommand {
                     print(out, "Priority was modified\n");
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE,"Modify Command: Error while modifying", exception);
+                    throw new CommandException("Error. Unable execute the modify command", exception);
                 }
             }
             else {
@@ -88,6 +92,7 @@ public class ModifyCommand extends AbstractCommand {
 
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Modify Command: Error while modifying", exception);
+                    throw new CommandException("Error. Unable execute the modify command", exception);
                 }
             }
             else{

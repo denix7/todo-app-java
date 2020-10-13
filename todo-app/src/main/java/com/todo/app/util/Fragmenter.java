@@ -37,7 +37,6 @@ public class Fragmenter {
 
         String[] argsArray = new String[tokens.size()];
         argsArray = tokens.toArray(argsArray);
-        //System.out.println("frag" + Arrays.toString(argsArray));
         return argsArray;
     }
 

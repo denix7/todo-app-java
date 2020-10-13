@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -30,6 +31,7 @@ public class DeleteCommand extends AbstractCommand {
                         print(out, result == true ? "Task deleted succesfull\n" : "The task doesn't exist\n");
                     } catch (BusinessException exception) {
                         LOGGER.log(Level.SEVERE, "Delete Command: Error while storing", exception);
+                        throw new CommandException("Error. Unable execute the delete command", exception);
                     }
             }
             else {

@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.logging.Level;
@@ -34,7 +35,8 @@ public class InfoCommand extends AbstractCommand {
                         print(out, "Task not found\n");
                     }
                 } catch (BusinessException exception) {
-                    LOGGER.log(Level.SEVERE, "Info Command: Error while storing", exception);
+                    LOGGER.log(Level.SEVERE, "Info Command: Error while reading", exception);
+                    throw new CommandException("Error. Unable execute the info command", exception);
                 }
             }
             else{

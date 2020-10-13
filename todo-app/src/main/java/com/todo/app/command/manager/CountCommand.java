@@ -1,6 +1,7 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
+import com.todo.app.exceptions.CommandException;
 import com.todo.app.filters.Filter;
 import com.todo.app.filters.PriorityFilter;
 import com.todo.app.filters.StatusFilter;
@@ -28,6 +29,7 @@ public class CountCommand extends AbstractCommand {
                 result = bo.countTasks();
             } catch (Exception exception) {
                 LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                throw new CommandException("Error. Unable execute the count command", exception);
             }
             print(out, "There are : " + result + " tasks founded\n");
         }
@@ -40,6 +42,7 @@ public class CountCommand extends AbstractCommand {
                         result = bo.countTasksByFilter(filter);
                     } catch (Exception exception) {
                         LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                        throw new CommandException("Error. Unable execute the count command", exception);
                     }
                 }
             }
@@ -49,6 +52,7 @@ public class CountCommand extends AbstractCommand {
                     result = bo.countTasksByFilter(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                    throw new CommandException("Error. Unable execute the count command", exception);
                 }
             }
             else if(args[0].equals("tag:")) {
@@ -57,6 +61,7 @@ public class CountCommand extends AbstractCommand {
                     result = bo.countTasksByFilter(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "Count Command: Error while storing", exception);
+                    throw new CommandException("Error. Unable execute the count command", exception);
                 }
             }
             else {

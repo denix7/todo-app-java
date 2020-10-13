@@ -2,6 +2,7 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class TagsCommand extends AbstractCommand {
                 tags = bo.getAllTags();
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Tag Command: Error while reading", exception);
+                throw new CommandException("Error. Unable execute the tags command", exception);
             }
             for(String key : tags){
                 print(out, key + "\n");
@@ -36,6 +38,7 @@ public class TagsCommand extends AbstractCommand {
                 tags = bo.getAllTagsWithQuantity();
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Tag Command: Error while reading", exception);
+                throw new CommandException("Error. Unable execute the tags command", exception);
             }
             tags.forEach((k, v) -> {
                 print(out, k + " : " + v + "\n");

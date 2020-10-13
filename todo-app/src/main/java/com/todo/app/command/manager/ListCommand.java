@@ -3,6 +3,7 @@ package com.todo.app.command.manager;
 import com.todo.app.aplication.TaskService;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 import com.todo.app.filters.Filter;
 import com.todo.app.filters.PriorityFilter;
 import com.todo.app.filters.StatusFilter;
@@ -31,6 +32,7 @@ public class ListCommand extends AbstractCommand {
                 tasks = bo.getAllTasks();
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "List Command: Error while storing", exception);
+                throw new CommandException("Error. Unable execute the list command", exception);
             }
         }
         else if(args != null && args.length > 2){
@@ -44,6 +46,7 @@ public class ListCommand extends AbstractCommand {
                     tasks = bo.find(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("Error. Unable execute the list command", exception);
                 }
             }
             else if(args[0].equals("status:")){
@@ -53,6 +56,7 @@ public class ListCommand extends AbstractCommand {
                     tasks = bo.find(filter);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("Error. Unable execute the list command", exception);
                 }
             }
             else if(args[0].equals("priority:")){
@@ -62,6 +66,7 @@ public class ListCommand extends AbstractCommand {
                     tasks = bo.find(filter);
                 } catch (Exception exception) {
                     LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("Error. Unable execute the list command", exception);
                 }
             }
             else{

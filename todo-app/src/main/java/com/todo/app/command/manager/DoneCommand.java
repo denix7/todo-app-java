@@ -3,6 +3,7 @@ package com.todo.app.command.manager;
 import com.todo.app.aplication.TaskService;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ public class DoneCommand extends AbstractCommand {
                 bo.modifyTask(task.getUuid(), task);
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
+                throw new CommandException("Error. Unable execute the done command", exception);
             }
             print(out, "Marked as done\n");
         }
@@ -51,6 +53,7 @@ public class DoneCommand extends AbstractCommand {
                             bo.modifyTask(current.getUuid(), current);
                         } catch (BusinessException exception) {
                             LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
+                            throw new CommandException("Error. Unable execute the done command", exception);
                         }
                     }
                 }
