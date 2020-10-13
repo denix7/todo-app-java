@@ -24,8 +24,8 @@ public class AddCommand extends AbstractCommand{
     @Override
     public void execute(String[] args, OutputStream out, TaskService bo) {
         Task task = Injector.getTask();
-        if(args != null && args.length == 1) {
-            print(out, "Adding element with title\n");
+
+        if(args != null) {
             String description = args[0];
             task.setDescription(description);
             UUID id = UUID.randomUUID();
@@ -36,45 +36,33 @@ public class AddCommand extends AbstractCommand{
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
             task.setEntry(dtf.format(now));
-
             task.setDue(dtf.format(now));
 
-            try {
-                bo.addTask(task);
-            } catch (BusinessException exception) {
-                LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
-                throw new CommandException("Error. Unable execute the add command", exception);
-            }
-        }
-        if(args == null || args.length == 0) {
-            print(out, "You should add a note");
-        }
-        if(args != null && args.length == 2 ) {
-            if(args[1].equals("M") || args[1].equals("H") || args[1].equals("L")){
-                String description = args[0];
-                String priority = args[1];
-
-                task.setDescription(description);
-                task.setPriority(priority);
-                UUID id = UUID.randomUUID();
-                task.setUuid(id);
-                task.setStatus("pending");
-                task.setTag("default");
-                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-                LocalDateTime now = LocalDateTime.now();
-                task.setEntry(dtf.format(now));
-                task.setDue(dtf.format(now));
-
+            if(args.length == 1){
                 try {
                     bo.addTask(task);
+                    System.out.println("Task added successfully");
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
                     throw new CommandException("Error. Unable execute the add command", exception);
                 }
-                print(out, "Task with priority added\n");
             }
-            else {
-                print(out,"Task not added, priority only could be: L/M/H");
+            if(args.length == 2 ) {
+                if(args[1].equals("M") || args[1].equals("H") || args[1].equals("L")){
+                    String priority = args[1];
+                    task.setPriority(priority);
+
+                    try {
+                        bo.addTask(task);
+                        System.out.println("Task added successfully");
+                    } catch (BusinessException exception) {
+                        LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
+                        throw new CommandException("Error. Unable execute the add command", exception);
+                    }
+                }
+                else {
+                    print(out,"Task not added, priority only could be: L/M/H");
+                }
             }
         }
     }
