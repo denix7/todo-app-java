@@ -76,7 +76,7 @@ public class ListCommand extends AbstractCommand {
             print(out, "Command not valid\n");
         }
 
-        if(tasks.isEmpty()){
+        if(tasks == null){
             print(out, "There are not coincidences\n");
         }
         else{

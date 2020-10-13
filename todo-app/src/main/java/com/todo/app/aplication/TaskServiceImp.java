@@ -19,7 +19,7 @@ public class TaskServiceImp implements TaskService {
     private static final Logger LOGGER = Logger.getLogger(TaskServiceImp.class.getName());
 
     public TaskServiceImp() {
-        this.taskDAO = Injector.getTaskMyFileDao();
+        this.taskDAO = Injector.getTaskMyHibernateDao();
     }
 
     public TaskServiceImp(TaskDAO taskDAO) {

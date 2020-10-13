@@ -6,7 +6,7 @@ import com.todo.app.filters.Filter;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskHibernateImpl implements TaskDAO {
+public class TaskHibernateDAOImpl implements TaskDAO {
 
     @Override
     public void save(Task task) {
