@@ -4,6 +4,7 @@ import com.todo.app.aplication.TaskService;
 import com.todo.app.dependencyInjection.Injector;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
+import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.time.LocalDateTime;
@@ -22,10 +23,10 @@ public class AddCommand extends AbstractCommand{
 
     @Override
     public void execute(String[] args, OutputStream out, TaskService bo) {
+        Task task = Injector.getTask();
         if(args != null && args.length == 1) {
             print(out, "Adding element with title\n");
             String description = args[0];
-            Task task = Injector.getTask();
             task.setDescription(description);
             UUID id = UUID.randomUUID();
             task.setUuid(id);
@@ -42,6 +43,7 @@ public class AddCommand extends AbstractCommand{
                 bo.addTask(task);
             } catch (BusinessException exception) {
                 LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
+                throw new CommandException("Error. Unable execute the add command", exception);
             }
         }
         if(args == null || args.length == 0) {
@@ -51,7 +53,7 @@ public class AddCommand extends AbstractCommand{
             if(args[1].equals("M") || args[1].equals("H") || args[1].equals("L")){
                 String description = args[0];
                 String priority = args[1];
-                Task task = Injector.getTask();
+
                 task.setDescription(description);
                 task.setPriority(priority);
                 UUID id = UUID.randomUUID();
@@ -67,6 +69,7 @@ public class AddCommand extends AbstractCommand{
                     bo.addTask(task);
                 } catch (BusinessException exception) {
                     LOGGER.log(Level.SEVERE, "Add Command: Error while storing", exception);
+                    throw new CommandException("Error. Unable execute the add command", exception);
                 }
                 print(out, "Task with priority added\n");
             }
