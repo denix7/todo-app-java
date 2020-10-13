@@ -41,8 +41,6 @@ public class CommandExecutor {
 
             Command command = commandManager.getCommand(commandName);
 
-            //BusinessObject bo = new BusinessObjectTxtImpl(new TaskTxtDAOImpl("c:\\\\tasks-java\\\\tasks.txt"));
-
             TaskService bo  = Injector.getTaskService();
 
             try {

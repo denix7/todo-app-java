@@ -10,7 +10,7 @@ public class Injector {
         return new TaskServiceImp();
     }
 
-    public static TaskDAO getTaskDao() {
+    public static TaskDAO getTaskMySqlDao() {
         return new TaskMySqlDAOImpl();
     }
 

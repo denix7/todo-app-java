@@ -5,16 +5,19 @@ import com.todo.app.exceptions.BusinessException;
 import com.todo.app.filters.Filter;
 
 import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TaskTxtDAOImpl{
+public class TaskTxtDAOImpl implements TaskDAO{
     private String fileName;
     private boolean exist;
     private static final Logger LOGGER = Logger.getLogger(TaskMySqlDAOImpl.class.getName());
 
     public TaskTxtDAOImpl(String fileName) {
+        //fileName = "c:\\tasks-java\\tasks.txt";
         this.fileName = fileName;
         this.exist = exist(fileName);
     }
@@ -35,6 +38,16 @@ public class TaskTxtDAOImpl{
         catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void saveList(List<Task> tasks) {
+
+    }
+
+    @Override
+    public void update(UUID id, Task task) {
+
     }
 
     public void saveList(ArrayList<Task> tasks) {
@@ -58,6 +71,11 @@ public class TaskTxtDAOImpl{
 
     public void delete(Task task) {
 
+    }
+
+    @Override
+    public Task read(int index) {
+        return null;
     }
 
     public ArrayList<Task> loadTasks() {
@@ -122,4 +140,172 @@ public class TaskTxtDAOImpl{
         return answer;
     }
 
+    @Override
+    public int count() {
+        return 0;
+    }
+
+    @Override
+    public int countByFilter(Filter filter) {
+        return 0;
+    }
+
+    /*Service layer*/
+
+    public void addTask(String taskName, String priority) {
+        UUID id = UUID.randomUUID();
+        Task task = new Task(taskName);
+
+        task.setUuid(id);
+        task.setStatus("pending");
+        task.setTag("default");
+
+        if(priority != null) {
+            task.setPriority(priority);
+        }
+        else {
+            task.setPriority("M");
+        }
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        task.setEntry(dtf.format(now));
+
+
+        try {
+            save(task);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void modifyTask(String[] args) {
+        ArrayList<Task> tasks = loadTasks();
+        modifyTaskByIndex(tasks, args);
+    }
+
+    public void modifyTaskByIndex(ArrayList<Task> tasks, String[] args) {
+        try {
+            boolean numeric;
+            numeric = args[0].matches("-?\\d+(\\.\\d+)?");
+
+            if (numeric && args.length == 2) {
+                int taskIndex = Integer.parseInt(args[0]) - 1;
+                String newDescription = args[1];
+                Task current = tasks.get(taskIndex);
+                current.setDescription(newDescription);
+            }
+            else {
+                int index = Integer.parseInt(args[0]) - 1;
+                String newTag = args[2];
+                Task current = tasks.get(index);
+                current.setTag(newTag);
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Parameters is needed");
+        }
+
+        try {
+            boolean existFile = exist(fileName);
+            if(existFile) {
+                deleteFile(fileName);
+                saveList(tasks);
+                System.out.println("Task " + " was modified");
+            }
+            else {
+                System.out.println("Doesn't exists any file");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void doneTask(String[] args) {
+        ArrayList<Task> tasks = loadTasks();
+        markAsDone(tasks, args[0]);
+    }
+
+    public void markAsDone(ArrayList<Task> tasks, String arg) {
+        boolean isNumeric;
+        isNumeric = arg.matches("-?\\d+(\\.\\d+)?");
+
+        if(isNumeric) {
+            int index = Integer.parseInt(arg);
+            Task current = tasks.get(index-1);
+            current.setStatus("completed");
+        }
+        else {
+            for(Task current : tasks) {
+                if(current.getTag().equals(arg)) {
+                    current.setStatus("completed");
+                }
+            }
+        }
+
+        try
+        {
+            boolean existFile = exist(fileName);
+            if(existFile) {
+                deleteFile(fileName);
+                saveList(tasks);
+                System.out.println("marked as done");
+            }
+            else {
+                System.out.println("Doesn't exists any file");
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void listTasks(String[] args) {
+        ArrayList<Task> tasks = loadTasks();
+
+        if(args != null) {
+            tasks = filterByTag(tasks, args[0]);
+        }
+
+        System.out.println("===================LIST==================");
+        int indexTask= 1;
+        for(Task current : tasks) {
+            System.out.println(indexTask +")" + " " + current.showList());
+            indexTask++;
+        }
+        System.out.println("There are : " + tasks.size() + " elements");
+    }
+
+    public ArrayList<Task> filterByTag(ArrayList<Task> tasks, String tag) {
+        ArrayList<Task> answer = new ArrayList<>();
+
+        for(Task current : tasks) {
+            String currentTag = current.getTag();
+            if(currentTag.equals(tag)) {
+                answer.add(current);
+            }
+        }
+        if(answer.isEmpty()) {
+            System.out.println("Nothing founded");
+        }
+        return answer;
+    }
+
+    public void loadFile() {
+        try {
+            if(exist(fileName)) {
+                deleteFile(fileName);
+                createFile(fileName);
+            }
+            else {
+                deleteFile(fileName);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
