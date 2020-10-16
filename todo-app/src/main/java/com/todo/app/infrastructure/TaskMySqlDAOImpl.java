@@ -82,30 +82,49 @@ public class TaskMySqlDAOImpl implements TaskDAO {
     }
 
     @Override
-    public void delete(Task task) {
-        String sql = "delete from tasks where id = ?";
+    public boolean delete(UUID uuid) {
+        String sql = "delete from tasks where uuid = ?";
 
         try (Connection connection = adapter.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);) {
 
-            statement.setInt(1, task.getId());
+            statement.setString(1, uuid.toString());
             statement.executeUpdate();
+
+            return (statement.executeUpdate() > 0);
         }
-        catch (SQLException exception) {
+        catch (SQLException | NumberFormatException exception ) {
             LOGGER.log(Level.SEVERE, "Unable to delete task", exception);
             throw new PersistentException("Error while deleting in DB", exception);
         }
     }
 
+    public boolean deleteByFilter(Filter filter) {
+        String sql = "delete from tasks where " + filter.getName() + "=?";
+
+        try (Connection connection = adapter.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+
+            statement.setString(1, filter.getValue());
+            statement.executeUpdate();
+
+            return statement.executeUpdate() > 0;
+
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to find task", exception);
+            throw new PersistentException("Error while finding in DB", exception);
+        }
+    }
+
     @Override
-    public Task read(int index) {
-        String sql = "select * from tasks where id = ?";
+    public Task read(UUID uuid) {
+        String sql = "select * from tasks where uuid = ?";
         Task current = null;
 
         try (Connection connection = adapter.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);){
 
-            statement.setInt(1, index);
+            statement.setString(1, uuid.toString());
             ResultSet results = statement.executeQuery();
 
             while(results.next()) {
@@ -134,7 +153,7 @@ public class TaskMySqlDAOImpl implements TaskDAO {
             }
         }
         catch(SQLException exception){
-            LOGGER.log(Level.SEVERE, "Unable to read task " + index, exception);
+            LOGGER.log(Level.SEVERE, "Unable to read task " + uuid, exception);
             throw new PersistentException("Error while reading in DB", exception);
         } finally {
             return current;
@@ -259,11 +278,11 @@ public class TaskMySqlDAOImpl implements TaskDAO {
                 counter = results.getInt("total");
             }
 
+            return counter;
+
         } catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Unable to find task", exception);
             throw new PersistentException("Error while finding in DB", exception);
-        } finally {
-            return counter;
         }
     }
 }

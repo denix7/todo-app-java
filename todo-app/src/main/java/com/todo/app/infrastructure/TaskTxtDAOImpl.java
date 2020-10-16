@@ -85,12 +85,17 @@ public class TaskTxtDAOImpl implements TaskDAO{
         }
     }
 
-    public void delete(Task task) {
+    public boolean delete(UUID id) {
         throw new UnsupportedOperationException("Not supported");
     }
 
     @Override
-    public Task read(int index) {
+    public boolean deleteByFilter(Filter filter) {
+        throw new UnsupportedOperationException("Not supported");
+    }
+
+    @Override
+    public Task read(UUID id) {
         return null;
     }
 

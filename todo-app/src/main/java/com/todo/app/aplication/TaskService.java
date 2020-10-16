@@ -29,9 +29,11 @@ public interface TaskService {
 
     Map<String, Integer> getAllTagsWithQuantity();
 
-    boolean deleteTask(int index);
+    boolean deleteTask(UUID id);
 
-    String getInfo(int index);
+    boolean deleteByFilter(Filter filter);
+
+    String getInfo(UUID id);
 
     boolean exportAll();
 

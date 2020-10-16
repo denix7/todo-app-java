@@ -1,10 +1,9 @@
 package com.todo.app.factory;
 
-import com.todo.app.infrastructure.TaskMySqlDAOImpl;
+import com.todo.app.exceptions.PersistentException;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,16 +14,17 @@ public abstract class FactoryDBAdapter {
     private static final Logger LOGGER = Logger.getLogger(FactoryDBAdapter.class.getName());
 
     public static DBAdapter getAdapter(){
-        DBAdapter dbAdapter = null;
+        DBAdapter dbAdapter;
         try {
             Properties p = loadProperties();
             String dbType = p.getProperty(DB_TYPE);
             dbAdapter = (DBAdapter)Class.forName(dbType).newInstance();
-        }
-        catch (IOException | ClassNotFoundException exception) {
-            LOGGER.log(Level.SEVERE, "Unable to get connection", exception);
-        } finally {
+
             return dbAdapter;
+        }
+        catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException exception) {
+            LOGGER.log(Level.SEVERE, "Unable to get DB adapter");
+            return null;
         }
     }
 

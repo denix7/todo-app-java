@@ -19,7 +19,7 @@ public class TaskServiceImp implements TaskService {
     private static final Logger LOGGER = Logger.getLogger(TaskServiceImp.class.getName());
 
     public TaskServiceImp() {
-        this.taskDAO = Injector.getTaskMyHibernateDao();
+        this.taskDAO = Injector.getTaskMySqlDao();
     }
 
     public TaskServiceImp(TaskDAO taskDAO) {
@@ -27,117 +27,58 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public void addTask(Task task) throws BusinessException {
-        try {
-            taskDAO.save(task);
-        }
-        catch (PersistentException exception){
-            LOGGER.log(Level.SEVERE, "Error while storing in Business Layer", exception);
-            throw new BusinessException("Error. Unable to add in Business Layer", exception);
-        }
+    public void addTask(Task task) {
+        taskDAO.save(task);
     }
 
     @Override
-    public void modifyTask(UUID id, Task newTask) throws BusinessException {
-        try {
-            taskDAO.update(id, newTask);
-        } catch (PersistentException exception){
-            LOGGER.log(Level.SEVERE, "Error while modifying in Business Layer", exception);
-            throw new BusinessException("Error. Unable to modify in Business Layer", exception);
-        }
+    public void modifyTask(UUID id, Task newTask) {
+        taskDAO.update(id, newTask);
     }
 
     @Override
     public Task getTaskById(UUID id) {
-        try {
-            return taskDAO.read(Integer.parseInt(id.toString()));
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while getting task by id tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
+        return taskDAO.read(id);
     }
 
     @Override
-    public List<Task> getAllTasks() throws BusinessException {
-        List<Task> tasks;
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
+    public List<Task> getAllTasks() {
+        List<Task> tasks = taskDAO.loadTasks();
         return tasks;
     }
 
     @Override
-    public List<Task> find(Filter filter) throws BusinessException {
-        List<Task> tasks;
-
-        try {
-            tasks = taskDAO.find(filter);
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        return tasks;
+    public List<Task> find(Filter filter) {
+        return taskDAO.find(filter);
     }
 
     @Override
-    public int countTasks() throws BusinessException {
-        int cantity;
-
-        try {
-            cantity = taskDAO.count();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        return cantity;
+    public int countTasks() {
+        return taskDAO.count();
     }
 
     @Override
-    public int countTasksByFilter(Filter filter) throws BusinessException {
-        int cantity;
-
-        try {
-            cantity = taskDAO.countByFilter(filter);
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        return cantity;
+    public int countTasksByFilter(Filter filter) {
+        return taskDAO.countByFilter(filter);
     }
 
     @Override
-    public List<String> getAllTags() throws BusinessException {
+    public List<String> getAllTags() {
         List<Task> tasks;
         Map<String, Integer> tags;
 
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
+        tasks = taskDAO.loadTasks();
 
         tags = countTags(tasks);
         return new ArrayList<>(tags.keySet());
     }
 
     @Override
-    public Map<String, Integer> getAllTagsWithQuantity() throws BusinessException {
+    public Map<String, Integer> getAllTagsWithQuantity() {
         List<Task> tasks;
         Map<String, Integer> tags;
 
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
+        tasks = taskDAO.loadTasks();
 
         tags = countTags(tasks);
         return tags;
@@ -160,65 +101,40 @@ public class TaskServiceImp implements TaskService {
     }
 
     @Override
-    public boolean deleteTask(int index) throws BusinessException {
-        List<Task> tasks;
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
-
-        if(index <= tasks.size()){
-            Task taskToDelete = tasks.get(index);
-            try {
-                taskDAO.delete(taskToDelete);
-            }
-            catch (PersistentException exception){
-                LOGGER.log(Level.SEVERE, "Error while storing in Business Layer", exception);
-                throw new BusinessException("Error in Businnes Layer", exception);
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
+    public boolean deleteTask(UUID id) {
+        return taskDAO.delete(id);
     }
 
     @Override
-    public String getInfo(int index) throws BusinessException {
+    public boolean deleteByFilter(Filter filter) {
+        return taskDAO.deleteByFilter(filter);
+    }
+
+    @Override
+    public String getInfo(UUID id) {
         List<Task> tasks;
         Task current = null;
-        try {
-            current = taskDAO.read(index);
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        } finally {
-            if (current != null) {
-                return ("Name:     " + current.getDescription() + "\n" +
-                        "ID:       " + current.getUuid() + "\n" +
-                        "Status:   " + current.getStatus() + "\n" +
-                        "Tag:      " + current.getTag() + "\n" +
-                        "priority: " + current.getPriority() + "\n" +
-                        "entry :   " + current.getEntry() + "\n"
-                );
-            }
-            return  null;
+        current = taskDAO.read(id);
+
+        if (current != null) {
+            return ("Name:     " + current.getDescription() + "\n" +
+                    "ID:       " + current.getUuid() + "\n" +
+                    "Status:   " + current.getStatus() + "\n" +
+                    "Tag:      " + current.getTag() + "\n" +
+                    "priority: " + current.getPriority() + "\n" +
+                    "entry :   " + current.getEntry() + "\n"
+            );
         }
+        return  null;
     }
 
     @Override
-    public boolean exportAll() throws BusinessException {
+    public boolean exportAll() {
         List<Task> tasks;
         boolean result = false;
 
-        try {
-            tasks = taskDAO.loadTasks();
-        } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Error while loading tasks in Business Layer", exception);
-            throw new BusinessException("Error. Unable to load tasks in Business Layer", exception);
-        }
+        tasks = taskDAO.loadTasks();
+
         try{
             result = exportAsCsv(tasks);
         }
@@ -243,7 +159,7 @@ public class TaskServiceImp implements TaskService {
             }
             result = true;
         }
-        catch(Exception e){
+        catch(IOException e){
             result = false;
             e.printStackTrace();
         }

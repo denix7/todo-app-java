@@ -1,10 +1,16 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
+import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
 import com.todo.app.exceptions.CommandException;
+import com.todo.app.filters.Filter;
+import com.todo.app.filters.PriorityFilter;
+import com.todo.app.filters.StatusFilter;
+import com.todo.app.filters.TagFilter;
 
 import java.io.OutputStream;
+import java.util.List;
 import java.util.logging.Level;
 
 public class DeleteCommand extends AbstractCommand {
@@ -17,45 +23,57 @@ public class DeleteCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, TaskService bo) {
-        boolean result = false;
-        if(args == null) {
+        boolean result;
+        if (args == null) {
             print(out, "Command not found\n");
-        }
-        else if(args.length == 1) {
+        } else if (args.length == 1) {
             String indexExpected = args[0];
             boolean isNumeric = indexExpected.matches("-?\\d+(\\.\\d+)?");
-            if(isNumeric) {
+            if (isNumeric) {
                 int index = Integer.parseInt(args[0]) - 1;
-                    try {
-                        result = bo.deleteTask(index);
-                        print(out, result == true ? "Task deleted succesfull\n" : "The task doesn't exist\n");
-                    } catch (BusinessException exception) {
-                        LOGGER.log(Level.SEVERE, "Delete Command: Error while storing", exception);
-                        throw new CommandException("Error. Unable execute the delete command", exception);
-                    }
-            }
-            else {
+                List<Task> tasks = bo.getAllTasks();
+                Task current = tasks.get(index);
+
+                result = bo.deleteTask(current.getUuid());
+                print(out, result == false ? "Task deleted succesfull\n" : "The task doesn't exist\n");
+            } else {
                 print(out, "This index is not valid\n");
             }
-        }
-        else if(args.length == 2) {
-            String filter = args[0];
-            String value = args[1];
-
-            if(filter.equals("tag:")) {
-                //bo.deleteTaskByTag(value);
-            }
-            else if(filter.equals("priority:")) {
-                if (value.equals("H") || value.equals("M") || value.equals("L")) {
-                   // bo.deleteTaskByPriority(current);
+        } else if (args.length == 2) {
+            if (args[0].equals("tag:")) {
+                String tag = args[1];
+                Filter filter = new TagFilter(tag);
+                try {
+                    bo.deleteByFilter(filter);
+                    print(out, "Deleted all tasks with tag : " + tag + "\n");
+                } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("Error. Unable execute the list command", exception);
                 }
+            } else if (args[0].equals("status:")) {
+                String status = args[1];
+                Filter filter = new StatusFilter(status);
+                try {
+                    bo.deleteByFilter(filter);
+                    print(out, "Deleted all tasks with status : " + status + "\n");
+                } catch (BusinessException exception) {
+                    LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("Error. Unable execute the list command", exception);
+                }
+            } else if (args[0].equals("priority:")) {
+                String priority = args[1];
+                Filter filter = new PriorityFilter(priority);
+                try {
+                    bo.deleteByFilter(filter);
+                    print(out, "Deleted all tasks with priority : " + priority + "\n");
+                } catch (Exception exception) {
+                    LOGGER.log(Level.SEVERE, "List Command: Error while reading", exception);
+                    throw new CommandException("Error. Unable execute the list command", exception);
+                }
+            } else {
+                print(out, "Filter no valid\n");
             }
-            else if(filter.equals("status:")) {
-                //bo.deleteTaskByStatus(current);
-                print(out, "Task deleted\n");
-            }
-        }
-        else {
+        } else {
             print(out, "Command not valid\n");
         }
     }

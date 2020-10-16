@@ -1,14 +1,17 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
+import com.todo.app.domain.entities.Task;
 import com.todo.app.exceptions.BusinessException;
 import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
+import java.util.List;
 import java.util.logging.Level;
 
 public class InfoCommand extends AbstractCommand {
     public static final String COMMAND_NAME = "info";
+
     @Override
     public String getName() {
         return super.getName();
@@ -16,34 +19,29 @@ public class InfoCommand extends AbstractCommand {
 
     @Override
     public void execute(String[] args, OutputStream out, TaskService bo) {
-        if(args == null) {
+        if (args == null) {
             print(out, "Command not valid\n");
-        }
-        else if(args.length == 1){
+        } else if (args.length == 1) {
             String indexExpected = args[0];
             boolean isNumeric = indexExpected.matches("-?\\d+(\\.\\d+)?");
 
             if (isNumeric) {
-                int index = Integer.parseInt(indexExpected);
+                int index = Integer.parseInt(indexExpected) - 1;
                 String taskInfo = "";
 
-                try {
-                    taskInfo = bo.getInfo(index);
-                    if(taskInfo != null) {
-                        print(out, taskInfo);
-                    } else {
-                        print(out, "Task not found\n");
-                    }
-                } catch (BusinessException exception) {
-                    LOGGER.log(Level.SEVERE, "Info Command: Error while reading", exception);
-                    throw new CommandException("Error. Unable execute the info command", exception);
+                List<Task> tasks = bo.getAllTasks();
+                Task current = tasks.get(index);
+
+                taskInfo = bo.getInfo(current.getUuid());
+                if (taskInfo != null) {
+                    print(out, taskInfo);
+                } else {
+                    print(out, "Task not found\n");
                 }
-            }
-            else{
+            } else {
                 print(out, "The param is incorrect\n");
             }
-        }
-        else {
+        } else {
             print(out, "Command not valid\n");
         }
     }

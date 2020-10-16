@@ -13,17 +13,19 @@ public interface TaskDAO extends CrudRepository<Task> {
 
     void saveList(List<Task> tasks);
 
-    public void update(UUID id, Task task);
+    void update(UUID id, Task task);
 
-    public void delete(Task task);
+    boolean delete(UUID id);
 
-    public Task read(int index);
+    boolean deleteByFilter(Filter filter);
 
-    public List<Task> loadTasks();
+    Task read(UUID id);
 
-    public List<Task> find(Filter filter);
+    List<Task> loadTasks();
 
-    public int count();
+    List<Task> find(Filter filter);
 
-    public int countByFilter(Filter filter);
+    int count();
+
+    int countByFilter(Filter filter);
 }

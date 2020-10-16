@@ -25,8 +25,7 @@ public class CommandExecutor {
                 try {
                     defaultCommand.execute(null, System.out,null);
                 } catch (Exception exception) {
-                    LOGGER.info("Is not possible to execute the command");
-                    LOGGER.log(Level.SEVERE, "Is not possible to execute the command", exception);
+                    LOGGER.log(Level.SEVERE, "Is not possible to execute the command");
                 }
                 continue;
             }
@@ -45,8 +44,8 @@ public class CommandExecutor {
 
             try {
                 command.execute(commandArgs2, System.out, bo);
-            } catch (CommandException exception) {
-                LOGGER.log(Level.SEVERE, "Command: Error while executing command", exception);
+            } catch (Exception exception) {
+                LOGGER.log(Level.SEVERE, "Is not possible to execute the command");
             }
         }
     }

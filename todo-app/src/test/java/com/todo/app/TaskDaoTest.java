@@ -18,22 +18,22 @@ public class TaskDaoTest {
 
     @Test
     public void get() throws SQLException, ClassNotFoundException {
-        int id = 13;
+        UUID uuid = UUID.randomUUID();
         Task taskExpected = new Task();
 
-        taskExpected.setId(id);
+        taskExpected.setUuid(uuid);
+
         Task task = null;
         try {
-            task = taskDAO.read(id);
+            task = taskDAO.read(uuid);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-        assertEquals (id, task.getId());
+        assertEquals (uuid, task.getUuid());
     }
 
     @Test
     public void add() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        int id = 13;
         UUID uuid = UUID.randomUUID();
         String description = "new task";
         String priority = "H";
@@ -43,7 +43,6 @@ public class TaskDaoTest {
         Task task = new Task();
 
         task.setDescription(description);
-        task.setId(id);
         task.setUuid(uuid);
         task.setStatus(status);
         task.setTag(tag);
@@ -61,17 +60,16 @@ public class TaskDaoTest {
 
         Task taskSaved = null;
         try {
-            taskSaved = taskDAO.read(id);
+            taskSaved = taskDAO.read(uuid);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
 
-        assertEquals(taskSaved.getId(), id);
+        assertEquals(taskSaved.getUuid(), uuid);
     }
 
     @Test
     public void delete() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        int id = 15;
         UUID uuid = UUID.randomUUID();
         String description = "new task";
         String priority = "H";
@@ -81,7 +79,6 @@ public class TaskDaoTest {
         Task task = new Task();
 
         task.setDescription(priority);
-        task.setId(id);
         task.setUuid(uuid);
         task.setStatus(status);
         task.setTag(tag);
@@ -91,14 +88,14 @@ public class TaskDaoTest {
         task.setEntry(dtf.format(now));
 
         try {
-            taskDAO.delete(task);
+            taskDAO.delete(uuid);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
 
         Task taskReaded = null;
         try {
-            taskReaded = taskDAO.read(id);
+            taskReaded = taskDAO.read(uuid);
         } catch (Exception exception) {
             exception.printStackTrace();
         }

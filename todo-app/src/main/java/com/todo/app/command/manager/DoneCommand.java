@@ -8,7 +8,6 @@ import com.todo.app.exceptions.CommandException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 
 public class DoneCommand extends AbstractCommand {
@@ -32,38 +31,25 @@ public class DoneCommand extends AbstractCommand {
             Task task = tasks.get(index - 1);
             task.setStatus("completed");
 
-            try {
-                bo.modifyTask(task.getUuid(), task);
-            } catch (BusinessException exception) {
-                LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
-                throw new CommandException("Error. Unable execute the done command", exception);
-            }
+            bo.modifyTask(task.getUuid(), task);
             print(out, "Marked as done\n");
-        }
-        else if(!isNumeric && args.length == 2){
+        } else if (!isNumeric && args.length == 2) {
             System.out.println(Arrays.toString(args));
             String tag = args[1];
-            if(args[0].equals("tag:")){
+            if (args[0].equals("tag:")) {
                 List<Task> tasks = bo.getAllTasks();
 
-                for (Task current: tasks) {
-                    if(current.getTag().equals(tag)) {
+                for (Task current : tasks) {
+                    if (current.getTag().equals(tag)) {
                         current.setStatus("completed");
-                        try {
-                            bo.modifyTask(current.getUuid(), current);
-                        } catch (BusinessException exception) {
-                            LOGGER.log(Level.SEVERE, "Done Command: Error while storing", exception);
-                            throw new CommandException("Error. Unable execute the done command", exception);
-                        }
+                        bo.modifyTask(current.getUuid(), current);
                     }
                 }
                 print(out, "All tasks with tag marked as done\n");
-            }
-            else{
+            } else {
                 print(out, "Command not valid\n");
             }
-        }
-        else{
+        } else {
             print(out, "Command not valid\n");
         }
     }

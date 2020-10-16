@@ -12,9 +12,9 @@ public interface CrudRepository<T>{
 
     public void update(UUID id, T t);
 
-    public void delete(T t);
+    public boolean delete(UUID id);
 
-    public T read(int index);
+    public T read(UUID id);
 
     public List<T> loadTasks();
 }

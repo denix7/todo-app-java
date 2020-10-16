@@ -1,6 +1,7 @@
 package com.todo.app.factory;
 
 import com.todo.app.aplication.TaskServiceImp;
+import com.todo.app.exceptions.PersistentException;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,18 +24,18 @@ public class MySQLAdapterImpl implements DBAdapter {
 
     @Override
     public Connection getConnection() {
+        String connectionString = "jdbc:mysql://localhost:3306/todo-app?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC";
+        String user = "root";
+        String password = "";
+
         try {
-            String connectionString = "jdbc:mysql://localhost:3306/todo-app?zeroDateTimeBehavior=convertToNull&serverTimezone=UTC";
-            String user = "root";
-            String password = "";
             connection = DriverManager.getConnection(connectionString, user, password);
 
+            return connection;
         }
         catch (SQLException exception) {
             LOGGER.log(Level.SEVERE, "Error while getting DB conection", exception);
-
-        } finally {
-            return connection;
+            throw new PersistentException("Cannot connect to DB", exception);
         }
     }
 
