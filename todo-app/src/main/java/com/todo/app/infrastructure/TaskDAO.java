@@ -1,7 +1,6 @@
 package com.todo.app.infrastructure;
 
 import com.todo.app.domain.entities.Task;
-import com.todo.app.exceptions.PersistentException;
 import com.todo.app.filters.Filter;
 
 import java.util.List;

@@ -1,10 +1,8 @@
 package com.todo.app.aplication;
 
 import com.todo.app.domain.entities.Task;
-import com.todo.app.exceptions.BusinessException;
 import com.todo.app.filters.Filter;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;

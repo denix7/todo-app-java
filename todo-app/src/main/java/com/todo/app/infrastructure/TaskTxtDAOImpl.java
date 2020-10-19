@@ -1,15 +1,11 @@
 package com.todo.app.infrastructure;
 
 import com.todo.app.domain.entities.Task;
-import com.todo.app.exceptions.BusinessException;
 import com.todo.app.exceptions.PersistentException;
 import com.todo.app.filters.Filter;
 
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TaskTxtDAOImpl implements TaskDAO{

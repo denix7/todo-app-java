@@ -2,7 +2,6 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
 import com.todo.app.dependencyInjection.Injector;
-import com.todo.app.exceptions.CommandException;
 import com.todo.app.util.Fragmenter;
 
 import java.util.Arrays;

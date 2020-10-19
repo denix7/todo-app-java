@@ -1,6 +1,5 @@
 package com.todo.app.util;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -110,7 +109,6 @@ public class Fragmenter {
         if(tokens.size()>0) {
             String[] argsArray = new String[tokens.size()];
             argsArray = tokens.toArray(argsArray);
-            //System.out.println(Arrays.toString(argsArray));
             return argsArray;
 
         }

@@ -1,9 +1,5 @@
 package com.todo.app.infrastructure;
 
-import com.todo.app.domain.entities.Task;
-import com.todo.app.exceptions.PersistentException;
-
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 

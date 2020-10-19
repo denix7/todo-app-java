@@ -1,11 +1,8 @@
 package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
-import com.todo.app.exceptions.BusinessException;
-import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
-import java.util.logging.Level;
 
 public class ExportCommand extends AbstractCommand {
     public static final String COMMAND_NAME = "export";

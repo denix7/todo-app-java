@@ -2,13 +2,10 @@ package com.todo.app.command.manager;
 
 import com.todo.app.aplication.TaskService;
 import com.todo.app.domain.entities.Task;
-import com.todo.app.exceptions.BusinessException;
-import com.todo.app.exceptions.CommandException;
 
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 
 public class DoneCommand extends AbstractCommand {
 

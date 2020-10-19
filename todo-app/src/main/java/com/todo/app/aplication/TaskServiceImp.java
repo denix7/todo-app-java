@@ -2,7 +2,6 @@ package com.todo.app.aplication;
 
 import com.todo.app.dependencyInjection.Injector;
 import com.todo.app.exceptions.BusinessException;
-import com.todo.app.exceptions.PersistentException;
 import com.todo.app.infrastructure.TaskDAO;
 import com.todo.app.domain.entities.Task;
 import com.todo.app.filters.Filter;
